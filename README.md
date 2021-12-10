@@ -12,52 +12,40 @@
 ## 폐쇄망 설치 가이드
 * 설치를 진행하기 전 아래의 과정을 통해 필요한 이미지 및 yaml 파일을 준비한다.
 * 그 후, Install Step을 진행하면 된다.
-1. 사용하는 image repository에 EFK 설치 시 필요한 이미지를 push한다. 
+1. 사용하는 image repository에 Opensearch 설치 시 필요한 이미지를 push한다. 
 
     * 작업 디렉토리 생성 및 환경 설정
     ```bash
-    $ mkdir -p ~/efk-install
-    $ export EFK_HOME=~/efk-install
-    $ cd $EFK_HOME
-    $ export ES_VERSION=7.2.0
-    $ export KIBANA_VERSION=7.2.0
-    $ export GATEKEEPER_VERSION=10.0.0
-    $ export FLUENTD_VERSION=v1.4.2-debian-elasticsearch-1.1
+    $ mkdir -p ~/opensearch-install
+    $ export OS_HOME=~/opensearch-install
+    $ cd $OS_HOME
+    $ export OS_VERSION=1.1.0
+    $ export DASHBOARD_VERSION=1.0.0
     $ export BUSYBOX_VERSION=1.32.0
     $ export REGISTRY={ImageRegistryIP:Port}
     ```
     * 외부 네트워크 통신이 가능한 환경에서 필요한 이미지를 다운받는다.
     ```bash
-    $ sudo docker pull docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION}
-    $ sudo docker save docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION} > elasticsearch_${ES_VERSION}.tar
-    $ sudo docker pull docker.elastic.co/kibana/kibana:${KIBANA_VERSION}
-    $ sudo docker save docker.elastic.co/kibana/kibana:${KIBANA_VERSION} > kibana_${KIBANA_VERSION}.tar
-    $ sudo docker pull quay.io/keycloak/keycloak-gatekeeper:${GATEKEEPER_VERSION}
-    $ sudo docker save quay.io/keycloak/keycloak-gatekeeper:${GATEKEEPER_VERSION} > gatekeeper_${GATEKEEPER_VERSION}.tar
-    $ sudo docker pull fluent/fluentd-kubernetes-daemonset:${FLUENTD_VERSION}
-    $ sudo docker save fluent/fluentd-kubernetes-daemonset:${FLUENTD_VERSION} > fluentd_${FLUENTD_VERSION}.tar
+    $ sudo docker pull opensearchproject/opensearch:${OS_VERSION}
+    $ sudo docker save opensearchproject/opensearch:${OS_VERSION} > opensearch_${OS_VERSION}.tar
+    $ sudo docker pull opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION}
+    $ sudo docker save opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION} > dashboard_${DASHBOARD_VERSION}.tar
     $ sudo docker pull busybox:${BUSYBOX_VERSION}
     $ sudo docker save busybox:${BUSYBOX_VERSION} > busybox_${BUSYBOX_VERSION}.tar
     ```
   
 2. 위의 과정에서 생성한 tar 파일들을 폐쇄망 환경으로 이동시킨 뒤 사용하려는 registry에 이미지를 push한다.
     ```bash
-    $ sudo docker load < elasticsearch_${ES_VERSION}.tar
-    $ sudo docker load < kibana_${KIBANA_VERSION}.tar
-    $ sudo docker load < gatekeeper_${GATEKEEPER_VERSION}.tar
-    $ sudo docker load < fluentd_${FLUENTD_VERSION}.tar
+    $ sudo docker load < opensearch_${OS_VERSION}.tar
+    $ sudo docker load < dashboard_${DASHBOARD_VERSION}.tar
     $ sudo docker load < busybox_${BUSYBOX_VERSION}.tar
     
-    $ sudo docker tag docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION} ${REGISTRY}/elasticsearch/elasticsearch:${ES_VERSION}
-    $ sudo docker tag docker.elastic.co/kibana/kibana:${KIBANA_VERSION} ${REGISTRY}/kibana/kibana:${KIBANA_VERSION}
-    $ sudo docker tag quay.io/keycloak/keycloak-gatekeeper:${GATEKEEPER_VERSION} ${REGISTRY}/keycloak/keycloak-gatekeeper:${GATEKEEPER_VERSION}
-    $ sudo docker tag fluent/fluentd-kubernetes-daemonset:${FLUENTD_VERSION} ${REGISTRY}/fluentd-kubernetes-daemonset:${FLUENTD_VERSION}
+    $ sudo docker tag opensearchproject/opensearch:${OS_VERSION} ${REGISTRY}/opensearchproject/opensearch:${OS_VERSION}
+    $ sudo docker tag opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION} ${REGISTRY}/opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION}
     $ sudo docker tag busybox:${BUSYBOX_VERSION} ${REGISTRY}/busybox:${BUSYBOX_VERSION}
     
-    $ sudo docker push ${REGISTRY}/elasticsearch/elasticsearch:${ES_VERSION}
-    $ sudo docker push ${REGISTRY}/kibana/kibana:${KIBANA_VERSION}
-    $ sudo docker push ${REGISTRY}/keycloak/keycloak-gatekeeper:${GATEKEEPER_VERSION}
-    $ sudo docker push ${REGISTRY}/fluentd-kubernetes-daemonset:${FLUENTD_VERSION}
+    $ sudo docker push ${REGISTRY}/opensearchproject/opensearch:${OS_VERSION}
+    $ sudo docker push ${REGISTRY}/opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION}
     $ sudo docker push ${REGISTRY}/busybox:${BUSYBOX_VERSION}
     ```
 
