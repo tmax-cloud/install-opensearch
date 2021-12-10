@@ -1,4 +1,3 @@
-
 # Opensearch 설치 가이드
 
 ## 구성 요소 및 버전
@@ -257,3 +256,4 @@
                 "index.blocks.read_only_allow_delete": null
             }
             ```
+
