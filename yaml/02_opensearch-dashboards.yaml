@@ -1,7 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: opensearch-dashboards
+  namespace: kube-logging
+  labels:
+    app: opensearch-dashboards
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 5601
+    name: http
+    protocol: TCP
+    targetPort: 5601
+  selector:
+    app: opensearch-dashboards
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dashboards
+  name: dashboard
   namespace: kube-logging
   labels:
     app: opensearch-dashboards
@@ -15,9 +32,10 @@ spec:
       labels:
         app: opensearch-dashboards
     spec:
+      serviceAccount: opensearch-service-account
       containers:
       - name: dashboards
-        image: docker.io/opensearchproject/opensearch-dashboards:{DASHBOARD_VERSION}
+        image: opensearchproject/opensearch-dashboards:1.2.0
         imagePullPolicy: "IfNotPresent"
         resources:
           limits:
@@ -28,138 +46,33 @@ spec:
             memory: 1000Mi
         env:
           - name: OPENSEARCH_HOSTS
-            value: https://opensearch.kube-logging.svc:9200
+            value: "https://opensearch:9200"
           - name: SERVER_HOST
             value: "0.0.0.0"
-          - name: NODE_TLS_REJECT_UNAUTHORIZED
-            value: "0"
         ports:
         - containerPort: 5601
-          name: https
+          name: http
           protocol: TCP 
         volumeMounts:
         - name: config
           mountPath: /usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
           subPath: opensearch_dashboards.yml
-        - name: dashboards-cert
-          mountPath: /usr/share/opensearch-dashboards/config/certificates
-          readOnly: true
       volumes:
       - name: config
         configMap:
-          name: dashboards-config
-      - name: dashboards-cert
-        secret:
-          secretName: dashboards-secret
+          name: opensearch-dashboards-config
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: dashboards-config
+  name: opensearch-dashboards-config
   namespace: kube-logging
 data:
   opensearch_dashboards.yml: |
     server.name: dashboards
-    server.host: "0.0.0.0"
-
-    server.ssl.enabled: true
-    server.ssl.certificate: /usr/share/opensearch-dashboards/config/certificates/tls.crt
-    server.ssl.key: /usr/share/opensearch-dashboards/config/certificates/tls.key
-
-    opensearch.hosts: ["https://opensearch.kube-logging.svc:9200"]
+    server.host: "0"
     opensearch.username: admin
     opensearch.password: admin
     
-    opensearch.ssl.certificateAuthorities: 
-      [/usr/share/opensearch-dashboards/config/certificates/ca.crt]
-    opensearch.ssl.verificationMode: full
-
-    opensearch.requestHeadersWhitelist: ["Authorization","security_tenant", "securitytenant"]
-    opensearch_security.multitenancy.enabled: true
-    opensearch_security.multitenancy.tenants.enable_global: true
-    opensearch_security.multitenancy.tenants.enable_private: true
-    opensearch_security.multitenancy.tenants.preferred: ["Private", "Global"]
-    opensearch_security.multitenancy.enable_filter: false
-
-    opensearch_security.auth.type: "openid"
-    opensearch_security.openid.connect_url: "https://{HYPERAUTH_URL}/auth/realms/tmax/.well-known/openid-configuration"
-    opensearch_security.openid.client_id: "dashboards"
-    opensearch_security.openid.client_secret: "{DASHBOARD_CLIENT_SECRET}"
-    opensearch_security.openid.base_redirect_url: "https://dashboards.{CUSTOM_DOMAIN_NAME}"
-    opensearch_security.openid.root_ca: /usr/share/opensearch-dashboards/config/certificates/ca.crt
-    opensearch_security.openid.verify_hostnames: false
-    opensearch_security.cookie.secure: false
-
-    logging.verbose: true
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: dashboards
-  namespace: kube-logging
-  labels:
-    app: opensearch-dashboards
-  annotations:
-    traefik.ingress.kubernetes.io/service.serverstransport: tmaxcloud@file
-spec:
-  type: ClusterIP
-  ports:
-  - port: 5601
-    targetPort: 5601
-    name: https
-    protocol: TCP
-  selector:
-    app: opensearch-dashboards
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  labels:
-    ingress.tmaxcloud.org/name: dashboards
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    cert-manager.io/cluster-issuer: tmaxcloud-issuer
-  name: dashboards
-  namespace: kube-logging
-spec:
-  ingressClassName: tmax-cloud
-  rules:
-  - host: dashboards.{CUSTOM_DOMAIN_NAME}
-    http:
-      paths:
-      - backend:
-          service:
-            name: dashboards
-            port:
-              number: 5601
-        path: /
-        pathType: Prefix
-  tls:
-  - hosts:
-    - dashboards.{CUSTOM_DOMAIN_NAME}
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: dashboards-cert
-  namespace: kube-logging
-spec:
-  secretName: dashboards-secret
-  commonName: "dashboards"
-  privateKey:
-    algorithm: RSA
-    encoding: PKCS8
-    size: 2048
-  isCA: false
-  usages:
-    - digital signature
-    - key encipherment
-    - server auth
-    - client auth
-  dnsNames:
-    - "tmax-cloud"
-    - "dashboards.kube-logging.svc"
-  issuerRef:
-    kind: ClusterIssuer
-    group: cert-manager.io
-    name: tmaxcloud-issuer
+    opensearch.ssl.verificationMode: none
+    opensearch.requestTimeout: "100000ms"

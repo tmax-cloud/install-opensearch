@@ -1,4 +1,10 @@
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: opensearch-service-account
+  namespace: kube-logging
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: opensearch
@@ -34,9 +40,10 @@ spec:
       labels:
         app: opensearch
     spec:
+      serviceAccount: opensearch-service-account
       containers:
       - name: opensearch
-        image: docker.io/opensearchproject/opensearch:{OS_VERSION}
+        image: docker.io/opensearchproject/opensearch:1.2.3
         imagePullPolicy: "IfNotPresent"
         securityContext:
           allowPrivilegeEscalation: true
@@ -47,7 +54,7 @@ spec:
             memory: 16Gi
           requests:
             cpu: 100m
-            memory: 10Gi
+            memory: 8Gi
         ports:
         - containerPort: 9200
           name: http
@@ -59,32 +66,22 @@ spec:
         - name: config
           mountPath: /usr/share/opensearch/config/opensearch.yml
           subPath: opensearch.yml
-        - name: security-config
-          mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/config.yml
-          subPath: config.yml
-          readOnly: true
-        - name: opensearch-cert
-          mountPath: /usr/share/opensearch/config/certificates
-          readOnly: true
-        - name: admin-cert
-          mountPath: /usr/share/opensearch/config/certificates/admin
-          readOnly: true
         env:
           - name: cluster.name
             value: os-cluster
           - name: node.name
             valueFrom:
               fieldRef:
-                fieldPath: metadata.name
-          - name: discovery.seed_hosts
-            value: "os-cluster-0.opensearch"
-          - name: cluster.initial_master_nodes
-            value: "os-cluster-0"
+                fieldPath: spec.nodeName
+          - name: discovery.type
+            value: "single-node"
+          - name: network.host
+            value: "0.0.0.0"
           - name: OPENSEARCH_JAVA_OPTS
             value: "-Xms8g -Xmx8g"
       initContainers:
       - name: fix-permissions
-        image: busybox:{BUSYBOX_VERSION}
+        image: busybox:1.32.0
         command: ["sh", "-c", "chown -R 1000:1000 /usr/share/opensearch/data"]
         securityContext:
           privileged: true
@@ -92,12 +89,12 @@ spec:
         - name: data
           mountPath: /usr/share/opensearch/data
       - name: increase-vm-max-map
-        image: busybox:{BUSYBOX_VERSION}
+        image: busybox:1.32.0
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true 
       - name: increase-fd-ulimit
-        image: busybox:{BUSYBOX_VERSION}
+        image: busybox:1.32.0
         command: ["sh", "-c", "ulimit -n 65536"]
         securityContext:
           privileged: true
@@ -105,15 +102,6 @@ spec:
       - name: config
         configMap:
           name: opensearch-config
-      - name: security-config
-        configMap:
-          name: opensearch-securityconfig
-      - name: opensearch-cert
-        secret:
-          secretName: opensearch-secret
-      - name: admin-cert
-        secret:
-          secretName: admin-secret
   volumeClaimTemplates:
   - metadata:
       name: data
@@ -136,28 +124,32 @@ data:
   opensearch.yml: |
     cluster.name: "os-cluster"
     network.host: "0.0.0.0"
-    discovery.seed_hosts: os-cluster-0.opensearch
-    cluster.initial_master_nodes: os-cluster-0
-
-    plugins.security.ssl.transport.pemkey_filepath: /usr/share/opensearch/config/certificates/tls.key
-    plugins.security.ssl.transport.pemcert_filepath: /usr/share/opensearch/config/certificates/tls.crt
-    plugins.security.ssl.transport.pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/ca.crt
-    plugins.security.ssl.transport.enabled: true
-    plugins.security.ssl.transport.enforce_hostname_verification: false
-    plugins.security.ssl.http.enabled: true
-    plugins.security.ssl.http.pemkey_filepath: /usr/share/opensearch/config/certificates/tls.key
-    plugins.security.ssl.http.pemcert_filepath: /usr/share/opensearch/config/certificates/tls.crt
-    plugins.security.ssl.http.pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/ca.crt
-    plugins.security.allow_unsafe_democertificates: true
-    #plugins.security.allow_default_init_securityindex: true
-
-    plugins.security.restapi.roles_enabled: ["all_access", "security_rest_api_access"]
-    plugins.security.authcz.admin_dn:
-      - "CN=admin"
-    plugins.security.nodes_dn:
-      - "CN=opensearch"
-   #compatibility.override_main_response_version: true
-    plugins.security.system_indices.indices:
+    plugins:
+      security:
+        ssl:
+          transport:
+            pemcert_filepath: esnode.pem
+            pemkey_filepath: esnode-key.pem
+            pemtrustedcas_filepath: root-ca.pem
+            enforce_hostname_verification: false
+          http:
+            enabled: true
+            pemcert_filepath: esnode.pem
+            pemkey_filepath: esnode-key.pem
+            pemtrustedcas_filepath: root-ca.pem
+        allow_unsafe_democertificates: true
+        allow_default_init_securityindex: true
+        authcz:
+          admin_dn:
+            - CN=kirk,OU=client,O=client,L=test,C=de
+        audit.type: internal_opensearch
+        enable_snapshot_restore_privilege: true
+        check_snapshot_restore_write_privileges: true
+        restapi:
+          roles_enabled: ["all_access", "security_rest_api_access"]
+        system_indices:
+          enabled: true
+          indices:
             [
               ".opendistro-alerting-config",
               ".opendistro-alerting-alert*",
@@ -170,93 +162,4 @@ data:
               ".opendistro-notebooks",
               ".opendistro-asynchronous-search-response*",
             ]
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: opensearch-securityconfig
-  namespace: kube-logging
-  labels:
-    app: opensearch
-data:
-  config.yml: |
-    _meta:
-       type: "config"
-       config_version: 2
-    config:
-      dynamic:
-        authc:
-          basic_internal_auth_domain:
-            http_enabled: true
-            transport_enabled: true
-            order: 1
-            http_authenticator:
-              type: basic
-              challenge: false
-            authentication_backend:
-              type: internal
-          openid_auth_domain:
-            http_enabled: true
-            transport_enabled: true
-            order: 0
-            http_authenticator:
-              type: "openid"
-              challenge: false
-              config:
-                subject_key: preferred_username
-                roles_key: roles
-                openid_connect_url: https://{HYPERAUTH_URL}/auth/realms/tmax/.well-known/openid-configuration
-                openid_connect_idp:
-                  enable_ssl: true
-                  verify_hostnames: false
-                  pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/ca.crt
-            authentication_backend:
-              type: noop
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: admin-cert
-  namespace: kube-logging
-spec:
-  secretName: admin-secret
-  commonName: admin
-  privateKey:
-    algorithm: RSA
-    encoding: PKCS8
-    size: 2048
-  isCA: false
-  usages:
-    - digital signature
-    - key encipherment
-    - server auth
-    - client auth
-  issuerRef:
-    kind: ClusterIssuer
-    group: cert-manager.io
-    name: tmaxcloud-issuer
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: opensearch-cert
-  namespace: kube-logging
-spec:
-  secretName: opensearch-secret
-  commonName: "opensearch"
-  privateKey:
-    algorithm: RSA
-    encoding: PKCS8
-    size: 2048
-  usages:
-    - digital signature
-    - key encipherment
-    - server auth
-    - client auth
-  dnsNames:
-    - "tmax-cloud"
-    - "opensearch.kube-logging.svc"
-  issuerRef:
-    kind: ClusterIssuer
-    group: cert-manager.io
-    name: tmaxcloud-issuer
+    #compatibility.override_main_response_version: true
