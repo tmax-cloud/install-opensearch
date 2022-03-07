@@ -70,15 +70,9 @@
 		* BUSYBOX_VERSION
 			* Busybox 의 버전
 			* ex) 1.32.0
-        * HYPERAUTH_URL
-            * Hyperauth 의 URL
-            * ex) hyperauth.tmaxcloud.org
-        * DASHBOARD_CLIENT_SECRET
-            * Hyperauth 에 생성된 dashboards client 의 secret
-            * ex) 22a985f7-c12d-4812-bd4e-bd598e1df7e8
         * CUSTOM_DOMAIN_NAME
             * Ingress로 접근 요청할 사용자 지정 도메인 이름
-            * ex) dashboards.tmaxcloud.org
+            * ex) tmaxcloud.org
 		* FLUENTD_VERSION
 			* FLUENTD_VERSION 의 버전
 			* ex) v1.4.2-debian-elasticsearch-1.1
@@ -93,29 +87,6 @@
 			* 폐쇄망 사용시 image repository의 주소
 			* 폐쇄망 아닐시 {REGISTRY} 그대로 유지
 			* ex) 192.168.171:5000
-## Hyperauth 연동
-* 목적: `Opensearch-dashboards와 Hyperauth 연동`
-* 순서:
-    *  hyperauth에서 client 생성
-    	* Client protocol = openid-connect
-    	* Access type = confidential 
-    	* Standard Flow Enabled = On 
-    	* Direct Access Grants Enabled = On
-    	* Service Accounts Enabled = On
-    	* Valid Redirect URIs: '*'
-    * Client > kibana > Credentials > client_secret 복사 후 DASHBOARD_CLIENT_SECRET을 채운다.
-    * Client > kibana > Mappers > add builtin 클릭 후 'realm roles'에 체크하여 Add selected 클릭
-    * Client > kibana > Mappers > realm roles 선택 후 설정 변경
-    	* Token Clain Name = roles
-    	* Add to ID token = On
-    	* Add to access token = On
-    	* Add to userinfo = On
-    * Dashboard를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Realm Roles에 admin이 적용되어 있는지 확인
-    
-    * client 생성
-    ![image](figure/client.png)
-    * mapper 생성
-    ![image](figure/mapper.png)
 
 ## 삭제 가이드
 * 목적 : `삭제를 위한 shell script 실행`
@@ -141,10 +112,8 @@
     $ export BUSYBOX_VERSION=1.32.0
     $ export STORAGECLASS_NAME=csi-cephfs-sc
     ```
-    * Hyperauth 연동 관련 스펙을 export 한다.
+    * ingress 관련 스펙을 export 한다.
     ```bash
-    $ export HYPERAUTH_URL=hyperauth.tmaxcloud.org
-    $ export DASHBOARD_CLIENT_SECRET=22a985f7-c12d-4812-bd4e-bd598e1df7e8
     $ export CUSTOM_DOMAIN_NAME=dashboards.tmaxcloud.org
     ```
     
@@ -165,9 +134,8 @@
 	$ sed -i 's/{BUSYBOX_VERSION}/'${BUSYBOX_VERSION}'/g' 01_opensearch.yaml
 	$ sed -i 's/{OS_VERSION}/'${OS_VERSION}'/g' 01_opensearch.yaml
 	$ sed -i 's/{STORAGECLASS_NAME}/'${STORAGECLASS_NAME}'/g' 01_opensearch.yaml
-	$ sed -i 's/{KIBANA_VERSION}/'${KIBANA_VERSION}'/g' 02_opensearch-dashboards.yaml
-    $ sed -i 's/{HYPERAUTH_URL}/'${HYPERAUTH_URL}'/g' 02_opensearch-dashboards.yaml
-    $ sed -i 's/{DASHBOARD_CLIENT_SECRET}/'${DASHBOARD_CLIENT_SECRET}'/g' 02_opensearch-dashboards.yaml
+	$ sed -i 's/{DASHBOARD_VERSION}/'${DASHBOARD_VERSION}'/g' 02_opensearch-dashboards.yaml
+    $ sed -i 's/{CUSTOM_DOMAIN_NAME}/'${CUSTOM_DOMAIN_NAME}'/g' 02_opensearch-dashboards.yaml
 	$ sed -i 's/{FLUENTD_VERSION}/'${FLUENTD_VERSION}'/g' 03_fluentd.yaml
   	$ sed -i 's/{FLUENTD_VERSION}/'${FLUENTD_VERSION}'/g' 03_fluentd_cri-o.yaml
 	```
@@ -200,7 +168,7 @@
 ![image](figure/dashboards.png)
 * 비고 :
     * Dashboard pod 가 running 임을 확인한 뒤 https://dashboards.${CUSTOM_DOMAIN_NAME}/ 에 접속한다.
-    * 해당 Hyperauth 사용자 계정으로 로그인해서 정상 작동을 확인한다.
+    * superuser계정 (admin/admin)으로 로그인해서 정상 작동을 확인한다.
 
 ## Step 3. fluentd 설치
 * 목적 : `EFK의 agent daemon 역할을 수행하는 fluentd를 설치`
