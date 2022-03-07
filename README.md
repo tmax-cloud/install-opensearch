@@ -111,28 +111,12 @@
     	* Add to access token = On
     	* Add to userinfo = On
     * Dashboard를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Realm Roles에 admin이 적용되어 있는지 확인
+    
+    * client 생성
+    ![image](figure/client.png)
+    * mapper 생성
+    ![image](figure/mapper.png)
 
-## Step 1. installer 실행
-* 목적 : `설치를 위한 shell script 실행`
-* 순서: 
-	* 권한 부여 및 실행
-	``` bash
-	$ sudo chmod +x yaml/install_EFK.sh
-	$ sudo chmod +x yaml/uninstall_EFK.sh
-	$ ./yaml/install_EFK.sh
-	```
-
-## 비고
-* Dashboard의 서비스 타입 변경을 원하는 경우
-    * yaml/02_opensearch-dashboards.yaml 파일에서 Service의 spec.type 수정
-
-## 삭제 가이드
-* 목적 : `삭제를 위한 shell script 실행`
-* 순서: 
-	* 실행
-	``` bash
-	$ ./yaml/uninstall.sh
-	```
 
 ## 수동 설치 가이드
 ## Prerequisites
@@ -157,7 +141,6 @@
     $ export CUSTOM_DOMAIN_NAME=dashboards.tmaxcloud.org
     ```
     
-
 * 비고  
     * 이하 인스톨 가이드는 StorageClass 이름이 csi-cephfs-sc 라는 가정하에 진행한다.
 
@@ -207,8 +190,9 @@
     ```bash
     $ kubectl apply -f 02_opensearch-dashboards.yaml
     ```
+![image](figure/dashboards.png)
 * 비고 :
-    * Dashboard pod 가 running 임을 확인한 뒤 https://${CUSTOM_DOMAIN_NAME}/ 에 접속한다.
+    * Dashboard pod 가 running 임을 확인한 뒤 https://dashboards.${CUSTOM_DOMAIN_NAME}/ 에 접속한다.
     * 해당 Hyperauth 사용자 계정으로 로그인해서 정상 작동을 확인한다.
 
 ## Step 3. fluentd 설치
