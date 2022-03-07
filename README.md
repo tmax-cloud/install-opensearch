@@ -162,10 +162,10 @@
     * 이하 인스톨 가이드는 StorageClass 이름이 csi-cephfs-sc 라는 가정하에 진행한다.
 
 ## Install Steps
-0. [Opensearch yaml 수정]
-1. [OpenSearch 설치]
-2. [OpenSearch-Dashboards 설치]
-3. [Fluentd 설치]
+0. [Opensearch yaml 수정](https://github.com/chaejin-lee/install-opensearch/blob/master/README.md#step-0-opensearch-yaml-%EC%88%98%EC%A0%95)
+1. [OpenSearch 설치](https://github.com/chaejin-lee/install-opensearch/blob/master/README.md#step-1-opensearch-%EC%84%A4%EC%B9%98)
+2. [OpenSearch-Dashboards 설치](https://github.com/chaejin-lee/install-opensearch/blob/master/README.md#step-2-opensearch-dashboards-%EC%84%A4%EC%B9%98)
+3. [Fluentd 설치](https://github.com/chaejin-lee/install-opensearch/blob/master/README.md#step-3-fluentd-%EC%84%A4%EC%B9%98)
 
 ## Step 0. opensearch yaml 수정
 * 목적 : `opensearch yaml에 이미지 registry, 버전 및 노드 정보를 수정`
