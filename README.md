@@ -57,8 +57,8 @@
     $ sudo docker push ${REGISTRY}/fluentd-kubernetes-daemonset:${FLUENTD_VERSION}
     ```
 
-## Step 0. efk.config 설정
-* 목적 : `yaml/efk.config 파일에 설치를 위한 정보 기입`
+## Step 0. opensearch.config 설정
+* 목적 : `yaml/opensearch.config 파일에 설치를 위한 정보 기입`
 * 순서: 
 	* 환경에 맞는 config 내용 작성
 		* OS_VERSION
@@ -167,8 +167,8 @@
 2. [OpenSearch-Dashboards 설치]
 3. [Fluentd 설치]
 
-## Step 0. efk yaml 수정
-* 목적 : `efk yaml에 이미지 registry, 버전 및 노드 정보를 수정`
+## Step 0. opensearch yaml 수정
+* 목적 : `opensearch yaml에 이미지 registry, 버전 및 노드 정보를 수정`
 * 생성 순서 : 
     * 아래의 command를 사용하여 사용하고자 하는 image 버전을 입력한다.
 	```bash
