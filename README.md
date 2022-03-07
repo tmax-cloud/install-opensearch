@@ -117,6 +117,13 @@
     * mapper 생성
     ![image](figure/mapper.png)
 
+## 삭제 가이드
+* 목적 : `삭제를 위한 shell script 실행`
+* 순서: 
+	* 실행
+	``` bash
+	$ ./yaml/uninstall.sh
+	```
 
 ## 수동 설치 가이드
 ## Prerequisites
