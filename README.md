@@ -78,7 +78,7 @@
             * ex) 22a985f7-c12d-4812-bd4e-bd598e1df7e8
         * CUSTOM_DOMAIN_NAME
             * Ingress로 접근 요청할 사용자 지정 도메인 이름
-            * ex) dashboards.tmaxcloud.org
+            * ex) tmaxcloud.org
 		* FLUENTD_VERSION
 			* FLUENTD_VERSION 의 버전
 			* ex) v1.4.2-debian-elasticsearch-1.1
@@ -168,6 +168,7 @@
 	$ sed -i 's/{KIBANA_VERSION}/'${KIBANA_VERSION}'/g' 02_opensearch-dashboards.yaml
     $ sed -i 's/{HYPERAUTH_URL}/'${HYPERAUTH_URL}'/g' 02_opensearch-dashboards.yaml
     $ sed -i 's/{DASHBOARD_CLIENT_SECRET}/'${DASHBOARD_CLIENT_SECRET}'/g' 02_opensearch-dashboards.yaml
+    $ sed -i 's/{CUSTOM_DOMAIN_NAME}/'${CUSTOM_DOMAIN_NAME}'/g' 02_opensearch-dashboards.yaml
 	$ sed -i 's/{FLUENTD_VERSION}/'${FLUENTD_VERSION}'/g' 03_fluentd.yaml
   	$ sed -i 's/{FLUENTD_VERSION}/'${FLUENTD_VERSION}'/g' 03_fluentd_cri-o.yaml
 	```
