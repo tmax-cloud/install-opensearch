@@ -209,14 +209,16 @@
       $ kubectl apply -f 03_fluentd.yaml
       ```
 ## 비고
-* ILM policy 설정
+* Index management policy 설정
     * watch-history-ilm-policy는 생성된 지 7일이 지난 인덱스는 자동으로 삭제한다.
     * policy를 수정하고 싶다면, Opensearch-dashboards에서 아래와 같이 Index Management > Index Policies 메뉴를 들어가서 watch-history-ilm-policy를 클릭한다.
     * 해당 페이지에서 Edit 버튼을 클릭하여 policy를 커스터마이징 후, Update를 클릭한다.
+    ![image](figure/policy.png)
 
 * OpenSearch에 HTTP 콜 하는 방법
     * Opensearch-dashboards Management 메뉴에서 Dev Tools를 클릭한다.
     * HTTP 콜 작성 후 ▶ 버튼 클릭
+    ![image](figure/dev-tools.png)
 
 * 에러 해결법
     * Limit of total fields [1000] in index 에러
@@ -232,8 +234,11 @@
         * 원인 : 디스크 사용량이 flood-stage watermark 수치를 넘어서면 OS가 자동적으로 저장을 막음 (default 값은 95%)
         * 해결 (택1)
             * 필요없는 인덱스를 삭제해서 용량 확보
-            
+                  * dev-tools에서 HTTP 콜을 통해 인덱스 삭제
+                  * ex) DELETE logstash-2022.01.01
+
             * HTTP콜을 통해 read-only 해제하기
+            ![image](read-only.png)
             ```
             PUT /{index 이름}/_settings
             {
