@@ -241,8 +241,8 @@
         * 원인 : 디스크 사용량이 flood-stage watermark 수치를 넘어서면 OS가 자동적으로 저장을 막음 (default 값은 95%)
         * 해결 (택1)
             * 필요없는 인덱스를 삭제해서 용량 확보
-                  * dev-tools에서 HTTP 콜을 통해 인덱스 삭제
-                  * ex) DELETE logstash-2022.01.01
+            	* dev-tools에서 HTTP 콜을 통해 인덱스 삭제
+            	* ex) DELETE logstash-2022.01.01
 
             * HTTP콜을 통해 read-only 해제하기
             ![image](figure/read-only.png)
