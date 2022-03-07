@@ -76,3 +76,30 @@ data:
     
     opensearch.ssl.verificationMode: none
     opensearch.requestTimeout: "100000ms"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    ingress.tmaxcloud.org/name: dashboards
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: tmaxcloud-issuer
+  name: dashboards
+  namespace: opensearch
+spec:
+  ingressClassName: tmax-cloud
+  rules:
+  - host: dashboards.{CUSTOM_DOMAIN_NAME}
+    http:
+      paths:
+      - backend:
+          service:
+            name: dashboards
+            port:
+              number: 5601
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - dashboards.{CUSTOM_DOMAIN_NAME}
