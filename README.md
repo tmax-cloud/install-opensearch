@@ -238,7 +238,7 @@
                   * ex) DELETE logstash-2022.01.01
 
             * HTTP콜을 통해 read-only 해제하기
-            ![image](read-only.png)
+            ![image](figure/read-only.png)
             ```
             PUT /{index 이름}/_settings
             {
