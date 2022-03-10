@@ -114,7 +114,7 @@
     ```
     * ingress 관련 스펙을 export 한다.
     ```bash
-    $ export CUSTOM_DOMAIN_NAME=dashboards.tmaxcloud.org
+    $ export CUSTOM_DOMAIN_NAME=tmaxcloud.org
     ```
     
 * 비고  
