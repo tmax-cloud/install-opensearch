@@ -43,7 +43,7 @@ spec:
       serviceAccount: opensearch-service-account
       containers:
       - name: opensearch
-        image: docker.io/opensearchproject/opensearch:1.2.3
+        image: docker.io/opensearchproject/opensearch:{OS_VERSION}
         imagePullPolicy: "IfNotPresent"
         securityContext:
           allowPrivilegeEscalation: true
@@ -73,15 +73,15 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
-          - name: discovery.type
-            value: "single-node"
-          - name: network.host
-            value: "0.0.0.0"
+          - name: discovery.seed_hosts
+            value: "os-cluster-0.opensearch" #"os-cluster-0.opensearch,os-cluster-1.opensearch,os-cluster-2.opensearch"
+          - name: cluster.initial_master_nodes
+            value: "os-cluster-0" #"os-cluster-0,os-cluster-1,os-cluster-2"
           - name: OPENSEARCH_JAVA_OPTS
             value: "-Xms8g -Xmx8g"
       initContainers:
       - name: fix-permissions
-        image: busybox:1.32.0
+        image: busybox:{BUSYBOX_VERSION}
         command: ["sh", "-c", "chown -R 1000:1000 /usr/share/opensearch/data"]
         securityContext:
           privileged: true
@@ -89,12 +89,12 @@ spec:
         - name: data
           mountPath: /usr/share/opensearch/data
       - name: increase-vm-max-map
-        image: busybox:1.32.0
+        image: busybox:{BUSYBOX_VERSION}
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true 
       - name: increase-fd-ulimit
-        image: busybox:1.32.0
+        image: busybox:{BUSYBOX_VERSION}
         command: ["sh", "-c", "ulimit -n 65536"]
         securityContext:
           privileged: true

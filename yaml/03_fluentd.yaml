@@ -84,7 +84,7 @@ spec:
       - operator: Exists
       containers:
       - name: fluentd
-        image: fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1
+        image: fluent/fluentd-kubernetes-daemonset:{FLUENTD_VERSION}
         command: ["/bin/bash", "-c", "gem install fluent-plugin-opensearch && fluentd -c /fluentd/etc/fluent.conf -p /fluentd/plugins --gemfile /fluentd/Gemfile"]
         env:
           - name: FLUENT_OPENSEARCH_HOST

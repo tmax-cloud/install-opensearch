@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: opensearch-dashboards
+  name: dashboards
   namespace: kube-logging
   labels:
     app: opensearch-dashboards
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
   - port: 5601
     name: http
@@ -35,7 +35,7 @@ spec:
       serviceAccount: opensearch-service-account
       containers:
       - name: dashboards
-        image: opensearchproject/opensearch-dashboards:1.2.0
+        image: opensearchproject/opensearch-dashboards:{DASHBOARD_VERSION}
         imagePullPolicy: "IfNotPresent"
         resources:
           limits:
