@@ -86,7 +86,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     cert-manager.io/cluster-issuer: tmaxcloud-issuer
   name: dashboards
-  namespace: opensearch
+  namespace: kube-logging
 spec:
   ingressClassName: tmax-cloud
   rules:
