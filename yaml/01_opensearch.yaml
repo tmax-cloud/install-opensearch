@@ -136,7 +136,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: opensearch-config
-  namespace: opensearch
+  namespace: kube-logging
   labels:
     app: opensearch
 data:
@@ -182,7 +182,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: opensearch-securityconfig
-  namespace: opensearch
+  namespace: kube-logging
   labels:
     app: opensearch
 data:
@@ -224,7 +224,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: admin-cert
-  namespace: opensearch
+  namespace: kube-logging
 spec:
   secretName: admin-secret
   commonName: admin
@@ -247,7 +247,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: opensearch-cert
-  namespace: opensearch
+  namespace: kube-logging
 spec:
   secretName: opensearch-secret
   commonName: "opensearch"
@@ -262,7 +262,7 @@ spec:
     - client auth
   dnsNames:
     - "tmax-cloud"
-    - "opensearch.opensearch.svc"
+    - "opensearch.kube-logging.svc"
   issuerRef:
     kind: ClusterIssuer
     group: cert-manager.io
