@@ -35,7 +35,7 @@ spec:
       serviceAccount: opensearch-service-account
       containers:
       - name: dashboards
-        image: opensearchproject/opensearch-dashboards:{DASHBOARD_VERSION}
+        image: docker.io/opensearchproject/opensearch-dashboards:{DASHBOARD_VERSION}
         imagePullPolicy: "IfNotPresent"
         securityContext:
           privileged: true
