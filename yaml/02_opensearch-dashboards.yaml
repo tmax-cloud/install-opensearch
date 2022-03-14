@@ -6,7 +6,7 @@ metadata:
   labels:
     app: opensearch-dashboards
   annotations:
-    traefik.ingress.kubernetes.io/service.serverstransport: insecure@file
+    traefik.ingress.kubernetes.io/service.serverstransport: tmaxcloud@file
 spec:
   type: ClusterIP
   ports:
@@ -37,8 +37,11 @@ spec:
       serviceAccount: opensearch-service-account
       containers:
       - name: dashboards
-        image: opensearchproject/opensearch-dashboards:{DASHBOARD_VERSION}
+        image: docker.io/opensearchproject/opensearch-dashboards:{DASHBOARD_VERSION}
         imagePullPolicy: "IfNotPresent"
+        securityContext:
+          privileged: true
+        command: ["/bin/bash", "-c", "/usr/share/opensearch-dashboards/settings.sh && /usr/share/opensearch-dashboards/opensearch-dashboards-docker-entrypoint.sh"]
         resources:
           limits:
             cpu: 500m
@@ -48,7 +51,7 @@ spec:
             memory: 1000Mi
         env:
           - name: OPENSEARCH_HOSTS
-            value: "https://opensearch:9200"
+            value: "https://opensearch.kube-logging.svc:9200"
           - name: SERVER_HOST
             value: "0.0.0.0"
         ports:
@@ -59,6 +62,12 @@ spec:
         - name: config
           mountPath: /usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
           subPath: opensearch_dashboards.yml
+        - name: settings
+          mountPath: /usr/share/opensearch-dashboards/settings.sh
+          subPath: settings.sh
+        - name: index-policy
+          mountPath: /usr/share/opensearch-dashboards/index-policy.json
+          subPath: index-policy.json
         - name: dashboards-cert
           mountPath: /usr/share/opensearch-dashboards/config/certificates
           readOnly: true
@@ -66,6 +75,19 @@ spec:
       - name: config
         configMap:
           name: opensearch-dashboards-config
+      - name: settings
+        configMap:
+          defaultMode: 0700
+          name: os-policy
+          items:
+          - key: settings.sh
+            path: settings.sh
+      - name: index-policy
+        configMap:
+          name: os-policy
+          items:
+          - key: index-policy.json
+            path: index-policy.json
       - name: dashboards-cert
         secret:
           secretName: dashboards-secret
@@ -105,6 +127,51 @@ data:
     opensearch_security.openid.root_ca: /usr/share/opensearch-dashboards/config/certificates/ca.crt
     opensearch_security.openid.verify_hostnames: false
     opensearch_security.cookie.secure: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: os-policy
+  namespace: kube-logging
+  labels:
+    app: opensearch-dashboards
+data:
+  settings.sh: |
+    curl -XPUT -u admin:admin -k -H 'Content-Type: application/json' 'https://opensearch.kube-logging.svc:9200/_plugins/_ism/policies/watch-history-ilm-policy' -d@/usr/share/opensearch-dashboards/index-policy.json
+  index-policy.json: |
+    {
+      "policy": {
+        "description": "Delete after 7 days from creation",
+        "default_state": "hot",
+        "states": [
+          {
+            "name": "hot",
+            "actions": [],
+            "transitions": [
+              {
+                "state_name": "delete",
+                "conditions": {
+                  "min_index_age": "7d"
+                }
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "actions": [
+              {
+                "delete": {}
+              }
+            ],
+            "transitions": []
+          }
+        ],
+        "ism_template": {
+           "index_patterns": ["logstash-*"],
+           "priority": 100
+        }
+      }
+    }
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

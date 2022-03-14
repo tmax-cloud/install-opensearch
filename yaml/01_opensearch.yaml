@@ -51,10 +51,10 @@ spec:
         resources:
           limits:
             cpu: 500m
-            memory: 16Gi
+            memory: 3000Mi
           requests:
             cpu: 100m
-            memory: 8Gi
+            memory: 100Mi
         ports:
         - containerPort: 9200
           name: http
@@ -82,13 +82,13 @@ spec:
           - name: node.name
             valueFrom:
               fieldRef:
-                fieldPath: spec.nodeName
+                fieldPath: metadata.name
           - name: discovery.seed_hosts
             value: "os-cluster-0.opensearch" #"os-cluster-0.opensearch,os-cluster-1.opensearch,os-cluster-2.opensearch"
           - name: cluster.initial_master_nodes
             value: "os-cluster-0" #"os-cluster-0,os-cluster-1,os-cluster-2"
           - name: OPENSEARCH_JAVA_OPTS
-            value: "-Xms8g -Xmx8g"
+            value: "-Xms2g -Xmx2g"
       initContainers:
       - name: fix-permissions
         image: busybox:{BUSYBOX_VERSION}
@@ -128,6 +128,7 @@ spec:
         app: opensearch
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {STORAGECLASS_NAME}
       resources:
         requests:
           storage: 50Gi
