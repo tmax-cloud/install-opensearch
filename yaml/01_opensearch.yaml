@@ -109,6 +109,7 @@ spec:
         app: opensearch
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {STORAGECLASS_NAME}
       resources:
         requests:
           storage: 50Gi
