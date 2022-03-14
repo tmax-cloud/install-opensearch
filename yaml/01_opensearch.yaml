@@ -72,7 +72,7 @@ spec:
           - name: node.name
             valueFrom:
               fieldRef:
-                fieldPath: spec.nodeName
+                fieldPath: metadata.name
           - name: discovery.seed_hosts
             value: "os-cluster-0.opensearch" #"os-cluster-0.opensearch,os-cluster-1.opensearch,os-cluster-2.opensearch"
           - name: cluster.initial_master_nodes
