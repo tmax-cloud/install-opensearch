@@ -198,9 +198,6 @@ do
   fi
 done
 echo "Dashboard starts up successfully"
-curl -XPOST -k -u admin:admin -H 'Content-Type: application/json' -H 'osd-xsrf: anything' https://$DASHBOARD_IP:5601/api/saved_objects/index-pattern/logstash-* '-d{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}' 
-set -e
-
 echo " "
 echo "---Installation Done---"
 popd
