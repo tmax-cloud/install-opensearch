@@ -193,8 +193,8 @@ do
   fi
 done
 echo "Dashboard starts up successfully"
-curl -f -XPOST -k -u admin:admin -H 'Content-Type: application/json' -H 'kbn-xsrf: anything' https://$DASHBOARD_IP:5601/api/saved_objects/index-pattern/logstash-* '-d{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}' 
-curl -XPOST -k -u admin:admin -H "Content-Type: application/json" -H "kbn-xsrf: true" https://$DASHBOARD_IP:5601/api/kibana/settings/defaultIndex -d '{"value": "logstash-*"}'
+curl -XPOST -k -u admin:admin -H 'Content-Type: application/json' -H 'osd-xsrf: anything' https://$DASHBOARD_IP:5601/api/saved_objects/index-pattern/logstash-* '-d{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}' 
+curl -XPOST -k -u admin:admin -H "Content-Type: application/json" -H "osd-xsrf: true" https://$DASHBOARD_IP:5601/api/kibana/settings/defaultIndex -d '{"value": "logstash-*"}'
 set -e
 
 echo " "
