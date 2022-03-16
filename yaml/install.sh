@@ -7,10 +7,11 @@ source ./opensearch.config
 
 echo "OS_VERSION = $OS_VERSION"
 echo "DASHBOARD_VERSION = $DASHBOARD_VERSION"
-#echo "CUSTOM_DOMAIN_NAME = $CUSTOM_DOMAIN_NAME"
+echo "CUSTOM_DOMAIN_NAME = $CUSTOM_DOMAIN_NAME"
 echo "FLUENTD_VERSION = $FLUENTD_VERSION"
 echo "BUSYBOX_VERSION = $BUSYBOX_VERSION"
 if [ $STORAGECLASS_NAME != "{STORAGECLASS_NAME}" ]; then
+  sed -i 's/{STORAGECLASS_NAME}/'${STORAGECLASS_NAME}'/g' 01_opensearch.yaml
   echo "STORAGECLASS_NAME = $STORAGECLASS_NAME"
 else
   sed -i 's/storageClassName: {STORAGECLASS_NAME}//g' 01_opensearch.yaml
@@ -22,9 +23,8 @@ fi
 
 sed -i 's/{BUSYBOX_VERSION}/'${BUSYBOX_VERSION}'/g' 01_opensearch.yaml
 sed -i 's/{OS_VERSION}/'${OS_VERSION}'/g' 01_opensearch.yaml
-#sed -i 's/{STORAGECLASS_NAME}/'${STORAGECLASS_NAME}'/g' 01_opensearch.yaml
 sed -i 's/{DASHBOARD_VERSION}/'${DASHBOARD_VERSION}'/g' 02_opensearch-dashboards.yaml
-#sed -i 's/{CUSTOM_DOMAIN_NAME}/'${CUSTOM_DOMAIN_NAME}'/g' 02_opensearch-dashboards.yaml
+sed -i 's/{CUSTOM_DOMAIN_NAME}/'${CUSTOM_DOMAIN_NAME}'/g' 02_opensearch-dashboards.yaml
 sed -i 's/{FLUENTD_VERSION}/'${FLUENTD_VERSION}'/g' 03_fluentd.yaml
 sed -i 's/{FLUENTD_VERSION}/'${FLUENTD_VERSION}'/g' 03_fluentd_cri-o.yaml
 
