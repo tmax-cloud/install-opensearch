@@ -70,6 +70,12 @@
 		* BUSYBOX_VERSION
 			* Busybox 의 버전
 			* ex) 1.32.0
+        * HYPERAUTH_URL
+            * Hyperauth 의 URL
+            * ex) hyperauth.tmaxcloud.org
+        * DASHBOARD_CLIENT_SECRET
+            * Hyperauth 에 생성된 dashboards client 의 secret
+            * ex) 22a985f7-c12d-4812-bd4e-bd598e1df7e8
         * CUSTOM_DOMAIN_NAME
             * Ingress로 접근 요청할 사용자 지정 도메인 이름
             * ex) tmaxcloud.org
@@ -87,6 +93,29 @@
 			* 폐쇄망 사용시 image repository의 주소
 			* 폐쇄망 아닐시 {REGISTRY} 그대로 유지
 			* ex) 192.168.171:5000
+## Hyperauth 연동
+* 목적: `Opensearch-dashboards와 Hyperauth 연동`
+* 순서:
+    *  hyperauth에서 client 생성
+    	* Client protocol = openid-connect
+    	* Access type = confidential 
+    	* Standard Flow Enabled = On 
+    	* Direct Access Grants Enabled = On
+    	* Service Accounts Enabled = On
+    	* Valid Redirect URIs: '*'
+    * Client > kibana > Credentials > client_secret 복사 후 DASHBOARD_CLIENT_SECRET을 채운다.
+    * Client > kibana > Mappers > add builtin 클릭 후 'realm roles'에 체크하여 Add selected 클릭
+    * Client > kibana > Mappers > realm roles 선택 후 설정 변경
+    	* Token Claim Name = roles
+    	* Add to ID token = On
+    	* Add to access token = On
+    	* Add to userinfo = On
+    * Dashboard를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Realm Roles에 admin이 적용되어 있는지 확인
+
+    * client 생성
+
+    * mapper 생성
+    ![image](figure/mapper.png)
 
 ## 삭제 가이드
 * 목적 : `삭제를 위한 shell script 실행`
@@ -112,8 +141,10 @@
     $ export BUSYBOX_VERSION=1.32.0
     $ export STORAGECLASS_NAME=csi-cephfs-sc
     ```
-    * ingress 관련 스펙을 export 한다.
+    * Hyperauth 연동 관련 스펙을 export 한다.
     ```bash
+    $ export HYPERAUTH_URL=hyperauth.tmaxcloud.org
+    $ export DASHBOARD_CLIENT_SECRET=22a985f7-c12d-4812-bd4e-bd598e1df7e8
     $ export CUSTOM_DOMAIN_NAME=dashboards.tmaxcloud.org
     ```
     
@@ -170,7 +201,7 @@
 ![image](figure/dashboards.png)
 * 비고 :
     * Dashboard pod 가 running 임을 확인한 뒤 https://dashboards.${CUSTOM_DOMAIN_NAME}/ 에 접속한다.
-    * superuser계정 (admin/admin)으로 로그인해서 정상 작동을 확인한다.
+    * Hyperauth에서 설정한 사용자 계정으로 로그인하여 정상 작동을 확인한다.
 
 ## Step 3. fluentd 설치
 * 목적 : `EFK의 agent daemon 역할을 수행하는 fluentd를 설치`
