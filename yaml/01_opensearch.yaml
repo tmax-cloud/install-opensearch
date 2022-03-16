@@ -157,7 +157,7 @@ data:
     plugins.security.ssl.http.pemcert_filepath: /usr/share/opensearch/config/certificates/tls.crt
     plugins.security.ssl.http.pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/ca.crt
     plugins.security.allow_unsafe_democertificates: true
-    #plugins.security.allow_default_init_securityindex: true
+    plugins.security.allow_default_init_securityindex: true
 
     plugins.security.restapi.roles_enabled: ["all_access", "security_rest_api_access"]
     plugins.security.authcz.admin_dn:
