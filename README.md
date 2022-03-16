@@ -88,6 +88,16 @@
 			* 폐쇄망 아닐시 {REGISTRY} 그대로 유지
 			* ex) 192.168.171:5000
 
+## Step 1. installer 실행
+* 목적 : `설치를 위한 shell script 실행`
+* 순서: 
+	* 권한 부여 및 실행
+	``` bash
+	$ sudo chmod +x yaml/install.sh
+	$ sudo chmod +x yaml/uninstall.sh
+	$ ./yaml/install.sh
+	```
+
 ## 삭제 가이드
 * 목적 : `삭제를 위한 shell script 실행`
 * 순서: 
