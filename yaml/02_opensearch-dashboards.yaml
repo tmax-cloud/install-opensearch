@@ -54,6 +54,8 @@ spec:
             value: "https://opensearch.kube-logging.svc:9200"
           - name: SERVER_HOST
             value: "0.0.0.0"
+          - name: NODE_TLS_REJECT_UNAUTHORIZED
+            value: "0"
         ports:
         - containerPort: 5601
           name: https
