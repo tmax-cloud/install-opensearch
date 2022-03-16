@@ -180,7 +180,7 @@ echo "logstash index was made in OpenSearch"
 
 for ((i=0; i<11; i++))
 do
-  is_success=`curl -XGET -k -u admin:admin http://$DASHBOARD_IP:5601/api/kibana/status -I`
+  is_success=`curl -XGET -k -u admin:admin http://$DASHBOARD_IP:5601/api/status -I`
 
   if [[ "$is_success" == *"200 OK"* ]]; then
     break
@@ -193,8 +193,8 @@ do
   fi
 done
 echo "Dashboard starts up successfully"
-curl -f -XPOST -k -u admin:admin -H 'Content-Type: application/json' -H 'kbn-xsrf: anything' http://$DASHBOARD_IP:5601/api/kibana/api/saved_objects/index-pattern/logstash-* '-d{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}' 
-curl -XPOST -k -u admin:admin -H "Content-Type: application/json" -H "kbn-xsrf: true" http://$DASHBOARD_IP:5601/api/kibana/api/kibana/settings/defaultIndex -d '{"value": "logstash-*"}'
+curl -f -XPOST -k -u admin:admin -H 'Content-Type: application/json' -H 'kbn-xsrf: anything' http://$DASHBOARD_IP:5601/api/saved_objects/index-pattern/logstash-* '-d{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}' 
+curl -XPOST -k -u admin:admin -H "Content-Type: application/json" -H "kbn-xsrf: true" http://$DASHBOARD_IP:5601/api/kibana/settings/defaultIndex -d '{"value": "logstash-*"}'
 set -e
 
 echo " "
