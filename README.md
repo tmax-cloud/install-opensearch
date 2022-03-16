@@ -145,7 +145,7 @@
     ```bash
     $ export HYPERAUTH_URL=hyperauth.tmaxcloud.org
     $ export DASHBOARD_CLIENT_SECRET=22a985f7-c12d-4812-bd4e-bd598e1df7e8
-    $ export CUSTOM_DOMAIN_NAME=dashboards.tmaxcloud.org
+    $ export CUSTOM_DOMAIN_NAME=tmaxcloud.org
     ```
     
 * 비고  
