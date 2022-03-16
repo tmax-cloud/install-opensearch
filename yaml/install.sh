@@ -13,9 +13,10 @@ echo "CUSTOM_DOMAIN_NAME = $CUSTOM_DOMAIN_NAME"
 echo "FLUENTD_VERSION = $FLUENTD_VERSION"
 echo "BUSYBOX_VERSION = $BUSYBOX_VERSION"
 if [ $STORAGECLASS_NAME != "{STORAGECLASS_NAME}" ]; then
+  sed -i 's/{STORAGECLASS_NAME}/'${STORAGECLASS_NAME}'/g' 01_opensearch.yaml
   echo "STORAGECLASS_NAME = $STORAGECLASS_NAME"
 else
-  export STORAGECLASS_NAME=
+  sed -i 's/storageClassName: {STORAGECLASS_NAME}//g' 01_opensearch.yaml
   echo "STORAGECLASS_NAME = default-storage-class"
 fi
 if [ $REGISTRY != "{REGISTRY}" ]; then
@@ -25,7 +26,6 @@ fi
 sed -i 's/{BUSYBOX_VERSION}/'${BUSYBOX_VERSION}'/g' 01_opensearch.yaml
 sed -i 's/{OS_VERSION}/'${ES_VERSION}'/g' 01_opensearch.yaml
 sed -i 's/{HYPERAUTH_URL}/'${HYPERAUTH_URL}'/g' 01_opensearch.yaml
-sed -i 's/{STORAGECLASS_NAME}/'${STORAGECLASS_NAME}'/g' 01_opensearch.yaml
 sed -i 's/{DASHBOARD_VERSION}/'${DASHBOARD_VERSION}'/g' 02_opensearch-dashboards.yaml
 sed -i 's/{HYPERAUTH_URL}/'${HYPERAUTH_URL}'/g' 02_opensearch-dashboards.yaml
 sed -i 's/{DASHBOARD_CLIENT_SECRET}/'${DASHBOARD_CLIENT_SECRET}'/g' 02_opensearch-dashboards.yaml
@@ -63,7 +63,7 @@ fi
 echo " "
 echo "---2. Wait until Opensearch starts up---"
 echo "It will take a couple of minutes"
-sleep 15s
+sleep 1m
 set +e
 export OS_IP=`kubectl get svc -n kube-logging | grep opensearch | tr -s ' ' | cut -d ' ' -f3`
 for ((i=0; i<11; i++))
@@ -95,7 +95,8 @@ if [ $suc != 0 ]; then
   kubectl delete -f 02_opensearch-dashboards.yaml
   exit 1
 else
-  echo "Dashboard pod running success" 
+  echo "Dashboard pod running success"
+  sleep 10s
 fi
 
 # 4. Install Fluentd
@@ -110,6 +111,7 @@ if [ $suc != 0 ]; then
   exit 1
 else
   echo "Fluentd running success"
+  sleep 10s
 fi
 
 # 5. Wait until Dashboard makes an index and alias normally
