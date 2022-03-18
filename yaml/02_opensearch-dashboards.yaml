@@ -132,7 +132,7 @@ data:
     opensearch_security.openid.client_id: "dashboards"
     opensearch_security.openid.client_secret: "{DASHBOARD_CLIENT_SECRET}"
     opensearch_security.openid.base_redirect_url: "https://dashboards.{CUSTOM_DOMAIN_NAME}"
-    opensearch_security.openid.root_ca: /usr/share/opensearch-dashboards/config/certificates/hyperauth/ca.crt
+    opensearch_security.openid.root_ca: /usr/share/opensearch-dashboards/config/certificates/ca.crt
     opensearch_security.openid.verify_hostnames: false
     opensearch_security.cookie.secure: false
 ---
