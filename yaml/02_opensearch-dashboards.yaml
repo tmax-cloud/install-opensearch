@@ -73,6 +73,9 @@ spec:
         - name: dashboards-cert
           mountPath: /usr/share/opensearch-dashboards/config/certificates
           readOnly: true
+        #- name: hyperauth-ca
+        #  mountPath: /usr/share/opensearch-dashboards/config/certificates/hyperauth
+        #  readOnly: true
       volumes:
       - name: config
         configMap:
@@ -93,6 +96,9 @@ spec:
       - name: dashboards-cert
         secret:
           secretName: dashboards-secret
+      #- name: hyperauth-ca
+      #  secret:
+      #    secretName: hyperauth-ca
 ---
 apiVersion: v1
 kind: ConfigMap
