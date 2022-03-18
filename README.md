@@ -113,7 +113,7 @@
     * Dashboard를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Realm Roles에 admin이 적용되어 있는지 확인
 
     * client 생성
-
+    ![image](figure/client.png)
     * mapper 생성
     ![image](figure/mapper.png)
 
