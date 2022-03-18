@@ -145,7 +145,7 @@ metadata:
     app: opensearch-dashboards
 data:
   settings.sh: |
-    curl -XPUT -u admin:admin -k -H 'Content-Type: application/json' 'https://opensearch.opensearch.svc:9200/_plugins/_ism/policies/watch-history-ilm-policy' -d@/usr/share/opensearch-dashboards/index-policy.json
+    curl -XPUT -u admin:admin -k -H 'Content-Type: application/json' 'https://opensearch.kube-logging.svc:9200/_plugins/_ism/policies/watch-history-ilm-policy' -d@/usr/share/opensearch-dashboards/index-policy.json
   index-policy.json: |
     {
       "policy": {
