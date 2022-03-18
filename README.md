@@ -296,4 +296,4 @@ opensearch-dashboards-config
 ```
   opensearch_security.openid.root_ca: /usr/share/opensearch-dashboards/config/certificates/hyperauth/ca.crt #로 수정
 ```
-4. 이후 install 가이드와 동일하게 설치를 진행
+4. 이후 install 가이드와 동일한 순서로 설치를 진행
