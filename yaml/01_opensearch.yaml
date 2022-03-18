@@ -274,32 +274,3 @@ spec:
     kind: ClusterIssuer
     group: cert-manager.io
     name: tmaxcloud-issuer
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: hyperauth-ca
-  namespace: kube-logging
-type: Opaque
-stringData:
-  ca.crt: |
-    -----BEGIN CERTIFICATE-----
-    MIIDFDCCAfygAwIBAgIRAMv5gYRn62NbTeGZTUjw7sswDQYJKoZIhvcNAQELBQAw
-    FDESMBAGA1UEAxMJdG1heGNsb3VkMB4XDTIyMDExOTA1NTA1OVoXDTIzMDExOTA1
-    NTA1OVowFDESMBAGA1UEAxMJdG1heGNsb3VkMIIBIjANBgkqhkiG9w0BAQEFAAOC
-    AQ8AMIIBCgKCAQEAlRGRMIFCZ14+BgY/l12HIgNBaOuHLYX8owaqFWGuF3APLbHY
-    vddwmgg0Tll6h0rCLkIFVrzQmFYmbyU2+M6JRMajyMWWnuCAtEqpN1ZwDm4RnZfs
-    i5OyFmJKZ3LcmKqIkmyaYb2QqdTliNQkqytUmyX59zkrTe2Y/sWkPGA3jKTm9CIK
-    7l9x5E8JfJ3VKy289DzLjcTIX0AeRgd2HMdpN6DFAouTBhzMa8OqO3Dq0pSvqwju
-    Wr47nqujAIu+7RgxfEcCzx36GmH7sJpCUZzKCfEqcA65IjgpQJWARGtoDZHJ767K
-    i5O7lDc8qkPdZRDT+XoHfzMTSYcmKh8Lg4X8AwIDAQABo2EwXzAOBgNVHQ8BAf8E
-    BAMCAqQwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMA8GA1UdEwEB/wQF
-    MAMBAf8wHQYDVR0OBBYEFL6/kFBtiDyVKwxAGYIwbLH9dG4rMA0GCSqGSIb3DQEB
-    CwUAA4IBAQAQAP9JRV3cv0owTl1tH+af7Fbf1hk/8IuT0ZWE+r3W9VEYlVV+i1D5
-    hWOfLRmaKp9BHATKiz8e4buoYtRv0mhk8oWtw1BaGPBiYH/1rGfz97vTgMnkkFaH
-    iSq7QO6xtzJLYK8wcv/ndpyU2qI/mZzPC4a3jmnMh/ogMVahZ5ByqaMgiQ5HMhJl
-    PkZl50o+xILFVHFJgzNIm5ShDag8gKZ9HWieh50Ks/vFHZl99kCtgLQ8fXuapys3
-    piJ00dEOHZoBqjb2AjoCDSkAScHvufLNfcdHKF4ln4aP3LlRBmUX53hYJYJhaDAU
-    R8mmeoP6Xz6IQFTwkGXaKuP11txXLFjx
-    -----END CERTIFICATE-----
-
