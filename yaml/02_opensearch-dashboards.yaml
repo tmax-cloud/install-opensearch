@@ -73,6 +73,9 @@ spec:
         - name: dashboards-cert
           mountPath: /usr/share/opensearch-dashboards/config/certificates
           readOnly: true
+        #- name: hyperauth-ca
+        #  mountPath: /usr/share/opensearch-dashboards/config/certificates/hyperauth
+        #  readOnly: true
       volumes:
       - name: config
         configMap:
@@ -93,6 +96,9 @@ spec:
       - name: dashboards-cert
         secret:
           secretName: dashboards-secret
+      #- name: hyperauth-ca
+      #  secret:
+      #    secretName: hyperauth-ca
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -126,7 +132,7 @@ data:
     opensearch_security.openid.client_id: "dashboards"
     opensearch_security.openid.client_secret: "{DASHBOARD_CLIENT_SECRET}"
     opensearch_security.openid.base_redirect_url: "https://dashboards.{CUSTOM_DOMAIN_NAME}"
-    opensearch_security.openid.root_ca: /usr/share/opensearch-dashboards/config/certificates/ca.crt
+    opensearch_security.openid.root_ca: /usr/share/opensearch-dashboards/config/certificates/hyperauth/ca.crt
     opensearch_security.openid.verify_hostnames: false
     opensearch_security.cookie.secure: false
 ---
@@ -139,7 +145,7 @@ metadata:
     app: opensearch-dashboards
 data:
   settings.sh: |
-    curl -XPUT -u admin:admin -k -H 'Content-Type: application/json' 'https://opensearch.kube-logging.svc:9200/_plugins/_ism/policies/watch-history-ilm-policy' -d@/usr/share/opensearch-dashboards/index-policy.json
+    curl -XPUT -u admin:admin -k -H 'Content-Type: application/json' 'https://opensearch.opensearch.svc:9200/_plugins/_ism/policies/watch-history-ilm-policy' -d@/usr/share/opensearch-dashboards/index-policy.json
   index-policy.json: |
     {
       "policy": {

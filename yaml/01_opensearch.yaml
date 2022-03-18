@@ -43,7 +43,7 @@ spec:
       serviceAccount: opensearch-service-account
       containers:
       - name: opensearch
-        image: docker.io/opensearchproject/opensearch:{OS_VERSION}
+        image: docker.io/opensearchproject/opensearch:1.2.3
         imagePullPolicy: "IfNotPresent"
         securityContext:
           allowPrivilegeEscalation: true
@@ -76,6 +76,9 @@ spec:
         - name: admin-cert
           mountPath: /usr/share/opensearch/config/certificates/admin
           readOnly: true
+        #- name: hyperauth-ca
+        #  mountPath: /usr/share/opensearch/config/certificates/hyperauth
+        #  readOnly: true
         env:
           - name: cluster.name
             value: os-cluster
@@ -91,7 +94,7 @@ spec:
             value: "-Xms2g -Xmx2g"
       initContainers:
       - name: fix-permissions
-        image: busybox:{BUSYBOX_VERSION}
+        image: busybox:1.32.0
         command: ["sh", "-c", "chown -R 1000:1000 /usr/share/opensearch/data"]
         securityContext:
           privileged: true
@@ -99,12 +102,12 @@ spec:
         - name: data
           mountPath: /usr/share/opensearch/data
       - name: increase-vm-max-map
-        image: busybox:{BUSYBOX_VERSION}
+        image: busybox:1.32.0
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true 
       - name: increase-fd-ulimit
-        image: busybox:{BUSYBOX_VERSION}
+        image: busybox:1.32.0
         command: ["sh", "-c", "ulimit -n 65536"]
         securityContext:
           privileged: true
@@ -121,6 +124,9 @@ spec:
       - name: admin-cert
         secret:
           secretName: admin-secret
+      #- name: hyperauth-ca
+      #  secret:
+      #    secretName: hyperauth-ca
   volumeClaimTemplates:
   - metadata:
       name: data
@@ -128,7 +134,6 @@ spec:
         app: opensearch
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: {STORAGECLASS_NAME}
       resources:
         requests:
           storage: 50Gi
@@ -217,7 +222,7 @@ data:
                 openid_connect_idp:
                   enable_ssl: true
                   verify_hostnames: false
-                  pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/ca.crt
+                  pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/hyperauth/ca.crt
             authentication_backend:
               type: noop
 ---
@@ -268,3 +273,32 @@ spec:
     kind: ClusterIssuer
     group: cert-manager.io
     name: tmaxcloud-issuer
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hyperauth-ca
+  namespace: kube-logging
+type: Opaque
+stringData:
+  ca.crt: |
+    -----BEGIN CERTIFICATE-----
+    MIIDFDCCAfygAwIBAgIRAMv5gYRn62NbTeGZTUjw7sswDQYJKoZIhvcNAQELBQAw
+    FDESMBAGA1UEAxMJdG1heGNsb3VkMB4XDTIyMDExOTA1NTA1OVoXDTIzMDExOTA1
+    NTA1OVowFDESMBAGA1UEAxMJdG1heGNsb3VkMIIBIjANBgkqhkiG9w0BAQEFAAOC
+    AQ8AMIIBCgKCAQEAlRGRMIFCZ14+BgY/l12HIgNBaOuHLYX8owaqFWGuF3APLbHY
+    vddwmgg0Tll6h0rCLkIFVrzQmFYmbyU2+M6JRMajyMWWnuCAtEqpN1ZwDm4RnZfs
+    i5OyFmJKZ3LcmKqIkmyaYb2QqdTliNQkqytUmyX59zkrTe2Y/sWkPGA3jKTm9CIK
+    7l9x5E8JfJ3VKy289DzLjcTIX0AeRgd2HMdpN6DFAouTBhzMa8OqO3Dq0pSvqwju
+    Wr47nqujAIu+7RgxfEcCzx36GmH7sJpCUZzKCfEqcA65IjgpQJWARGtoDZHJ767K
+    i5O7lDc8qkPdZRDT+XoHfzMTSYcmKh8Lg4X8AwIDAQABo2EwXzAOBgNVHQ8BAf8E
+    BAMCAqQwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMA8GA1UdEwEB/wQF
+    MAMBAf8wHQYDVR0OBBYEFL6/kFBtiDyVKwxAGYIwbLH9dG4rMA0GCSqGSIb3DQEB
+    CwUAA4IBAQAQAP9JRV3cv0owTl1tH+af7Fbf1hk/8IuT0ZWE+r3W9VEYlVV+i1D5
+    hWOfLRmaKp9BHATKiz8e4buoYtRv0mhk8oWtw1BaGPBiYH/1rGfz97vTgMnkkFaH
+    iSq7QO6xtzJLYK8wcv/ndpyU2qI/mZzPC4a3jmnMh/ogMVahZ5ByqaMgiQ5HMhJl
+    PkZl50o+xILFVHFJgzNIm5ShDag8gKZ9HWieh50Ks/vFHZl99kCtgLQ8fXuapys3
+    piJ00dEOHZoBqjb2AjoCDSkAScHvufLNfcdHKF4ln4aP3LlRBmUX53hYJYJhaDAU
+    R8mmeoP6Xz6IQFTwkGXaKuP11txXLFjx
+    -----END CERTIFICATE-----
+
