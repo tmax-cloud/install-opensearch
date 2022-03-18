@@ -43,7 +43,7 @@ spec:
       serviceAccount: opensearch-service-account
       containers:
       - name: opensearch
-        image: docker.io/opensearchproject/opensearch:1.2.3
+        image: docker.io/opensearchproject/opensearch:{OS_VERSION}
         imagePullPolicy: "IfNotPresent"
         securityContext:
           allowPrivilegeEscalation: true
@@ -94,7 +94,7 @@ spec:
             value: "-Xms2g -Xmx2g"
       initContainers:
       - name: fix-permissions
-        image: busybox:1.32.0
+        image: busybox:{BUSYBOX_VERSION}
         command: ["sh", "-c", "chown -R 1000:1000 /usr/share/opensearch/data"]
         securityContext:
           privileged: true
@@ -102,12 +102,12 @@ spec:
         - name: data
           mountPath: /usr/share/opensearch/data
       - name: increase-vm-max-map
-        image: busybox:1.32.0
+        image: busybox:{BUSYBOX_VERSION}
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true 
       - name: increase-fd-ulimit
-        image: busybox:1.32.0
+        image: busybox:{BUSYBOX_VERSION}
         command: ["sh", "-c", "ulimit -n 65536"]
         securityContext:
           privileged: true
