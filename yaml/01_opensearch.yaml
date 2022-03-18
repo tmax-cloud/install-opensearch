@@ -223,7 +223,7 @@ data:
                 openid_connect_idp:
                   enable_ssl: true
                   verify_hostnames: false
-                  pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/hyperauth/ca.crt
+                  pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/ca.crt
             authentication_backend:
               type: noop
 ---
