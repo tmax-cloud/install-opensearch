@@ -120,6 +120,20 @@
     * Realm role
     ![image](figure/realm-roles.png)
 
+## Step 1. installer 실행
+* 목적 : `설치를 위한 shell script 실행`
+* 순서: 
+	* 권한 부여 및 실행
+	``` bash
+	$ sudo chmod +x yaml/install.sh
+	$ sudo chmod +x yaml/uninstall.sh
+	$ ./yaml/install.sh
+	```
+
+## 비고
+* Dashboard의 서비스 타입 변경을 원하는 경우
+    * yaml/02_opensearch-dashboards.yaml 파일에서 Service의 spec.type 수정
+
 ## 삭제 가이드
 * 목적 : `삭제를 위한 shell script 실행`
 * 순서: 
@@ -160,8 +174,8 @@
 2. [OpenSearch-Dashboards 설치](https://github.com/chaejin-lee/install-opensearch/blob/master/README.md#step-2-opensearch-dashboards-%EC%84%A4%EC%B9%98)
 3. [Fluentd 설치](https://github.com/chaejin-lee/install-opensearch/blob/master/README.md#step-3-fluentd-%EC%84%A4%EC%B9%98)
 
-## Step 0. opensearch yaml 수정
-* 목적 : `opensearch yaml에 이미지 registry, 버전 및 노드 정보를 수정`
+## Step 0. opensearch-stack yaml 수정
+* 목적 : `opensearch-stack yaml에 이미지 registry, 버전 및 노드 정보를 수정`
 * 생성 순서 : 
     * 아래의 command를 사용하여 사용하고자 하는 image 버전을 입력한다.
 	```bash
