@@ -103,9 +103,9 @@
     	* Direct Access Grants Enabled = On
     	* Service Accounts Enabled = On
     	* Valid Redirect URIs: '*'
-    * Client > kibana > Credentials > client_secret 복사 후 DASHBOARD_CLIENT_SECRET을 채운다.
-    * Client > kibana > Mappers > add builtin 클릭 후 'realm roles'에 체크하여 Add selected 클릭
-    * Client > kibana > Mappers > realm roles 선택 후 설정 변경
+    * Client > dashboards > Credentials > client_secret 복사 후 DASHBOARD_CLIENT_SECRET을 채운다.
+    * Client > dashboards > Mappers > add builtin 클릭 후 'realm roles'에 체크하여 Add selected 클릭
+    * Client > dashboards > Mappers > realm roles 선택 후 설정 변경
     	* Token Claim Name = roles
     	* Add to ID token = On
     	* Add to access token = On
