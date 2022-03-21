@@ -1,7 +1,7 @@
 # Elasticsearch-Opensearch 데이터 마이그레이션 가이드
 
 ### Step 1. ElasticSearch backup repo 생성
-* [01_elasticsearch.yaml](migration/01_elasticsearch.yaml)에 snapshot repository 생성을 위한 설정을 추가한 후, es-cluster pod를 재기동한다.
+* [01_elasticsearch.yaml](migration/01_elasticsearch.yaml)(예시)에 snapshot repository 생성을 위한 설정을 추가한 후, es-cluster pod를 재기동한다.
 * 예시1) elasticsearch/statefulset 추가 설정
 ```
 volumeMounts:
