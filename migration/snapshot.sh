@@ -17,15 +17,6 @@ curl -XPUT "http://$ES_IP:9200/_snapshot/backups?pretty" -H 'Content-Type: appli
 }
 '
 
-curl -XGET http://$ES_IP:9200/_snapshot/backups/
-is_success=`echo $?`
-if [ $is_success == *backups* ]; then
-    echo "Created Backup Repository"
-    sleep 5s
-else
-    echo "Failed to create Backup Repository"
-    exit 1
-
 # 2. Create Snapshot Data
 echo " "
 echo "---Create Snapshot Data---"
@@ -37,15 +28,6 @@ curl -XPUT "http://$ES_IP:9200/_snapshot/backups/snapshot_1?wait_for_completion=
   "include_global_state": false
 }
 '
-
-curl -XGET http://$ES_IP:9200/_snapshot/backups/snapshot_1
-is_success=`echo $?`
-if [ $is_success == *snapshot_1* ]; then
-    echo "Created Snapshot Data"
-    sleep 5s
-else
-    echo "Failed to create snapshot"
-    exit 1
 
 echo " "
 echo "---Saving Snapshot Done---"
