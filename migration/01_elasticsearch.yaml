@@ -99,10 +99,10 @@ spec:
         securityContext:
           privileged: true
       volumes:
-      - name: es-config
+      - name: es-config   # path.repo 설정으로 backup repository 경로 설정
         configMap:
           name: es-config
-      - name: backups-vol
+      - name: backups-vol  # backup repository를 pvc로 마운트
         persistentVolumeClaim:
           claimName: backups-es-cluster-0
   volumeClaimTemplates:
@@ -133,4 +133,4 @@ metadata:
 data:
   elasticsearch.yml: |
     network.host: "0.0.0.0"
-    path.repo: ["/backups"]
+    path.repo: ["/backups"] # backup repository 경로
