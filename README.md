@@ -110,12 +110,15 @@
     	* Add to ID token = On
     	* Add to access token = On
     	* Add to userinfo = On
-    * Dashboard를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Realm Roles에 admin이 적용되어 있는지 확인
+    * Roles > Realm Roles > add role 클릭 후 'admin' role 생성
+    * Dashboard를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Realm Roles에 admin을 적용한다.
 
     * client 생성
     ![image](figure/client-page.png)
     * mapper 생성
     ![image](figure/mapper.png)
+    * Realm role
+    ![image](figure/realm-roles.png)
 
 ## 삭제 가이드
 * 목적 : `삭제를 위한 shell script 실행`
