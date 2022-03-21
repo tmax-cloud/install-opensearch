@@ -17,12 +17,12 @@ curl -u admin:admin -k -XPUT https://$OS_IP:9200/_snapshot/backups -H 'Content-T
 }
 '
 
-# 2. Import Snapshot Data
+# 2. Restore Snapshot Data
 echo " "
-echo "---Import Snapshot Data---"
+echo "---Restore Snapshot Data---"
 
 curl -u admin:admin -k -XPOST https://$OS_IP:9200/_snapshot/backups/snapshot_1/_restore
 
 echo " "
-echo "---Import Snapshot Done---"
+echo "---Restore Snapshot Done---"
 
