@@ -1,7 +1,7 @@
 # Elasticsearch-Opensearch 데이터 마이그레이션 가이드
 
 ### Step 1. ElasticSearch backup repo 생성
-* [01_elasticsearch.yaml](migration/01_elasticsearch.yaml)(예시)에 snapshot repository 생성을 위한 설정을 추가한 후, es-cluster pod를 재기동한다.
+* 기존에 사용한 [01_elasticsearch.yaml](migration/01_elasticsearch.yaml)(예시용)에 snapshot repository 생성을 위한 설정을 추가한 후, es-cluster pod를 재기동한다.
 * 예시1) elasticsearch/statefulset 추가 설정
 ```
 volumeMounts:
@@ -81,12 +81,11 @@ $ ./migration/restore.sh
 
 
 ### 비고
-* Snapshot으로 저장하고자 하는 index 설정
 * [snapshot.sh](migration/snapshot.sh)에서 저장하고자 하는 index-pattern을 추가할 수 있다.
 * 예시) fluentd-* index-pattern 추가 시,
 ```
 {
-  "indices": "logstash-*", "fluentd-*" # 
+  "indices": "logstash-*", "fluentd-*" # 추가한 index-pattern
   "ignore_unavailable": true,
   "include_global_state": false
 }
@@ -94,4 +93,4 @@ $ ./migration/restore.sh
 ```
 
 * 단, kibana의 system indices는 (ex) .kibana*) snapshot에 저장하지 않는다.
-*  dashboards와 동일한 system indices 이름을 사용하기 때문에 충돌한다
+* dashboards와 동일한 system indices 이름을 사용하기 때문에 충돌하기 때문
