@@ -234,6 +234,11 @@
       ```bash
       $ kubectl apply -f 03_fluentd.yaml
       ```
+  3. Kubernetes pod 별로 index 생성하고자 할 경우
+    * [03_fluentd_multiple_index.yaml](yaml/03_fluentd_multiple_index.yaml) 실행 
+      ```bash
+      $ kubectl apply -f 03_fluentd_multiple_index.yaml
+      ```
 ## 비고
 * Index management policy 설정
     * watch-history-ilm-policy는 생성된 지 7일이 지난 인덱스는 자동으로 삭제한다.
