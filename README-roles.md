@@ -25,4 +25,5 @@
 
 * Dashboard에 새로 권한을 부여한 사용자 계정으로 로그인한다.
 * 오른쪽 상단에 있는 계정 메뉴에서 "View roles and identities"를 클릭하여, 예시와 같이 새로 생성한 role이 적용되어 있는 것을 확인한다.
+* 예시)
 ![image](figure/check-roles.png)
