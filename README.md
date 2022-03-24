@@ -257,6 +257,10 @@
     * policy를 수정하고 싶다면, Opensearch-dashboards에서 아래와 같이 Index Management > Index Policies 메뉴를 들어가서 watch-history-ilm-policy를 클릭한다.
     * 해당 페이지에서 Edit 버튼을 클릭하여 policy를 커스터마이징 후, Update를 클릭한다.
     ![image](figure/policy.png)
+    * 변경된 policy가 기존 index에 적용되지 않은 경우
+        * Index Management > Managed Indices > Change Policy를 클릭
+        * 변경된 policy를 적용하려는 indices를 설정
+        * New Policy에 watch-history-ilm-policy 적용 후 Change 클릭
 
 * OpenSearch에 HTTP 콜 하는 방법
     * Opensearch-dashboards Management 메뉴에서 Dev Tools를 클릭한다.
