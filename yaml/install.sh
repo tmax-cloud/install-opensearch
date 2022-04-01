@@ -5,6 +5,7 @@ pushd $SCRIPTDIR
 # Apply configuration
 source ./opensearch.config
 
+echo "RS_PLUGIN = $RS_PLUGIN"
 echo "OS_VERSION = $OS_VERSION"
 echo "DASHBOARD_VERSION = $DASHBOARD_VERSION"
 echo "HYPERAUTH_URL = $HYPERAUTH_URL"
@@ -12,6 +13,11 @@ echo "DASHBOARD_CLIENT_SECRET = $DASHBOARD_CLIENT_SECRET"
 echo "CUSTOM_DOMAIN_NAME = $CUSTOM_DOMAIN_NAME"
 echo "FLUENTD_VERSION = $FLUENTD_VERSION"
 echo "BUSYBOX_VERSION = $BUSYBOX_VERSION"
+
+if [ $RS_PLUGIN == "true" ]; then
+  sed -i 's/#//g' 02_opensearch-dashboards.yaml
+  echo "Opensearch-Dashboards Rightsizing Plugin Enabled"
+fi
 if [ $STORAGECLASS_NAME != "{STORAGECLASS_NAME}" ]; then
   sed -i 's/{STORAGECLASS_NAME}/'${STORAGECLASS_NAME}'/g' 01_opensearch.yaml
   echo "STORAGECLASS_NAME = $STORAGECLASS_NAME"
