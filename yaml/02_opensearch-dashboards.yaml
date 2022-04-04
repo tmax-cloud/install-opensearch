@@ -37,8 +37,8 @@ spec:
       serviceAccount: opensearch-service-account
       #initContainers:
       #- name: install-plugins
-      #  image: docker.io/tmaxcloudck/rightsizing-opensearch-plugin
-      #  command: ['sh', '-c', "cp -r /workspace/* /plugins"]
+      #  image: docker.io/tmaxcloudck/rightsizing-opensearch-plugin:demo
+      #  command: ["sh", "-c", "cp -r /workspace/* /plugins"]
       #  volumeMounts:
       #  - name: install-plugin-volume
       #    mountPath: /plugins
@@ -210,9 +210,20 @@ spec:
               number: 5601
         path: /
         pathType: Prefix
+  #- host: rightsizing.{CUSTOM_DOMAIN_NAME}
+  #  http:
+  #    paths:
+  #    - backend:
+  #        service:
+  #          name: rightsizing-api-server-svc
+  #          port:
+  #            number: 8000
+  #      path: /
+  #      pathType: Prefix
   tls:
   - hosts:
     - dashboards.{CUSTOM_DOMAIN_NAME}
+    #- rightsizing.{CUSTOM_DOMAIN_NAME}
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
