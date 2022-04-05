@@ -185,7 +185,7 @@ echo "logstash index was made in OpenSearch"
 
 for ((i=0; i<11; i++))
 do
-  is_success=`curl -XGET -k -u admin:admin https://$DASHBOARD_IP:5601/api/status -I`
+  is_success=`curl -XGET -k -u admin:admin http://$DASHBOARD_IP:5601/api/status -I`
 
   if [[ "$is_success" == *"200 OK"* ]]; then
     break
