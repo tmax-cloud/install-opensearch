@@ -16,7 +16,7 @@ echo "BUSYBOX_VERSION = $BUSYBOX_VERSION"
 
 if [ $RS_PLUGIN == "true" ]; then
   sed -i 's/#{RS_PLUGIN_INITCONTAINER}/initContainers: \n      - name: install-plugins \n        image: docker.io\/tmaxcloudck\/rightsizing-opensearch-plugin:demo \n        command: ["sh", "-c", "cp -r \/workspace\/* \/plugins"] \n        volumeMounts: \n        - name: install-plugin-volume \n          mountPath: \/plugins/g' 02_opensearch-dashboards.yaml
-  sed -i 's/#{RS_PLUGIN_VOLUMEMOUNT}/- name: install-plugin-volume \n            mountPath: \/plugins/g' 02_opensearch-dashboards.yaml
+  sed -i 's/#{RS_PLUGIN_VOLUMEMOUNT}/- name: install-plugin-volume \n          mountPath: \/plugins/g' 02_opensearch-dashboards.yaml
   sed -i 's/#{RS_PLUGIN_VOLUME}/- name: install-plugin-volume \n        emptyDir: {}/g' 02_opensearch-dashboards.yaml
   sed -i 's/#{RS_PLUGIN_SETTING}/ls \/plugins\/*.zip | while read file; do \/usr\/share\/opensearch-dashboards\/bin\/opensearch-dashboards-plugin install file:\/\/$file; done/g' 02_opensearch-dashboards.yaml
   sed -i 's/#{RS_PLUGIN_INGRESS}/- host: rightsizing.{CUSTOM_DOMAIN_NAME} \n    http: \n      paths: \n      - backend: \n          service: \n            name: rightsizing-api-server-svc \n            port: \n              number: 8000 \n        path: \/ \n        pathType: Prefix/g' 02_opensearch-dashboards.yaml
