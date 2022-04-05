@@ -25,7 +25,7 @@ if [ $STORAGECLASS_NAME != "{STORAGECLASS_NAME}" ]; then
   sed -i 's/{STORAGECLASS_NAME}/'${STORAGECLASS_NAME}'/g' 01_opensearch.yaml
   echo "STORAGECLASS_NAME = $STORAGECLASS_NAME"
 else
-  sed -e 's/storageClassName: {STORAGECLASS_NAME}//' 01_opensearch.yaml
+  sed -i 's/storageClassName: {STORAGECLASS_NAME}//g' 01_opensearch.yaml
   echo "STORAGECLASS_NAME = default-storage-class"
 fi
 if [ $REGISTRY != "{REGISTRY}" ]; then
