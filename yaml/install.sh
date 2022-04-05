@@ -14,18 +14,25 @@ echo "CUSTOM_DOMAIN_NAME = $CUSTOM_DOMAIN_NAME"
 echo "FLUENTD_VERSION = $FLUENTD_VERSION"
 echo "BUSYBOX_VERSION = $BUSYBOX_VERSION"
 
+set +e
+export IS_PG=`sed -n '38p' 02_opensearch-dashboards.yaml`
+
 if [ $RS_PLUGIN == "true" ]; then
   sed -i 's/#{RS_PLUGIN_INITCONTAINER}/initContainers: \n      - name: install-plugins \n        image: docker.io\/tmaxcloudck\/rightsizing-opensearch-plugin:demo \n        command: ["sh", "-c", "cp -r \/workspace\/* \/plugins"] \n        volumeMounts: \n        - name: install-plugin-volume \n          mountPath: \/plugins/g' 02_opensearch-dashboards.yaml
   sed -i 's/#{RS_PLUGIN_VOLUMEMOUNT}/- name: install-plugin-volume \n          mountPath: \/plugins/g' 02_opensearch-dashboards.yaml
-  sed -i 's/#{RS_PLUGIN_VOLUME}/- name: install-plugin-volume \n        emptyDir: {}/g' 02_opensearch-dashboards.yaml
+  sed -i 's/#{RS_PLUGIN_VOLUME}/- name: install-plugin-volume\n        emptyDir: {}/g' 02_opensearch-dashboards.yaml
   sed -i 's/#{RS_PLUGIN_SETTING}/ls \/plugins\/*.zip | while read file; do \/usr\/share\/opensearch-dashboards\/bin\/opensearch-dashboards-plugin install file:\/\/$file; done/g' 02_opensearch-dashboards.yaml
   sed -i 's/#{RS_PLUGIN_INGRESS}/- host: rightsizing.{CUSTOM_DOMAIN_NAME} \n    http: \n      paths: \n      - backend: \n          service: \n            name: rightsizing-api-server-svc \n            port: \n              number: 8000 \n        path: \/ \n        pathType: Prefix/#{RS_PLUGIN_INITCONTAINER}/g' 02_opensearch-dashboards.yaml
-else
-  sed -i 's/initContainers: \n      - name: install-plugins \n        image: docker.io\/tmaxcloudck\/rightsizing-opensearch-plugin:demo \n        command: ["sh", "-c", "cp -r \/workspace\/* \/plugins"] \n        volumeMounts: \n        - name: install-plugin-volume \n          mountPath: \/plugins/g' 02_opensearch-dashboards.yaml
-  sed -i 's/- name: install-plugin-volume \n          mountPath: \/plugins/#{RS_PLUGIN_VOLUMEMOUNT}/g' 02_opensearch-dashboards.yaml
-  sed -i 's/- name: install-plugin-volume \n        emptyDir: {}/#{RS_PLUGIN_VOLUME}/g' 02_opensearch-dashboards.yaml
-  sed -i 's/ls \/plugins\/*.zip | while read file; do \/usr\/share\/opensearch-dashboards\/bin\/opensearch-dashboards-plugin install file:\/\/$file; done/#{RS_PLUGIN_SETTING}/g' 02_opensearch-dashboards.yaml
-  sed -i 's/- host: rightsizing.{CUSTOM_DOMAIN_NAME} \n    http: \n      paths: \n      - backend: \n          service: \n            name: rightsizing-api-server-svc \n            port: \n              number: 8000 \n        path: \/ \n        pathType: Prefix/#{RS_PLUGIN_INGRESS}/g' 02_opensearch-dashboards.yaml
+elif [ $IS_PG == "initContainers: "]; then
+  sed -i 's/initContainers: /#{RS_PLUGIN_INITCONTAINER}/g' 02_opensearch-dashboards.yaml
+  sed '39,44d' 02_opensearch-dashboards.yaml
+  sed -i 's/- name: install-plugin-volume /#{RS_PLUGIN_VOLUMEMOUNT}/g' 02_opensearch-dashboards.yaml
+  sed '80d' 02_opensearch-dashboards.yaml
+  sed -i 's/- name: install-plugin-volume/#{RS_PLUGIN_VOLUME}/g' 02_opensearch-dashboards.yaml
+  sed '104d' 02_opensearch-dashboards.yaml
+  sed -i 's/^ls/#{RS_PLUGIN_SETTING}/g' 02_opensearch-dashboards.yaml
+  sed -i 's/^- host: rightsizing/#{RS_PLUGIN_INGRESS}/g' 02_opensearch-dashboards.yaml
+  sed '212,220d' 02_opensearch-dashboards.yaml
 fi
 if [ $STORAGECLASS_NAME != "{STORAGECLASS_NAME}" ]; then
   sed -i 's/{STORAGECLASS_NAME}/'${STORAGECLASS_NAME}'/g' 01_opensearch.yaml
