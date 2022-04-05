@@ -1,8 +1,8 @@
-!/bin/bash
+# !/bin/bash
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 pushd $SCRIPTDIR
 
- Apply configuration
+# Apply configuration
 source ./opensearch.config
 
 echo "RS_PLUGIN = $RS_PLUGIN"
@@ -50,7 +50,7 @@ if [ $REGISTRY != "{REGISTRY}" ]; then
   sed -i 's/fluent\/fluentd-kubernetes-daemonset/'${REGISTRY}'\/fluentd-kubernetes-daemonset/g' 03_fluentd_cri-o.yaml
 fi
 
- 1. Install OpenSearch
+# 1. Install OpenSearch
 echo " "
 echo "---Installation Start---"
 kubectl create namespace kube-logging
@@ -68,7 +68,7 @@ else
   echo "OpenSearch pod running success" 
 fi
 
- 2. Wait until Opensearch starts up
+# 2. Wait until Opensearch starts up
 echo " "
 echo "---2. Wait until Opensearch starts up---"
 echo "It will take a couple of minutes"
@@ -93,7 +93,7 @@ done
 echo "OpenSearch starts up successfully"
 set -e
 
- 3. Install Opensearch-Dashboards
+# 3. Install Opensearch-Dashboards
 echo " "
 echo "---3. Install Opensearch-Dashboards---"
 kubectl apply -f 02_opensearch-dashboards.yaml
@@ -108,7 +108,7 @@ else
   sleep 10s
 fi
 
- 4. Install Fluentd
+# 4. Install Fluentd
 echo " "
 echo "---4. Install Fluentd---"
 kubectl apply -f 03_fluentd_cri-o.yaml
@@ -123,7 +123,7 @@ else
   sleep 10s
 fi
 
- 5. Wait until Dashboard makes an index and alias normally
+# 5. Wait until Dashboard makes an index and alias normally
 echo " "
 echo "---5. Wait until Dashboard makes an index and alias normally---"
 echo "It will take a couple of minutes"
@@ -169,7 +169,7 @@ echo "Dashboard made an alias on Opensearch successfully"
 sleep 10s
 set -e
 
- 6. Create default index 'logstash-*'
+# 6. Create default index 'logstash-*'
 echo " "
 echo "---6. Create default index 'logstash-*'---"
 echo "It will take a couple of minutes"
