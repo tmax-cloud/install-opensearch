@@ -150,7 +150,7 @@ metadata:
     app: opensearch-dashboards
 data:
   settings.sh: |
-    #cp -r /plugins/* /usr/share/opensearch-dashboards/plugins 
+    #ls /plugins/*.zip | while read file; do /usr/share/opensearch-dashboards/bin/opensearch-dashboards-plugin install file://$file; done
     curl -XPUT -u admin:admin -k -H 'Content-Type: application/json' 'https://opensearch.kube-logging.svc:9200/_plugins/_ism/policies/watch-history-ilm-policy' -d@/usr/share/opensearch-dashboards/index-policy.json
   index-policy.json: |
     {
