@@ -35,13 +35,7 @@ spec:
         app: opensearch-dashboards
     spec:
       serviceAccount: opensearch-service-account
-      initContainers: 
-      - name: install-plugins 
-        image: docker.io/tmaxcloudck/rightsizing-opensearch-plugin:demo 
-        command: ["sh", "-c", "cp -r /workspace/* /plugins"] 
-        volumeMounts: 
-        - name: install-plugin-volume 
-          mountPath: /plugins
+      #{RS_PLUGIN_INITCONTAINER}
       containers:
       - name: dashboards
         image: docker.io/opensearchproject/opensearch-dashboards:{DASHBOARD_VERSION}
@@ -80,8 +74,7 @@ spec:
         - name: dashboards-cert
           mountPath: /usr/share/opensearch-dashboards/config/certificates
           readOnly: true
-        - name: install-plugin-volume 
-        mountPath: /plugins
+        #{RS_PLUGIN_VOLUMEMOUNT}
       volumes:
       - name: config
         configMap:
@@ -102,8 +95,7 @@ spec:
       - name: dashboards-cert
         secret:
           secretName: dashboards-secret
-      - name: install-plugin-volume 
-        emptyDir: {}
+      #{RS_PLUGIN_VOLUME}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -150,7 +142,7 @@ metadata:
     app: opensearch-dashboards
 data:
   settings.sh: |
-    ls /plugins/*.zip | while read file; do /usr/share/opensearch-dashboards/bin/opensearch-dashboards-plugin install file://$file; done
+    #{RS_PLUGIN_SETTING}
     curl -XPUT -u admin:admin -k -H 'Content-Type: application/json' 'https://opensearch.kube-logging.svc:9200/_plugins/_ism/policies/watch-history-ilm-policy' -d@/usr/share/opensearch-dashboards/index-policy.json
   index-policy.json: |
     {
@@ -210,16 +202,7 @@ spec:
               number: 5601
         path: /
         pathType: Prefix
-  #- host: rightsizing.{CUSTOM_DOMAIN_NAME}
-  #  http:
-  #    paths:
-  #    - backend:
-  #        service:
-  #          name: rightsizing-api-server-svc
-  #          port:
-  #            number: 8000
-  #      path: /
-  #      pathType: Prefix
+  #{RS_PLUGIN_INGRESS}
   tls:
   - hosts:
     - dashboards.{CUSTOM_DOMAIN_NAME}
