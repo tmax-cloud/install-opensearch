@@ -6,6 +6,7 @@ pushd $SCRIPTDIR
 source ./opensearch.config
 
 echo "RS_PLUGIN = $RS_PLUGIN"
+echo "PG_IMAGE_PATH = $PG_IMAGE_PATH"
 echo "OS_VERSION = $OS_VERSION"
 echo "DASHBOARD_VERSION = $DASHBOARD_VERSION"
 echo "HYPERAUTH_URL = $HYPERAUTH_URL"
@@ -18,7 +19,7 @@ set +e
 export IS_PG=`grep -r 'initContainer' ./02_opensearch-dashboards.yaml`
 
 if [ $RS_PLUGIN == "true" ]; then
-  sed -i 's/#{RS_PLUGIN_INITCONTAINER}/initContainers: \n      - name: install-plugins \n        image: docker.io\/tmaxcloudck\/rightsizing-opensearch-plugin:demo \n        command: ["sh", "-c", "cp -r \/workspace\/* \/plugins"] \n        volumeMounts: \n        - name: install-plugin-volume \n          mountPath: \/plugins/g' 02_opensearch-dashboards.yaml
+  sed -i 's/#{RS_PLUGIN_INITCONTAINER}/initContainers: \n      - name: install-plugins \n        image: docker.io\/tmaxcloudck\/{PG_IMAGE_PATH} \n        command: ["sh", "-c", "cp -r \/workspace\/* \/plugins"] \n        volumeMounts: \n        - name: install-plugin-volume \n          mountPath: \/plugins/g' 02_opensearch-dashboards.yaml
   sed -i 's/#{RS_PLUGIN_VOLUMEMOUNT}/- name: install-plugin-volume \n          mountPath: \/plugins/g' 02_opensearch-dashboards.yaml
   sed -i 's/#{RS_PLUGIN_VOLUME}/- name: install-plugin-volume\n        emptyDir: {}/g' 02_opensearch-dashboards.yaml
   sed -i 's/#{RS_PLUGIN_SETTING}/ls \/plugins\/*.zip | while read file; do \/usr\/share\/opensearch-dashboards\/bin\/opensearch-dashboards-plugin install file:\/\/$file; done/g' 02_opensearch-dashboards.yaml
@@ -52,6 +53,7 @@ sed -i 's/{BUSYBOX_VERSION}/'${BUSYBOX_VERSION}'/g' 01_opensearch.yaml
 sed -i 's/{OS_VERSION}/'${OS_VERSION}'/g' 01_opensearch.yaml
 sed -i 's/{HYPERAUTH_URL}/'${HYPERAUTH_URL}'/g' 01_opensearch.yaml
 sed -i 's/{DASHBOARD_VERSION}/'${DASHBOARD_VERSION}'/g' 02_opensearch-dashboards.yaml
+sed -i 's/{PG_IMAGE_PATH}/'${PG_IMAGE_PATH}'/g' 02_opensearch-dashboards.yaml
 sed -i 's/{HYPERAUTH_URL}/'${HYPERAUTH_URL}'/g' 02_opensearch-dashboards.yaml
 sed -i 's/{DASHBOARD_CLIENT_SECRET}/'${DASHBOARD_CLIENT_SECRET}'/g' 02_opensearch-dashboards.yaml
 sed -i 's/{CUSTOM_DOMAIN_NAME}/'${CUSTOM_DOMAIN_NAME}'/g' 02_opensearch-dashboards.yaml
@@ -62,6 +64,7 @@ if [ $REGISTRY != "{REGISTRY}" ]; then
   sed -i 's/docker.io\/opensearchproject\/opensearch/'${REGISTRY}'\/opensearchproject\/opensearch/g' 01_opensearch.yaml
   sed -i 's/busybox/'${REGISTRY}'\/busybox/g' 01_opensearch.yaml
   sed -i 's/docker.io\/opensearchproject\/opensearch-dashboards/'${REGISTRY}'\/opensearchproject\/opensearch-dashboards/g' 02_opensearch-dashboards.yaml
+  sed -i 's/docker.io\/tmaxcloudck/'${REGISTRY}'/g' 02_opensearch-dashboards.yaml
   sed -i 's/fluent\/fluentd-kubernetes-daemonset/'${REGISTRY}'\/fluentd-kubernetes-daemonset/g' 03_fluentd.yaml
   sed -i 's/fluent\/fluentd-kubernetes-daemonset/'${REGISTRY}'\/fluentd-kubernetes-daemonset/g' 03_fluentd_cri-o.yaml
 fi

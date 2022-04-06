@@ -5,6 +5,7 @@
 * Opensearch dashboard ([opensearchproject/opensearch-dashboards:1.2.0](https://hub.docker.com/r/opensearchproject/opensearch-dashboards))
 * Busybox ([busybox:1.32.0](https://hub.docker.com/layers/busybox/library/busybox/1.32.0/images/sha256-414aeb860595d7078cbe87abaeed05157d6b44907fbd7db30e1cfba9b6902448?context=explore))
 * Fluentd ([fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1](https://hub.docker.com/layers/fluent/fluentd-kubernetes-daemonset/v1.4.2-debian-elasticsearch-1.1/images/sha256-ce4885865850d3940f5e5318066897b8502c0b955066392de7fd4ef6f1fd4275?context=explore))
+* Rightsizing Plugin ([docker.io/tmaxcloudck/rightsizing-opensearch-plugin:demo](https://hub.docker.com/repository/docker/tmaxcloudck/rightsizing-opensearch-plugin))
 
 ## Prerequisites
 * 필수 모듈
@@ -23,6 +24,7 @@
     $ cd $OS_HOME
     $ export OS_VERSION=1.2.3
     $ export DASHBOARD_VERSION=1.2.0
+    $ export PG_IMAGE_PATH=rightsizing-opensearch-plugin:demo
     $ export BUSYBOX_VERSION=1.32.0
     $ export FLUENTD_VERSION=v1.4.2-debian-elasticsearch-1.1
     $ export REGISTRY={ImageRegistryIP:Port}
@@ -35,6 +37,8 @@
     $ sudo docker save opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION} > dashboard_${DASHBOARD_VERSION}.tar
     $ sudo docker pull busybox:${BUSYBOX_VERSION}
     $ sudo docker save busybox:${BUSYBOX_VERSION} > busybox_${BUSYBOX_VERSION}.tar
+    $ sudo docker pull docker.io/tmaxcloudck/${PG_IMAGE_PATH}
+    $ sudo docker save docker.io/tmaxcloudck/${PG_IMAGE_PATH} > ${PG_IMAGE_PATH}.tar
     $ sudo docker pull fluent/fluentd-kubernetes-daemonset:${FLUENTD_VERSION}
     $ sudo docker save fluent/fluentd-kubernetes-daemonset:${FLUENTD_VERSION} > fluentd_${FLUENTD_VERSION}.tar
     ```
@@ -44,16 +48,19 @@
     $ sudo docker load < opensearch_${OS_VERSION}.tar
     $ sudo docker load < dashboard_${DASHBOARD_VERSION}.tar
     $ sudo docker load < busybox_${BUSYBOX_VERSION}.tar
+    $ sudo docker load < ${PG_IMAGE_PATH}.tar
     $ sudo docker load < fluentd_${FLUENTD_VERSION}.tar
     
     $ sudo docker tag opensearchproject/opensearch:${OS_VERSION} ${REGISTRY}/opensearchproject/opensearch:${OS_VERSION}
     $ sudo docker tag opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION} ${REGISTRY}/opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION}
     $ sudo docker tag busybox:${BUSYBOX_VERSION} ${REGISTRY}/busybox:${BUSYBOX_VERSION}
+    $ sudo docker tag docker.io/tmaxcloudck/${PG_IMAGE_PATH} ${REGISTRY}/${PG_IMAGE_PATH}
     $ sudo docker tag fluent/fluentd-kubernetes-daemonset:${FLUENTD_VERSION} ${REGISTRY}/fluentd-kubernetes-daemonset:${FLUENTD_VERSION}
     
     $ sudo docker push ${REGISTRY}/opensearchproject/opensearch:${OS_VERSION}
     $ sudo docker push ${REGISTRY}/opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION}
     $ sudo docker push ${REGISTRY}/busybox:${BUSYBOX_VERSION}
+    $ sudo docker push ${REGISTRY}/${PG_IMAGE_PATH}
     $ sudo docker push ${REGISTRY}/fluentd-kubernetes-daemonset:${FLUENTD_VERSION}
     ```
 
@@ -79,6 +86,9 @@
         * RS_PLUGIN
             * OpenSearch-Dashboards의 Rightsizing plugin 사용 유무, boolean
             * ex) true
+        *  PG_IMAGE_PATH
+            * OpenSearch-Dashboards Plugin 이미지 레포와 버전
+            * ex) rightsizing-opensearch-plugin:demo
         *  CUSTOM_DOMAIN_NAME
             * Ingress로 접근 요청할 사용자 지정 도메인 이름
             * ex) tmaxcloud.org
