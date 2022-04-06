@@ -76,6 +76,9 @@ spec:
         - name: admin-cert
           mountPath: /usr/share/opensearch/config/certificates/admin
           readOnly: true
+        #- name: hyperauth-ca
+        #  mountPath: /usr/share/opensearch/config/certificates/hyperauth
+        #  readOnly: true
         env:
           - name: cluster.name
             value: os-cluster
@@ -121,6 +124,9 @@ spec:
       - name: admin-cert
         secret:
           secretName: admin-secret
+      #- name: hyperauth-ca
+      #  secret:
+      #    secretName: hyperauth-ca
   volumeClaimTemplates:
   - metadata:
       name: data
