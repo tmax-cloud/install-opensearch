@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 pushd $SCRIPTDIR
 
@@ -28,17 +28,14 @@ elif [[ "$IS_PG" == *"initContainer"* ]]; then
   sed -i '39,44d' 02_opensearch-dashboards.yaml
   sleep 1s
   sed -i 's/- name: install-plugin-volume /#{RS_PLUGIN_VOLUMEMOUNT}/g' 02_opensearch-dashboards.yaml
-  sed -i '78d' 02_opensearch-dashboards.yaml
+  sed -i '81d' 02_opensearch-dashboards.yaml
   sleep 1s
-  sed -i '98s/.*/      #{RS_PLUGIN_VOLUME}/g' 02_opensearch-dashboards.yaml
-  sed -i '99d' 02_opensearch-dashboards.yaml
+  sed -i '104s/.*/      #{RS_PLUGIN_VOLUME}/g' 02_opensearch-dashboards.yaml
+  sed -i '105d' 02_opensearch-dashboards.yaml
   sleep 1s
-  sed -i '145s/.*/    #{RS_PLUGIN_SETTING}/g' 02_opensearch-dashboards.yaml
-  sed -i '205s/.*/  #{RS_PLUGIN_INGRESS}/g' 02_opensearch-dashboards.yaml
-  sed -i '206,214d' 02_opensearch-dashboards.yaml
-  echo "rightsizing plugin disabled"
-else
-  echo "rightsizing plugin disabled"
+  sed -i '151s/.*/    #{RS_PLUGIN_SETTING}/g' 02_opensearch-dashboards.yaml
+  sed -i '211s/.*/  #{RS_PLUGIN_INGRESS}/g' 02_opensearch-dashboards.yaml
+  sed -i '212,220d' 02_opensearch-dashboards.yaml
 fi
 if [ $STORAGECLASS_NAME != "{STORAGECLASS_NAME}" ]; then
   sed -i 's/{STORAGECLASS_NAME}/'${STORAGECLASS_NAME}'/g' 01_opensearch.yaml
@@ -115,6 +112,13 @@ set -e
 # 3. Install Opensearch-Dashboards
 echo " "
 echo "---3. Install Opensearch-Dashboards---"
+set +e
+export IS_PG=`grep -r 'initContainer' ./02_opensearch-dashboards.yaml`
+if [[ "$IS_PG" == *"initContainer"* ]]; then
+  echo "OpenSearch-Dashboard Rightsizing Plugin Enabled"
+else
+  echo "OpenSearch-Dashboard Rightsizing Plugin Disabled"
+fi
 kubectl apply -f 02_opensearch-dashboards.yaml
 timeout 5m kubectl -n kube-logging rollout status deployment/dashboard
 suc=`echo $?`
