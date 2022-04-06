@@ -169,15 +169,21 @@
     $ export DASHBOARD_VERSION=1.2.0
     $ export FLUENTD_VERSION=v1.4.2-debian-elasticsearch-1.1
     $ export BUSYBOX_VERSION=1.32.0
+    $ export PG_IMAGE_PATH=rightsizing-opensearch-plugin:demo
     $ export STORAGECLASS_NAME=csi-cephfs-sc
     ```
     * Hyperauth 연동 관련 및 기타 스펙을 export 한다.
     ```bash
+    $ export RS_PLUGIN=true #disable 시 false
     $ export HYPERAUTH_URL=hyperauth.tmaxcloud.org
     $ export DASHBOARD_CLIENT_SECRET=22a985f7-c12d-4812-bd4e-bd598e1df7e8
     $ export CUSTOM_DOMAIN_NAME=tmaxcloud.org
     ```
-    
+3. Plugin 설정을 위한 plugin-setting.sh를 실행한다.
+   ```bash
+   $ sudo chmod +x yaml/plugin-setting.sh
+   $ ./yaml/plugin-setting.sh
+   ```
 * 비고  
     * 이하 인스톨 가이드는 StorageClass 이름이 csi-cephfs-sc 라는 가정하에 진행한다.
 
@@ -197,6 +203,7 @@
 	$ sed -i 's/{HYPERAUTH_URL}/'${HYPERAUTH_URL}'/g' 01_opensearch.yaml
 	$ sed -i 's/{STORAGECLASS_NAME}/'${STORAGECLASS_NAME}'/g' 01_opensearch.yaml
     $ sed -i 's/{DASHBOARD_VERSION}/'${DASHBOARD_VERSION}'/g' 02_opensearch-dashboards.yaml
+    $ sed -i 's/{PG_IMAGE_PATH}/'${PG_IMAGE_PATH}'/g' 02_opensearch-dashboards.yaml
     $ sed -i 's/{HYPERAUTH_URL}/'${HYPERAUTH_URL}'/g' 02_opensearch-dashboards.yaml
     $ sed -i 's/{DASHBOARD_CLIENT_SECRET}/'${DASHBOARD_CLIENT_SECRET}'/g' 02_opensearch-dashboards.yaml
     $ sed -i 's/{CUSTOM_DOMAIN_NAME}/'${CUSTOM_DOMAIN_NAME}'/g' 02_opensearch-dashboards.yaml
@@ -209,6 +216,7 @@
 	$ sed -i 's/docker.io\/opensearchproject\/opensearch/'${REGISTRY}'\/opensearchproject\/opensearch/g' 01_opensearch.yaml
 	$ sed -i 's/busybox/'${REGISTRY}'\/busybox/g' 01_opensearch.yaml
 	$ sed -i 's/docker.io\/opensearchproject\/opensearch-dashboards/'${REGISTRY}'\/opensearchproject\/opensearch-dashboards/g' 02_opensearch-dashboards.yaml
+	$ sed -i 's/docker.io\/tmaxcloudck/'${REGISTRY}'/g' 02_opensearch-dashboards.yaml
 	$ sed -i 's/fluent\/fluentd-kubernetes-daemonset/'${REGISTRY}'\/fluentd-kubernetes-daemonset/g' 03_fluentd.yaml
 	$ sed -i 's/fluent\/fluentd-kubernetes-daemonset/'${REGISTRY}'\/fluentd-kubernetes-daemonset/g' 03_fluentd_cri-o.yaml
 	```    
