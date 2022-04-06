@@ -288,7 +288,7 @@ $ kubectl apply -f hyperauth-ca.yaml
 ```
 3. [01_opensearch.yaml](yaml/01_opensearch.yaml)와 [02_opensearch-dashboards.yaml](yaml/02_opensearch-dashboards.yaml)의 볼륨 설정 및 config 파일을 수정한다.
 
-* ex) 01_opensearch.yaml/statefulset 볼륨 마운트 추가
+* ex) 01_opensearch.yaml/statefulset 주석 해제
 ```
 volumeMounts:
 - name: hyperauth-ca
@@ -303,7 +303,7 @@ opensearch-securityconfig
 ```
 pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/hyperauth/ca.crt # 로 수정
 ```
-* ex) 02_opensearch-dashboards.yaml/deployment 볼륨 마운트 추가
+* ex) 02_opensearch-dashboards.yaml/deployment 주석 해제
 ```
 volumeMounts:
 - name: hyperauth-ca
