@@ -64,7 +64,7 @@ if [ $REGISTRY != "{REGISTRY}" ]; then
   sed -i 's/docker.io\/opensearchproject\/opensearch/'${REGISTRY}'\/opensearchproject\/opensearch/g' 01_opensearch.yaml
   sed -i 's/busybox/'${REGISTRY}'\/busybox/g' 01_opensearch.yaml
   sed -i 's/docker.io\/opensearchproject\/opensearch-dashboards/'${REGISTRY}'\/opensearchproject\/opensearch-dashboards/g' 02_opensearch-dashboards.yaml
-  sed -i 's/docker.io\/tmaxcloudck/'${REGISTRY}'\//g' 02_opensearch-dashboards.yaml
+  sed -i 's/docker.io\/tmaxcloudck/'${REGISTRY}'/g' 02_opensearch-dashboards.yaml
   sed -i 's/fluent\/fluentd-kubernetes-daemonset/'${REGISTRY}'\/fluentd-kubernetes-daemonset/g' 03_fluentd.yaml
   sed -i 's/fluent\/fluentd-kubernetes-daemonset/'${REGISTRY}'\/fluentd-kubernetes-daemonset/g' 03_fluentd_cri-o.yaml
 fi
