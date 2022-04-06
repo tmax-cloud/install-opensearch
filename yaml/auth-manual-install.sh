@@ -72,7 +72,7 @@ fi
 echo " "
 echo "---Installation Start---"
 kubectl create namespace kube-logging
-kubectl apply -f hyperauth-ca.yaml
+#kubectl apply -f hyperauth-ca.yaml
 
 echo " "
 echo "---1. Install OpenSearch---"
