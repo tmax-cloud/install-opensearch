@@ -186,6 +186,9 @@
    ```
 * 비고  
     * 이하 인스톨 가이드는 StorageClass 이름이 csi-cephfs-sc 라는 가정하에 진행한다.
+    * 재설치 시 Rightsizing plugin 설정을 변경할 경우
+        * ex) rightsizing plugin disable로 변경 시 
+        * export RS_PLUGIN=false 로 변수를 새로 export 후 plugin-setting.sh을 실행한다.
 
 ## Install Steps
 0. [Opensearch yaml 수정](https://github.com/chaejin-lee/install-opensearch/blob/master/README.md#step-0-opensearch-yaml-%EC%88%98%EC%A0%95)
