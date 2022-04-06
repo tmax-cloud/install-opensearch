@@ -74,6 +74,9 @@ spec:
         - name: dashboards-cert
           mountPath: /usr/share/opensearch-dashboards/config/certificates
           readOnly: true
+        #- name: hyperauth-ca
+        #  mountPath: /usr/share/opensearch-dashboards/config/certificates/hyperauth
+        #  readOnly: true
         #{RS_PLUGIN_VOLUMEMOUNT}
       volumes:
       - name: config
@@ -95,6 +98,9 @@ spec:
       - name: dashboards-cert
         secret:
           secretName: dashboards-secret
+      #- name: hyperauth-ca
+      #  secret:
+      #    secretName: hyperauth-ca
       #{RS_PLUGIN_VOLUME}
 ---
 apiVersion: v1
@@ -206,7 +212,7 @@ spec:
   tls:
   - hosts:
     - dashboards.{CUSTOM_DOMAIN_NAME}
-    #- rightsizing.{CUSTOM_DOMAIN_NAME}
+    #-
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
