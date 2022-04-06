@@ -35,7 +35,7 @@ spec:
         app: opensearch-dashboards
     spec:
       serviceAccount: opensearch-service-account
-      #{RS_PLUGIN_INITCONTAINER}
+      #{RS_PLUGIN_INITCONTAINER} 
       containers:
       - name: dashboards
         image: docker.io/opensearchproject/opensearch-dashboards:{DASHBOARD_VERSION}
