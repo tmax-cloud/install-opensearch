@@ -76,7 +76,10 @@
         * DASHBOARD_CLIENT_SECRET
             * Hyperauth 에 생성된 dashboards client 의 secret
             * ex) 22a985f7-c12d-4812-bd4e-bd598e1df7e8
-        * CUSTOM_DOMAIN_NAME
+        * RS_PLUGIN
+            * OpenSearch-Dashboards의 Rightsizing plugin 사용 유무, boolean
+            * ex) true
+        *  CUSTOM_DOMAIN_NAME
             * Ingress로 접근 요청할 사용자 지정 도메인 이름
             * ex) tmaxcloud.org
 		* FLUENTD_VERSION
@@ -158,7 +161,7 @@
     $ export BUSYBOX_VERSION=1.32.0
     $ export STORAGECLASS_NAME=csi-cephfs-sc
     ```
-    * Hyperauth 연동 관련 스펙을 export 한다.
+    * Hyperauth 연동 관련 및 기타 스펙을 export 한다.
     ```bash
     $ export HYPERAUTH_URL=hyperauth.tmaxcloud.org
     $ export DASHBOARD_CLIENT_SECRET=22a985f7-c12d-4812-bd4e-bd598e1df7e8
