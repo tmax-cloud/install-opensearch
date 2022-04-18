@@ -16,13 +16,13 @@ elif [[ "$IS_PG" == *"initContainer"* ]]; then
   sed -i '39,44d' 02_opensearch-dashboards.yaml
   sleep 1s
   sed -i 's/- name: install-plugin-volume /#{RS_PLUGIN_VOLUMEMOUNT}/g' 02_opensearch-dashboards.yaml
-  sed -i '81d' 02_opensearch-dashboards.yaml
+  sed -i '78d' 02_opensearch-dashboards.yaml
   sleep 1s
-  sed -i '104s/.*/      #{RS_PLUGIN_VOLUME}/g' 02_opensearch-dashboards.yaml
-  sed -i '105d' 02_opensearch-dashboards.yaml
+  sed -i '98s/.*/      #{RS_PLUGIN_VOLUME}/g' 02_opensearch-dashboards.yaml
+  sed -i '99d' 02_opensearch-dashboards.yaml
   sleep 1s
-  sed -i '151s/.*/    #{RS_PLUGIN_SETTING}/g' 02_opensearch-dashboards.yaml
-  sed -i '211s/.*/  #{RS_PLUGIN_INGRESS}/g' 02_opensearch-dashboards.yaml
-  sed -i '212,220d' 02_opensearch-dashboards.yaml
+  sed -i '144s/.*/    #{RS_PLUGIN_SETTING}/g' 02_opensearch-dashboards.yaml
+  sed -i '204s/.*/  #{RS_PLUGIN_INGRESS}/g' 02_opensearch-dashboards.yaml
+  sed -i '205,213d' 02_opensearch-dashboards.yaml
 fi
 
