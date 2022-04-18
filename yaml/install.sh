@@ -10,7 +10,7 @@ echo "PG_IMAGE_PATH = $PG_IMAGE_PATH"
 echo "OS_VERSION = $OS_VERSION"
 echo "DASHBOARD_VERSION = $DASHBOARD_VERSION"
 echo "HYPERAUTH_URL = $HYPERAUTH_URL"
-echo "DASHBOARD_CLIENT_SECRET = $DASHBOARD_CLIENT_SECRET"
+echo "OPENSEARCH_CLIENT_SECRET = $OPENSEARCH_CLIENT_SECRET"
 echo "CUSTOM_DOMAIN_NAME = $CUSTOM_DOMAIN_NAME"
 echo "FLUENTD_VERSION = $FLUENTD_VERSION"
 echo "BUSYBOX_VERSION = $BUSYBOX_VERSION"
@@ -55,7 +55,7 @@ sed -i 's/{HYPERAUTH_URL}/'${HYPERAUTH_URL}'/g' 01_opensearch.yaml
 sed -i 's/{DASHBOARD_VERSION}/'${DASHBOARD_VERSION}'/g' 02_opensearch-dashboards.yaml
 sed -i 's/{PG_IMAGE_PATH}/'${PG_IMAGE_PATH}'/g' 02_opensearch-dashboards.yaml
 sed -i 's/{HYPERAUTH_URL}/'${HYPERAUTH_URL}'/g' 02_opensearch-dashboards.yaml
-sed -i 's/{DASHBOARD_CLIENT_SECRET}/'${DASHBOARD_CLIENT_SECRET}'/g' 02_opensearch-dashboards.yaml
+sed -i 's/{OPENSEARCH_CLIENT_SECRET}/'${OPENSEARCH_CLIENT_SECRET}'/g' 02_opensearch-dashboards.yaml
 sed -i 's/{CUSTOM_DOMAIN_NAME}/'${CUSTOM_DOMAIN_NAME}'/g' 02_opensearch-dashboards.yaml
 sed -i 's/{FLUENTD_VERSION}/'${FLUENTD_VERSION}'/g' 03_fluentd.yaml
 sed -i 's/{FLUENTD_VERSION}/'${FLUENTD_VERSION}'/g' 03_fluentd_cri-o.yaml
