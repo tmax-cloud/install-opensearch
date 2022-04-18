@@ -176,7 +176,7 @@
     ```bash
     $ export RS_PLUGIN=true #disable 시 false
     $ export HYPERAUTH_URL=hyperauth.tmaxcloud.org
-    $ export DASHBOARD_CLIENT_SECRET=22a985f7-c12d-4812-bd4e-bd598e1df7e8
+    $ export OPENSEARCH_CLIENT_SECRET=22a985f7-c12d-4812-bd4e-bd598e1df7e8
     $ export CUSTOM_DOMAIN_NAME=tmaxcloud.org
     ```
 3. Plugin 설정을 위한 plugin-setting.sh를 실행한다.
@@ -208,7 +208,7 @@
     $ sed -i 's/{DASHBOARD_VERSION}/'${DASHBOARD_VERSION}'/g' 02_opensearch-dashboards.yaml
     $ sed -i 's/{PG_IMAGE_PATH}/'${PG_IMAGE_PATH}'/g' 02_opensearch-dashboards.yaml
     $ sed -i 's/{HYPERAUTH_URL}/'${HYPERAUTH_URL}'/g' 02_opensearch-dashboards.yaml
-    $ sed -i 's/{DASHBOARD_CLIENT_SECRET}/'${DASHBOARD_CLIENT_SECRET}'/g' 02_opensearch-dashboards.yaml
+    $ sed -i 's/{OPENSEARCH_CLIENT_SECRET}/'${OPENSEARCH_CLIENT_SECRET}'/g' 02_opensearch-dashboards.yaml
     $ sed -i 's/{CUSTOM_DOMAIN_NAME}/'${CUSTOM_DOMAIN_NAME}'/g' 02_opensearch-dashboards.yaml
 	$ sed -i 's/{FLUENTD_VERSION}/'${FLUENTD_VERSION}'/g' 03_fluentd.yaml
   	$ sed -i 's/{FLUENTD_VERSION}/'${FLUENTD_VERSION}'/g' 03_fluentd_cri-o.yaml
