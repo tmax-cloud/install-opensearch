@@ -5,7 +5,7 @@ metadata:
   namespace: kube-logging
 type: Opaque
 stringData:
-  # hyperauth 네임스페이스의 hyperauth-https-secret에 있는 ca.crt 붙여넣기
+  # api-gateway-system 네임스페이스의 gateway-tls-acme에 있는 tls.crt 붙여넣기
   ca.crt: |
     -----BEGIN CERTIFICATE-----
     MIIDFDCCAfygAwIBAgIRAMv5gYRn62NbTeGZTUjw7sswDQYJKoZIhvcNAQELBQAw
