@@ -242,7 +242,7 @@
     ```
 ![image](figure/dashboards.png)
 * 비고 :
-    * Dashboard pod 가 running 임을 확인한 뒤 https://dashboards.${CUSTOM_DOMAIN_NAME}/ 에 접속한다.
+    * Dashboard pod 가 running 임을 확인한 뒤 https://opensearch-dashboards.${CUSTOM_DOMAIN_NAME}/ 에 접속한다.
     * Hyperauth에서 설정한 사용자 계정으로 로그인하여 정상 작동을 확인한다.
 
 ## Step 3. fluentd 설치
