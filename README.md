@@ -114,7 +114,6 @@
     	* Access type = confidential 
     	* Standard Flow Enabled = On 
     	* Direct Access Grants Enabled = On
-    	* Service Accounts Enabled = On
     	* Valid Redirect URIs: '*'
     * Client > opensearch > Credentials > client_secret 복사 후 OPENSEARCH_CLIENT_SECRET을 채운다.
     * Client > opensearch > Mappers > add builtin 클릭 후 'realm roles'에 체크하여 Add selected 클릭
