@@ -80,7 +80,7 @@
         * HYPERAUTH_URL
             * Hyperauth 의 URL
             * ex) hyperauth.tmaxcloud.org
-        * DASHBOARD_CLIENT_SECRET
+        * OPENSEARCH_CLIENT_SECRET
             * Hyperauth 에 생성된 opensearch client 의 secret
             * ex) 22a985f7-c12d-4812-bd4e-bd598e1df7e8
         * RS_PLUGIN
