@@ -74,9 +74,6 @@ spec:
         - name: dashboards-cert
           mountPath: /usr/share/opensearch-dashboards/config/certificates
           readOnly: true
-        #- name: hyperauth-ca
-        #  mountPath: /usr/share/opensearch-dashboards/config/certificates/hyperauth
-        #  readOnly: true
         #{RS_PLUGIN_VOLUMEMOUNT}
       volumes:
       - name: config
@@ -98,9 +95,6 @@ spec:
       - name: dashboards-cert
         secret:
           secretName: dashboards-secret
-      #- name: hyperauth-ca
-      #  secret:
-      #    secretName: hyperauth-ca
       #{RS_PLUGIN_VOLUME}
 ---
 apiVersion: v1
@@ -135,7 +129,6 @@ data:
     opensearch_security.openid.client_id: "dashboards"
     opensearch_security.openid.client_secret: "{DASHBOARD_CLIENT_SECRET}"
     opensearch_security.openid.base_redirect_url: "https://dashboards.{CUSTOM_DOMAIN_NAME}"
-    opensearch_security.openid.root_ca: /usr/share/opensearch-dashboards/config/certificates/ca.crt
     opensearch_security.openid.verify_hostnames: false
     opensearch_security.cookie.secure: false
 ---
