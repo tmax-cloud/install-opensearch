@@ -318,7 +318,7 @@
             ```
 
 ## Hyperauth CA 공인인증서 설정
-* 목적: hyperauth의 도메인 ex) tmaxcloud.org 에 대한 공인 인증서를 볼륨 마운트를 통해 opensearch와 hyperauth 연동을 하기 위함.
+* 목적: hyperauth의 nip.io가 아닌 도메인 ex) tmaxcloud.org 에 대한 공인 인증서를 볼륨 마운트를 통해 opensearch와 hyperauth 연동을 하기 위함.
 * 순서: 
 1. [hyperauth-ca.yaml](yaml/hyperauth-ca.yaml)의 내용을 api-gateway-system 네임스페이스의 gateway-tls-acme 시크릿의 tls.crt로 수정한다.
 2. hyperauth-ca.yaml을 실행
