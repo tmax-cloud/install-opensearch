@@ -317,11 +317,10 @@
             }
             ```
 
-## Hyperauth CA 수동 설정
-* 목적: cert-manager 오류로 tmaxcloud-ca가 갱신되어 기존에 생성된 hyperauth에 적용중인 ca 인증서와 달라졌을 경우, 
-       hyperauth ca 인증서를 수동으로 설정하여 opensearch와 연동.
+## Hyperauth CA 공인인증서 설정
+* 목적: hyperauth의 도메인에 대한 공인 인증서를 마운트하여 opensearch와 hyperauth 연동을 하기 위함.
 * 순서: 
-1. [hyperauth-ca.yaml](yaml/hyperauth-ca.yaml)를 hyperauth에서 적용 중인 hyperauth-https-secret의 ca.crt로 수정한다.
+1. [hyperauth-ca.yaml](yaml/hyperauth-ca.yaml)의 내용을 api-gateway-system 네임스페이스의 gateway-tls-acme 시크릿의 tls.crt로 수정한다.
 2. hyperauth-ca.yaml을 실행
 ``` bash
 $ kubectl apply -f hyperauth-ca.yaml
