@@ -116,15 +116,15 @@
     	* Direct Access Grants Enabled = On
     	* Service Accounts Enabled = On
     	* Valid Redirect URIs: '*'
-    * Client > dashboards > Credentials > client_secret 복사 후 DASHBOARD_CLIENT_SECRET을 채운다.
-    * Client > dashboards > Mappers > add builtin 클릭 후 'realm roles'에 체크하여 Add selected 클릭
-    * Client > dashboards > Mappers > realm roles 선택 후 설정 변경
+    * Client > opensearch > Credentials > client_secret 복사 후 OPENSEARCH_CLIENT_SECRET을 채운다.
+    * Client > opensearch > Mappers > add builtin 클릭 후 'realm roles'에 체크하여 Add selected 클릭
+    * Client > opensearch > Mappers > realm roles 선택 후 설정 변경
     	* Token Claim Name = roles
     	* Add to ID token = On
     	* Add to access token = On
     	* Add to userinfo = On
     * Roles > Realm Roles > add role 클릭 후 'admin' role 생성
-    * Dashboard를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Realm Roles에 admin을 적용한다.
+    * Opensearch-Dashboards를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Realm Roles에 admin을 적용한다.
 
     * client 생성
     ![image](figure/client-page.png)
