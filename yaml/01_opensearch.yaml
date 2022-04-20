@@ -300,7 +300,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: os-users
-  namespace: opensearch
+  namespace: kube-logging
 data:
   internal_users.yml: |
     ---
