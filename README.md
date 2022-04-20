@@ -131,7 +131,7 @@
     * mapper 생성
     ![image](figure/client-mapper.png)
     * role-mapping
-    ![image](figure/-mapping.png)
+    ![image](figure/mapping.png)
 
 ## Step 1. installer 실행
 * 목적 : `설치를 위한 shell script 실행`
