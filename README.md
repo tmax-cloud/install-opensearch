@@ -116,21 +116,22 @@
     	* Direct Access Grants Enabled = On
     	* Valid Redirect URIs: '*'
     * Client > opensearch > Credentials > client_secret 복사 후 OPENSEARCH_CLIENT_SECRET을 채운다.
-    * Client > opensearch > Mappers > add builtin 클릭 후 'realm roles'에 체크하여 Add selected 클릭
-    * Client > opensearch > Mappers > realm roles 선택 후 설정 변경
+    * Client > opensearch > Mappers > add builtin 클릭 후 'client roles'에 체크하여 Add selected 클릭
+    * Client > opensearch > Mappers > client roles 선택 후 설정 변경
+        * Client ID = opensearch
     	* Token Claim Name = roles
     	* Add to ID token = On
     	* Add to access token = On
     	* Add to userinfo = On
-    * Roles > Realm Roles > add role 클릭 후 'admin' role 생성
-    * Opensearch-Dashboards를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Realm Roles에 admin을 적용한다.
+    * Client > opensearch > roles > add role 클릭 후 'admin' role 생성
+    * Opensearch-Dashboards를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Client Roles에서 opensearch 선택 후 admin을 적용한다.
 
     * client 생성
     ![image](figure/client-page.png)
     * mapper 생성
-    ![image](figure/mapper.png)
-    * Realm role
-    ![image](figure/realm-roles.png)
+    ![image](figure/client-mapper.png)
+    * role-mapping
+    ![image](figure/role-mapping.png)
 
 ## Step 1. installer 실행
 * 목적 : `설치를 위한 shell script 실행`
