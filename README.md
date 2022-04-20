@@ -123,8 +123,8 @@
     	* Add to ID token = On
     	* Add to access token = On
     	* Add to userinfo = On
-    * Client > opensearch > roles > add role 클릭 후 'admin' role 생성
-    * Opensearch-Dashboards를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Client Roles에서 opensearch 선택 후 admin을 적용한다.
+    * Client > opensearch > roles > add role 클릭 후 'opensearch-admin' role 생성
+    * Opensearch-Dashboards를 사용하고자 하는 사용자의 계정의 Role Mappings 설정에서 Client Roles에서 'opensearch' 선택 후 'opensearch-admin'을 적용한다.
 
     * client 생성
     ![image](figure/client-page.png)
