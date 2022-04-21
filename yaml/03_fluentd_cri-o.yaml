@@ -231,6 +231,7 @@ data:
       @log_level info
       request_timeout 2147483648
       include_tag_key true
+      suppress_type_name true
       host "#{ENV['FLUENT_OPENSEARCH_HOST']}"
       port "#{ENV['FLUENT_OPENSEARCH_PORT']}"
       user "#{ENV['FLUENT_OPENSEARCH_USER']}"
