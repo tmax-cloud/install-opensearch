@@ -320,7 +320,8 @@
 ## Hyperauth CA 공인인증서 설정
 * 목적: hyperauth의 nip.io가 아닌 도메인 ex) tmaxcloud.org 에 대한 공인 인증서를 볼륨 마운트를 통해 opensearch와 hyperauth 연동을 하기 위함.
 * 순서: 
-1. [hyperauth-ca.yaml](yaml/hyperauth-ca.yaml)의 내용을 api-gateway-system 네임스페이스의 gateway-tls-acme 시크릿의 tls.crt로 수정한다.
+1. [hyperauth-ca.yaml](yaml/hyperauth-ca.yaml)의 내용을 api-gateway-system 네임스페이스의 gateway-tls 시크릿의 tls.crt로 수정한다.
+   * 비고: 시크릿 이름이 위와 동일하지 않을 경우, api-gateway-system 네임스페이스의 secret 중 common-name이 해당 도메인 주소 ex) tmaxcloud.org를 가리키는 시크릿을 적용함.
 2. hyperauth-ca.yaml을 실행
 ``` bash
 $ kubectl apply -f hyperauth-ca.yaml
