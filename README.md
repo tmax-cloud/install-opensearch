@@ -351,3 +351,11 @@ openid_connect_idp:         # 해당 내용 추가 필요
 ```
 
 4. 이후 install 가이드와 동일한 순서로 설치를 진행
+
+* 비고: 설치 이후 대시보드 접속했을 때 hyperauth와의 redirect에러(error 302) 발생 시,
+     * 'kubectl exec -it os-cluster-os -n kube-logging /bin/bash' 로 opensearch pod 접속 
+     * 아래의 명령어 실행을 통해 securityconfig를 재설정한다.
+     ```bash
+     ./plugins/opensearch-security/tools/securityadmin.sh -cd ./plugins/opensearch-security/securityconfig/ -icl -nhnv -cacert ./config/certificates/admin/ca.crt -cert ./config/certificates/admin/tls.crt -key ./config/certificates/admin/tls.key
+
+     ```
