@@ -338,9 +338,14 @@ volumes:
   secret:
     secretName: hyperauth-ca
 ```
-opensearch-securityconfig
+opensearch-securityconfig 설정 추가
 ```
-pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/hyperauth/ca.crt # 로 수정
+openid_connect_url: https://{HYPERAUTH_URL}/auth/realms/tmax/.well-known/openid-configuration
+openid_connect_idp:         # 해당 내용 추가 필요
+  enable_ssl: true          # 해당 내용 추가 필요
+  verify_hostnames: false   # 해당 내용 추가 필요
+  pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/hyperauth/ca.crt # 해당 내용 추가 필요
+
 ```
 
 4. 이후 install 가이드와 동일한 순서로 설치를 진행
