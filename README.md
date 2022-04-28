@@ -329,7 +329,7 @@ $ kubectl apply -f hyperauth-ca.yaml
 ```
 3. opensearch Statefulset의 볼륨 마운트 설정 및 ConfigMap인 opensearch-securityconfig를 수정한다.
 
-* ex) 01_opensearch.yaml/statefulset 주석 해제
+* ex) opensearch statefulset 볼륨 & 마운트 추가
 ```
 volumeMounts:
 - name: hyperauth-ca
