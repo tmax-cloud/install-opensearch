@@ -1,5 +1,9 @@
 # Opensearch 설치 가이드
 
+## 개요
+* Opensearch Stack은 Opensearch, Opensearch-Dashboards, Fluentd로 구성된 플랫폼 조합이다.
+* K8S 클러스터로부터 Fluentd가 수집한 로그를 Opensearch에 적재하면, Opensearch는 수집된 로그를 저장하고 요청에 따라 검색 기능을 제공한다. 그리고 Opensearch-Dashboards를 통해 Opensearch에 적재된 데이터를 시각화한다.
+
 ## 구성 요소 및 버전
 * Opensearch ([opensearchproject/opensearch:1.2.3](https://hub.docker.com/r/opensearchproject/opensearch))
 * Opensearch dashboard ([opensearchproject/opensearch-dashboards:1.2.0](https://hub.docker.com/r/opensearchproject/opensearch-dashboards))
