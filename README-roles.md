@@ -36,13 +36,13 @@
 
 
 ## 비고
-###Document Level 권한 설정
+### Document Level 권한 설정
 * 목적: Index Pattern을 지정하여 특정 log field에 대하여 원하는 값에 해당하는 로그 데이터만 확인하거나 그 값을 포함하지 않는 로그 데이터를 확인할 수 있는 권한을 준다.
 * Dashboards UI를 통해 JSON 형태로 입력하여 설정한다.
 * ex) metricbeat-* 의 인덱스에서 prometheus.labels.namespace의 값이 monitoring인 로그만 출력하도록 설정
 ![image](figure/document-level.png)
 
-###Field Level 권한 설정
+### Field Level 권한 설정
 * 목적: Index Pattern을 지정하여 특정 log field들을 지정하여 해당 log field만 출력하도록 하거나 해당 log field만 제외한 나머지만 확인할 수 있는 권한을 준다.
 * Dashboards UI를 통해 include 또는 exclude 설정을 선택하여 적용하려는 log field를 입력하여 설정한다.
 * ex) logstash-* 의 인덱스에서 @timestamp, kubernetes.host, kubernetes.container_name, kubernetes.pod_name, kubernetes.namespace_name, log, tag, stream, error log field만 출력하도록 설정
