@@ -1,3 +1,7 @@
+## Opensearch 기능 가이드
+* [EFK-OpenSearch Migration 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/README-migration.md)
+* [Opensearch Role 설정 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/README-roles.md)
+
 # Opensearch 설치 가이드
 
 ## 개요
@@ -10,10 +14,6 @@
 * Busybox ([busybox:1.32.0](https://hub.docker.com/layers/busybox/library/busybox/1.32.0/images/sha256-414aeb860595d7078cbe87abaeed05157d6b44907fbd7db30e1cfba9b6902448?context=explore))
 * Fluentd ([fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1](https://hub.docker.com/layers/fluent/fluentd-kubernetes-daemonset/v1.4.2-debian-elasticsearch-1.1/images/sha256-ce4885865850d3940f5e5318066897b8502c0b955066392de7fd4ef6f1fd4275?context=explore))
 * Rightsizing Plugin ([docker.io/tmaxcloudck/rightsizing-opensearch-plugin:demo](https://hub.docker.com/repository/docker/tmaxcloudck/rightsizing-opensearch-plugin))
-
-## Opensearch 기능 가이드
-* [EFK-OpenSearch Migration 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/README-migration.md)
-* [Opensearch Role 설정 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/README-roles.md)
 
 ## Prerequisites
 * 필수 모듈
