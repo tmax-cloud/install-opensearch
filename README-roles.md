@@ -1,7 +1,13 @@
-# Hyperauth-Opensearch 유저별 권한(roles) 설정 가이드
-* 목적: Opensearch Dashboards에서 Custom role을 생성하여 hyperauth 유저에게 매핑 적용을 통해 접근 권한을 설정한다.
-* 유저 권한을 설정하기 위해서는 admin 권한을 가진 사용자로 로그인해야한다.
-  
+# Hyperauth-Opensearch 유저별 권한(role) 설정 가이드
+* 목적: Opensearch Dashboards에서 Role을 생성 또는 수정하여 hyperauth 유저에게 매핑 적용을 통해 접근 권한을 설정한다.
+* 유저 권한을 설정하기 위해서는 admin 권한을 가진 사용자로 접근해야한다.
+
+## Hyperauth에 적용한 Opensearch Role 상세
+* opensearch-admin : 전체 Plugin과 Index 관련 설정에 대한 Read, Write 권한 및 Security 설정을 통해 권한을 생성하고 매핑할 수 있는 Role
+* opensearch-developer : Security 설정을 제외한 전체 Plugin과 Index에 대하여 Read, Write 권한을 가진 Role
+* opensearch-guest : Security 설정을 제외한 전체 Plugin과 Index 관련 설정에 대하여 Read 권한을 가진 Role 
+
+## Custom Role 생성 가이드 
 ### Step 1. Dashboards UI에서 Custom Role 생성
 * Dashboards UI 메뉴에서 Security > Roles > Create Role을 클릭하여 Custom Role을 생성할 수 있다.
 * 예시) Custom role "test" 생성
@@ -27,3 +33,17 @@
 * 오른쪽 상단에 있는 계정 메뉴에서 "View roles and identities"를 클릭하여, 예시와 같이 새로 생성한 role이 적용되어 있는 것을 확인한다.
 * 예시)
 ![image](figure/check-roles.png)
+
+
+## 비고
+###Document Level 권한 설정
+* 목적: Index Pattern을 지정하여 특정 log field에 대하여 원하는 값에 해당하는 로그 데이터만 확인하거나 그 값을 포함하지 않는 로그 데이터를 확인할 수 있는 권한을 준다.
+* Dashboards UI를 통해 JSON 형태로 입력하여 설정한다.
+* ex) metricbeat-* 의 인덱스에서 prometheus.labels.namespace의 값이 monitoring인 로그만 출력하도록 설정
+![image](figure/document-level.png)
+
+###Field Level 권한 설정
+* 목적: Index Pattern을 지정하여 특정 log field들을 지정하여 해당 log field만 출력하도록 하거나 해당 log field만 제외한 나머지만 확인할 수 있는 권한을 준다.
+* Dashboards UI를 통해 include 또는 exclude 설정을 선택하여 적용하려는 log field를 입력하여 설정한다.
+* ex) logstash-* 의 인덱스에서 @timestamp, kubernetes.host, kubernetes.container_name, kubernetes.pod_name, kubernetes.namespace_name, log, tag, stream, error log field만 출력하도록 설정
+![image](figure/field-level.png)
