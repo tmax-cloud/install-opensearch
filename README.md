@@ -11,6 +11,10 @@
 * Fluentd ([fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1](https://hub.docker.com/layers/fluent/fluentd-kubernetes-daemonset/v1.4.2-debian-elasticsearch-1.1/images/sha256-ce4885865850d3940f5e5318066897b8502c0b955066392de7fd4ef6f1fd4275?context=explore))
 * Rightsizing Plugin ([docker.io/tmaxcloudck/rightsizing-opensearch-plugin:demo](https://hub.docker.com/repository/docker/tmaxcloudck/rightsizing-opensearch-plugin))
 
+## Opensearch 기능 가이드
+* [EFK-OpenSearch Migration 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/README-migration.md)
+* [Opensearch Role 설정 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/README-roles.md)
+
 ## Prerequisites
 * 필수 모듈
   * [RookCeph](https://github.com/tmax-cloud/hypersds-wiki/) 
