@@ -1,0 +1,52 @@
+{
+    "policy": {
+        "description": "A simple policy that saves snapshot data between hot and cold states and deletes the indices",
+        "default_state": "hot",
+        "states": [
+          {
+            "name": "hot",
+            "actions": [],
+            "transitions": [
+              {
+                "state_name": "cold",
+                "conditions": {
+                  "min_index_age": "1d"
+                }
+              }
+            ]
+          },
+          {
+            "name": "cold",
+            "actions": [
+              {
+                "snapshot": {
+                  "repository": "backups",
+                  "snapshot": "logstash"
+                }
+              }
+            ],
+            "transitions": [
+              {
+                "state_name": "delete",
+                "conditions": {
+                  "min_index_age": "1h"
+                }
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "actions": [
+              {
+                "delete": {}
+              }
+            ],
+            "transitions": []
+          }
+        ],
+        "ism_template": {
+           "index_patterns": ["logstash-*"],
+           "priority": 1
+        }
+    }
+}
