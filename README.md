@@ -271,6 +271,47 @@
       ```bash
       $ kubectl apply -f 03_fluentd_multiple_index.yaml
       ```
+## Opensearch HA 구성 가이드
+* 목적: Opensearch와 Opensearch-Dashboards 파드에 대하여 각각 Active-Active 방식으로 기동하기 위한 설정이다.
+* Opensearch 구성
+    1. [01_opensearch.yaml](yaml/01_opensearch.yaml)의 statefulset에서 replicas와 env 설정을 변경한다.
+     ```
+    spec:
+      serviceName: opensearch
+      selector:
+        matchLabels:
+          app: opensearch
+      replicas: 2 ## 1에서 2로 변경
+     
+    ...
+    
+    - name: discovery.zen.ping.unicast.hosts ## discovery.seed_hosts를 변경
+      value: "os-cluster-0.opensearch, os-cluster-1.opensearch" ## 증가된 만큼 수정
+    - name: cluster.initial_master_nodes
+      value: "os-cluster-0, os-cluster-1" ## 증가된 만큼 수정
+    
+    ```
+    2. statefulset의 volumes에 기존에 사용하고 있던 persistentVolumeClaim을 마운트한다.
+    
+    ```
+    volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: data-os-cluster-0
+    ```
+    
+    3. opensearch-config의 opensearch.yml에 설정을 변경 및 추가한다.
+    ```
+    data:
+      opensearch.yml: |
+        cluster.name: "os-cluster"
+        network.host: "0.0.0.0"
+	node.max_local_storage_nodes: 2 ## 추가한 내용
+        discovery.zen.ping.unicast.hosts: [ "os-cluster-0.opensearch", "os-cluster-1.opensearch" ] ## discovery.seed_hosts를 변경 및 증가된 만큼 수정
+        cluster.initial_master_nodes: os-cluster-0, os-cluster-1 ## 증가된 만큼 수정
+    ```
+* Opensearch-Dashboard 구성
+
 ## 비고
 * Fluentd에서 수집하는 로그 필드 설정
     * fluentd.yaml 파일 Configmap의 kubernetes.conf에 filter 설정을 추가로 적용하여 로그 필드를 삭제할 수 있다.
