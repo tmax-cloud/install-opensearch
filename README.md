@@ -274,6 +274,7 @@
 ## Opensearch HA 구성 가이드
 * 목적: Opensearch와 Opensearch-Dashboards 파드에 대하여 각각 Active-Active 방식으로 기동하기 위한 설정이다.
 * Opensearch 구성
+    * Opensearch의 경우 master node 후보를 3개 이상의 홀수 개를 생성하는 것을 권장한다.
     1. [01_opensearch.yaml](yaml/01_opensearch.yaml)의 statefulset에서 replicas와 env 설정을 변경한다.
      ```
     spec:
@@ -281,36 +282,28 @@
       selector:
         matchLabels:
           app: opensearch
-      replicas: 2 ## 1에서 2로 변경
+      replicas: 3 ## 1에서 3로 변경
      
     ...
     
-    - name: discovery.zen.ping.unicast.hosts ## discovery.seed_hosts를 변경
-      value: "os-cluster-0.opensearch, os-cluster-1.opensearch" ## 증가된 만큼 수정
+    - name: discovery.seed_hosts
+      value: "os-cluster-0.opensearch, os-cluster-1.opensearch, os-cluster-2.opensearch" ## 증가된 만큼 수정
     - name: cluster.initial_master_nodes
-      value: "os-cluster-0, os-cluster-1" ## 증가된 만큼 수정
+      value: "os-cluster-0, os-cluster-1, os-cluster-2" ## 증가된 만큼 수정
     
     ```
-    2. statefulset의 volumes에 기존에 사용하고 있던 persistentVolumeClaim을 마운트한다.
-    
-    ```
-    volumes:
-    - name: data
-      persistentVolumeClaim:
-        claimName: data-os-cluster-0
-    ```
-    
-    3. opensearch-config의 opensearch.yml에 설정을 변경 및 추가한다.
+    2. opensearch-config의 opensearch.yml에 설정을 변경 및 추가한다.
     ```
     data:
       opensearch.yml: |
         cluster.name: "os-cluster"
         network.host: "0.0.0.0"
-	node.max_local_storage_nodes: 2 ## 추가한 내용
-        discovery.zen.ping.unicast.hosts: [ "os-cluster-0.opensearch", "os-cluster-1.opensearch" ] ## discovery.seed_hosts를 변경 및 증가된 만큼 수정
-        cluster.initial_master_nodes: os-cluster-0, os-cluster-1 ## 증가된 만큼 수정
+        discovery.seed_hosts: [ "os-cluster-0.opensearch", "os-cluster-1.opensearch", "os-cluster-2.opensearch" ] ## 증가된 만큼 수정
+        cluster.initial_master_nodes: os-cluster-0, os-cluster-1, os-cluster-2 ## 증가된 만큼 수정
     ```
-* Opensearch-Dashboard 구성
+* Opensearch-Dashboards 구성
+    * Opensearch-Dashboards의 경우 Dashboards deployment을 추가로 생성한다.
+    * ex) 예시 참조 [dashboards-deployment.yaml](yaml/dashboards-deployment.yaml)
 
 ## 비고
 * Fluentd에서 수집하는 로그 필드 설정
