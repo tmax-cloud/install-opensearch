@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard-sub
+  namespace: kube-logging
+  labels:
+    app: opensearch-dashboards
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opensearch-dashboards
+  template:
+    metadata:
+      labels:
+        app: opensearch-dashboards
+    spec:
+      serviceAccount: opensearch-service-account
+      containers:
+      - name: dashboards
+        image: docker.io/opensearchproject/opensearch-dashboards:1.2.0
+        imagePullPolicy: "IfNotPresent"
+        securityContext:
+          privileged: true
+        command: ["/bin/bash", "-c", "/usr/share/opensearch-dashboards/settings.sh && /usr/share/opensearch-dashboards/opensearch-dashboards-docker-entrypoint.sh"]
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1000Mi
+          requests:
+            cpu: 500m
+            memory: 1000Mi
+        env:
+          - name: OPENSEARCH_HOSTS
+            value: "https://opensearch.kube-logging.svc:9200"
+          - name: SERVER_HOST
+            value: "0.0.0.0"
+          - name: NODE_TLS_REJECT_UNAUTHORIZED
+            value: "0"
+        ports:
+        - containerPort: 5601
+          name: https
+          protocol: TCP 
+        volumeMounts:
+        - name: config
+          mountPath: /usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
+          subPath: opensearch_dashboards.yml
+        - name: settings
+          mountPath: /usr/share/opensearch-dashboards/settings.sh
+          subPath: settings.sh
+        - name: index-policy
+          mountPath: /usr/share/opensearch-dashboards/index-policy.json
+          subPath: index-policy.json
+        - name: dashboards-cert
+          mountPath: /usr/share/opensearch-dashboards/config/certificates
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: opensearch-dashboards-config
+      - name: settings
+        configMap:
+          defaultMode: 0700
+          name: os-policy
+          items:
+          - key: settings.sh
+            path: settings.sh
+      - name: index-policy
+        configMap:
+          name: os-policy
+          items:
+          - key: index-policy.json
+            path: index-policy.json
+      - name: dashboards-cert
+        secret:
+          secretName: dashboards-secret
