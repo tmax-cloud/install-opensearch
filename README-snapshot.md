@@ -163,9 +163,18 @@ curl -u admin:admin -k -XPUT "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/bac
 '
 ```
 
-### Snapshot 조회, 삭제
-* Opensearch-Dashboards UI의 Dev Tools 또는 api 콜을 통해 snapshot 조회 및 삭제할 수 있다.
-* snapshot 조회
+### Step 3-1. Dashboards UI에서 Index Policy를 이용해 특정 index pattern을 가진 index를 주기적으로 저장
+*  Index Management > Index Policies > Create Policy 에서 Visual Editor로 설정을 진행한다.
+*  ISM template 설정에서 Add template으로 해당 policy를 적용하고자 하는 index-pattern을 설정한다. ex) logstash-*
+*  Edit State 설정에서 Actions에 add action을 클릭하여 action type에서 snapshot을 고른 후, repository 이름과 snapshot 이름을 설정한다.
+*  이전 state의 transitions 설정에서 minimum index age 설정을 통해 인덱스가 생성된 후 minimum index age로 설정한 기간이 지나면 자동으로 snapshot이 실행된다.
+    *  ex) 인덱스 생성 후 1일이 지나면 snapshot을 실행 후, 1시간이 지나면 인덱스를 삭제하는 policy 설정. 지워진 인덱스는 snapshot으로 별도로 저장되어 필요할 때 언제든 restore로 불러올 수 있다.
+    *  index-policy 생성 예시 [snapshot-policy.json](migration/snapshot-policy.json)
+![image](figure/snapshot-settings.png)
+
+## Snapshot 조회, 복구, 삭제
+* Opensearch-Dashboards UI의 Dev Tools 또는 api 콜을 통해 snapshot 조회, 복구 및 삭제를 할 수 있다.
+### snapshot 조회
 ```
 curl -u admin:admin -k -XGET "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/backups/_all # 저장된 snapshot 전체 조회
 curl -u admin:admin -k -XGET "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/backups/snapshot_1 # 특정 snapshot 조회
@@ -175,7 +184,18 @@ curl -u admin:admin -k -XGET "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/bac
 GET _snapshot/backups/_all # 저장된 snapshot 전체 조회
 GET _snapshot/backups/snapshot_1 # 특정 snapshot 조회
 ```
-* snapshot 삭제
+### snapshot 복구
+```
+curl -u admin:admin -k -XDELETE "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/backups/_all/_restore # 전체 snapshot 복구
+curl -u admin:admin -k -XDELETE "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/backups/snapshot_1/_restore # 특정 snapshot 복구
+```
+* Dev Tools를 통해 복구 시
+```
+POST _snapshot/backups/_all/_restore# 전체 snapshot 복구
+POST _snapshot/backups/snapshot_1/_restore# 특정 snapshot 복구
+```
+
+### snapshot 삭제
 ```
 curl -u admin:admin -k -XDELETE "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/backups/snapshot_1 # 특정 snapshot 삭제
 ```
@@ -183,11 +203,3 @@ curl -u admin:admin -k -XDELETE "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/
 ```
 DELETE _snapshot/backups/snapshot_1 # 특정 snapshot 삭제
 ```
-### Step 3-1. Dashboards UI에서 Index Policy를 이용해 특정 index pattern을 가진 index를 주기적으로 저장
-*  Index Management > Index Policies > Create Policy 에서 Visual Editor로 설정을 진행한다.
-*  ISM template 설정에서 Add template으로 해당 policy를 적용하고자 하는 index-pattern을 설정한다. ex) logstash-*
-*  Edit State 설정에서 Actions에 add action을 클릭하여 action type에서 snapshot을 고른 후, repository 이름과 snapshot 이름을 설정한다.
-*  이전 state의 transitions 설정에서 minimum index age 설정을 통해 인덱스가 생성된 후 minimum index age로 설정한 기간이 지나면 자동으로 snapshot이 실행된다.
-    *  ex) 인덱스 생성 후 1일이 지나면 snapshot을 실행 후, 1시간이 지나면 인덱스를 삭제하는 policy 설정. 지워진 인덱스는 snapshot으로 별도로 저장되어 필요할 때 언제든 restore로 불러올 수 있다.
-    *  index-policy 생성 예시 [snapshot-policy.json](migration/snapshot-policy.json)
-![image](figure/snapshot-settings.png)
