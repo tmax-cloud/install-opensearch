@@ -282,7 +282,7 @@
       selector:
         matchLabels:
           app: opensearch
-      replicas: 3 ## 1에서 3로 변경
+      replicas: 3 ## 1에서 3으로 변경
      
     ...
     
