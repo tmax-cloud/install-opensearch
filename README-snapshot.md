@@ -107,18 +107,18 @@ volumeMounts:
   - name: os-config
     mountPath: /usr/share/elasticsearch/config/opensearch.yml
     subPath: opensearch.yml
-  - name: backups-vol
+  - name: backups-vol  # backup repository volume 마운트 추가
     mountPath: /usr/share/opensearch/backups
     
  volumes:
       - name: os-config
         configMap:
           name: os-config
-      - name: backups-vol
+      - name: backups-vol  # backup repository volume 추가
         persistentVolumeClaim:
           claimName: backups-os-cluster-0
            
-  volumeClaimTemplates:
+  volumeClaimTemplates:  # backup repository 용 backups pvc 생성
   - metadata:
       name: backups
       labels:
@@ -133,7 +133,7 @@ volumeMounts:
 * 예시2) opensearch-config ConfigMap 추가 설정
 ```
 network.host: "0.0.0.0"
-path.repo: "/usr/share/opensearch/backups"
+path.repo: "/usr/share/opensearch/backups" # repository path 추가
 ```
 
 ### Step 2. OS backup repo 생성
