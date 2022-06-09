@@ -163,6 +163,26 @@ curl -u admin:admin -k -XPUT "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/bac
 '
 ```
 
+### Snapshot 조회, 삭제
+* Opensearch-Dashboards UI의 Dev Tools 또는 api 콜을 통해 snapshot 조회 및 삭제할 수 있다.
+* snapshot 조회
+```
+curl -u admin:admin -k -XGET "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/backups/_all # 저장된 snapshot 전체 조회
+curl -u admin:admin -k -XGET "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/backups/snapshot_1 # 특정 snapshot 조회
+```
+* Dev Tools를 통해 조회 시
+```
+GET _snapshot/backups/_all # 저장된 snapshot 전체 조회
+GET _snapshot/backups/snapshot_1 # 특정 snapshot 조회
+```
+* snapshot 삭제
+```
+curl -u admin:admin -k -XDELETE "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/backups/snapshot_1 # 특정 snapshot 삭제
+```
+* Dev Tools를 통해 삭제 시
+```
+DELETE _snapshot/backups/snapshot_1 # 특정 snapshot 삭제
+```
 ### Step 3-1. Dashboards UI에서 Index Policy를 이용해 특정 index pattern을 가진 index를 주기적으로 저장
 *  Index Management > Index Policies > Create Policy 에서 Visual Editor로 설정을 진행한다.
 *  ISM template 설정에서 Add template으로 해당 policy를 적용하고자 하는 index-pattern을 설정한다. ex) logstash-*
