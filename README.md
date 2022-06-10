@@ -12,7 +12,8 @@
 * Opensearch ([opensearchproject/opensearch:1.2.3](https://hub.docker.com/r/opensearchproject/opensearch))
 * Opensearch dashboard ([opensearchproject/opensearch-dashboards:1.2.0](https://hub.docker.com/r/opensearchproject/opensearch-dashboards))
 * Busybox ([busybox:1.32.0](https://hub.docker.com/layers/busybox/library/busybox/1.32.0/images/sha256-414aeb860595d7078cbe87abaeed05157d6b44907fbd7db30e1cfba9b6902448?context=explore))
-* Fluentd ([fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1](https://hub.docker.com/layers/fluent/fluentd-kubernetes-daemonset/v1.4.2-debian-elasticsearch-1.1/images/sha256-ce4885865850d3940f5e5318066897b8502c0b955066392de7fd4ef6f1fd4275?context=explore))
+* Fluentd ([docker.io/tmaxcloudck/hypercloud:fluentd-v1.4.2-debian-elasticsearch-1.1](https://hub.docker.com/layers/fluent/fluentd-kubernetes-daemonset/v1.4.2-debian-elasticsearch-1.1/images/sha256-ce4885865850d3940f5e5318066897b8502c0b955066392de7fd4ef6f1fd4275?context=explore](https://hub.docker.com/layers/204908945/tmaxcloudck/hypercloud/fluentd-v1.4.2-debian-elasticsearch-1.1/images/sha256-1221c5f693d9a974ca5ba1be84b5de81698ddbccaf734e70a76a75daf0dc992c?context=repo)))
+    * 기존 fluentd와 동일한 이미지에 opensearch output plugin을 추가하여 생성한 이미지
 * Rightsizing Plugin ([docker.io/tmaxcloudck/rightsizing-opensearch-plugin:demo](https://hub.docker.com/repository/docker/tmaxcloudck/rightsizing-opensearch-plugin))
 
 ## Prerequisites
@@ -34,7 +35,7 @@
     $ export DASHBOARD_VERSION=1.2.0
     $ export PG_IMAGE_PATH=rightsizing-opensearch-plugin:demo
     $ export BUSYBOX_VERSION=1.32.0
-    $ export FLUENTD_VERSION=v1.4.2-debian-elasticsearch-1.1
+    $ export FLUENTD_VERSION=fluentd-v1.4.2-debian-elasticsearch-1.1
     $ export REGISTRY={ImageRegistryIP:Port}
     ```
     * 외부 네트워크 통신이 가능한 환경에서 필요한 이미지를 다운받는다.
@@ -47,8 +48,8 @@
     $ sudo docker save busybox:${BUSYBOX_VERSION} > busybox_${BUSYBOX_VERSION}.tar
     $ sudo docker pull docker.io/tmaxcloudck/${PG_IMAGE_PATH}
     $ sudo docker save docker.io/tmaxcloudck/${PG_IMAGE_PATH} > ${PG_IMAGE_PATH}.tar
-    $ sudo docker pull fluent/fluentd-kubernetes-daemonset:${FLUENTD_VERSION}
-    $ sudo docker save fluent/fluentd-kubernetes-daemonset:${FLUENTD_VERSION} > fluentd_${FLUENTD_VERSION}.tar
+    $ sudo docker pull docker.io/tmaxcloudck/hypercloud:${FLUENTD_VERSION}
+    $ sudo docker save docker.io/tmaxcloudck/hypercloud:${FLUENTD_VERSION} > fluentd_${FLUENTD_VERSION}.tar
     ```
   
 2. 위의 과정에서 생성한 tar 파일들을 폐쇄망 환경으로 이동시킨 뒤 사용하려는 registry에 이미지를 push한다.
@@ -63,13 +64,13 @@
     $ sudo docker tag opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION} ${REGISTRY}/opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION}
     $ sudo docker tag busybox:${BUSYBOX_VERSION} ${REGISTRY}/busybox:${BUSYBOX_VERSION}
     $ sudo docker tag docker.io/tmaxcloudck/${PG_IMAGE_PATH} ${REGISTRY}/${PG_IMAGE_PATH}
-    $ sudo docker tag fluent/fluentd-kubernetes-daemonset:${FLUENTD_VERSION} ${REGISTRY}/fluentd-kubernetes-daemonset:${FLUENTD_VERSION}
+    $ sudo docker tag docker.io/tmaxcloudck/hypercloud:${FLUENTD_VERSION} ${REGISTRY}/hypercloud:${FLUENTD_VERSION}
     
     $ sudo docker push ${REGISTRY}/opensearchproject/opensearch:${OS_VERSION}
     $ sudo docker push ${REGISTRY}/opensearchproject/opensearch-dashboards:${DASHBOARD_VERSION}
     $ sudo docker push ${REGISTRY}/busybox:${BUSYBOX_VERSION}
     $ sudo docker push ${REGISTRY}/${PG_IMAGE_PATH}
-    $ sudo docker push ${REGISTRY}/fluentd-kubernetes-daemonset:${FLUENTD_VERSION}
+    $ sudo docker push ${REGISTRY}/hypercloud:${FLUENTD_VERSION}
     ```
 
 ## Step 0. opensearch.config 설정
@@ -102,7 +103,7 @@
             * ex) tmaxcloud.org
 		* FLUENTD_VERSION
 			* FLUENTD_VERSION 의 버전
-			* ex) v1.4.2-debian-elasticsearch-1.1
+			* ex) fluentd-v1.4.2-debian-elasticsearch-1.1
 		* BUSYBOX_VERSION
 			* BUSYBOX_VERSION 의 버전
 			* ex) 1.32.0
@@ -175,7 +176,7 @@
     ```bash
     $ export OS_VERSION=1.2.3
     $ export DASHBOARD_VERSION=1.2.0
-    $ export FLUENTD_VERSION=v1.4.2-debian-elasticsearch-1.1
+    $ export FLUENTD_VERSION=fluentd-v1.4.2-debian-elasticsearch-1.1
     $ export BUSYBOX_VERSION=1.32.0
     $ export PG_IMAGE_PATH=rightsizing-opensearch-plugin:demo
     $ export STORAGECLASS_NAME=csi-cephfs-sc
@@ -228,8 +229,8 @@
 	$ sed -i 's/busybox/'${REGISTRY}'\/busybox/g' 01_opensearch.yaml
 	$ sed -i 's/docker.io\/opensearchproject\/opensearch-dashboards/'${REGISTRY}'\/opensearchproject\/opensearch-dashboards/g' 02_opensearch-dashboards.yaml
 	$ sed -i 's/docker.io\/tmaxcloudck/'${REGISTRY}'/g' 02_opensearch-dashboards.yaml
-	$ sed -i 's/fluent\/fluentd-kubernetes-daemonset/'${REGISTRY}'\/fluentd-kubernetes-daemonset/g' 03_fluentd.yaml
-	$ sed -i 's/fluent\/fluentd-kubernetes-daemonset/'${REGISTRY}'\/fluentd-kubernetes-daemonset/g' 03_fluentd_cri-o.yaml
+	$ sed -i 's/docker.io\/tmaxcloudck/'${REGISTRY}'/g' 03_fluentd.yaml
+	$ sed -i 's/docker.io\/tmaxcloudck/'${REGISTRY}'/g' 03_fluentd_cri-o.yaml
 	```    
     
 ## Step 1. OpenSearch 설치
