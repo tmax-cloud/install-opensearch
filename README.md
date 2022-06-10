@@ -303,8 +303,18 @@
         cluster.initial_master_nodes: os-cluster-0, os-cluster-1, os-cluster-2 ## 증가된 만큼 수정
     ```
 * Opensearch-Dashboards 구성
-    * Opensearch-Dashboards의 경우 Dashboards deployment을 추가로 생성한다.
-    * ex) 예시 참조 [dashboards-deployment.yaml](yaml/dashboards-deployment.yaml)
+    * Opensearch-Dashboards의 경우 Dashboards replicas: 2로 수정한다.
+    ```
+    spec:
+      replicas: 2 ## 1에서 2로 변경
+      selector:
+        matchLabels:
+          app: opensearch-dashboards
+      template:
+        metadata:
+          labels:
+            app: opensearch-dashboards
+    ```
 
 ### Opensearch multi node 환경에서 single node 환경으로 변경하여 재기동 시 주의 사항
 *  opensearch data(PVC)에 master node 관련 설정이 저장되기 때문에 지워지는 노드에 대하여 master node 후보에서 제외시킨 후에 opensearch 재기동 필요
