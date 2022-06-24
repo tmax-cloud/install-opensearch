@@ -7,7 +7,7 @@
 ![image](../figure/structure.png)
 
 ## 시나리오 1: Index 생성 및 로그 조회
-* Opensearch, Opensearch-Dashboards, Fluentd의 모든 팟이 Running인 상태를 전제로 한다.
+* Fluentd를 통해 로그가 Opensearch에 적재가 잘 되고 있는지 확인하고 discover를 통해 로그의 상세 내역을 조회할 수 있다.
 * Index와 Index pattern의 차이:
     * Index : Opensearch에 적재된 log data
     * Index pattern: index data를 시각화하기 위한 log field의 data type mapping 정보
@@ -67,6 +67,7 @@
 * Operator에서 is / is not /is one of / is not one of/ exists / does not exist 중 원하는 조건을 선택한다.
 * Value는 해당 조건에 맞는 값을 설정한다.
 * ex) namespace가 monitoring인 로그만 조회
+    * Field: kubernetes.namespace_name / Operator: is / Value: monitoring 
 ![image](../figure/discover2.png)
 
 #### discover의 available fields
@@ -78,6 +79,7 @@
 
 
 ## 시나리오 2: Index Policy 설정
+* Index policy 설정을 통해 index lifecycle을 효율적으로 관리할 수 있
 
 ### Step 1. index policy 수정하기
 * 목적: Index Policy 기능을 통해 Index의 삭제 주기를 default 7일에서 3일로 변경한다.
