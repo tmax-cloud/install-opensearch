@@ -1,6 +1,8 @@
 ## Opensearch 기능 가이드
-* [EFK-OpenSearch Migration 및 Snapshot 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/README-snapshot.md)
-* [Opensearch Role 설정 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/README-roles.md)
+* [Opensearch 기본 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/docs/README-basic.md)
+* [Opensearch Plugin 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/docs/README-plugin.md)
+* [EFK-OpenSearch Migration 및 Snapshot 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/docs/README-snapshot.md)
+* [Opensearch Role 설정 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/docs/README-roles.md)
 
 # Opensearch 설치 가이드
 
