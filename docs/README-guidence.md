@@ -8,9 +8,6 @@
 
 ## 시나리오 1: Index 생성 및 로그 조회
 * Fluentd를 통해 로그가 Opensearch에 적재가 잘 되고 있는지 확인하고 discover를 통해 로그의 상세 내역을 조회할 수 있다.
-* Index와 Index pattern의 차이:
-    * Index : Opensearch에 적재된 log data
-    * Index pattern: index data를 시각화하기 위한 log field의 data type mapping 정보
 
 ### Step 1. refresh 설정을 통한 index 생성 조회
 * 목적: Opensearch의 indices에서는 실시간으로 조회가 갱신되지 않으므로 Refresh 시간을 1 sec로 설정하여 index 생성 및 로그 적재 현황을 확인한다.
@@ -37,20 +34,14 @@
 * 목적: 적재된 로그 내용을 시각화를 통해 조회하기 위한 index pattern을 생성한다.
 * pattern name을 설정할 때 정규식을 이용하여 해당 index를 포함하는 index pattern을 생성한다. 
     * 특정 index만 조회하고자 할 경우 해당 index name과 동일한 이름으로 생성할 수 있다.
+* Index와 Index pattern의 차이:
+    * Index : Opensearch에 적재된 log data
+    * Index pattern: index data를 시각화하기 위한 log field의 data type mapping 정보
+    *  #### index pattern을 지워도 log data는 index에 저장되어 있어 data가 삭제되지는 않는다.
 ![image](../figure/index-pattern-create1.png)
 
 * Time field는 @timestamp로 설정하여 Create index pattern을 클릭한다.
 ![image](../figure/index-pattern-create2.png)
-
-* 생성된 Index pattern을 통해 확인할 수 있는 내용은 다음과 같다.
-![image](../figure/index-pattern.png)
-* name: index의 log field name
-* type: log field 의 data type
-* format:
-* searchable:
-* aggregatable:
-* excluded:
-
 
 ### Step 3. discover를 통한 로그 조회
 * 목적: 생성한 index pattern을 바탕으로 opensearch에 적재된 log data를 조회한다.
@@ -64,7 +55,7 @@
 * 목적: filter 기능을 통해 원하는 로그를 조회할 수 있다.
 * +Add filter를 클릭한다.
 * Field에서 조건을 설정할 log field를 선택한다.
-* Operator에서 is / is not /is one of / is not one of/ exists / does not exist 중 원하는 조건을 선택한다.
+* Operator에서 is / is not, is one of / is not one of, exists / does not exist 중 원하는 조건을 선택한다.
 * Value는 해당 조건에 맞는 값을 설정한다.
 * ex) namespace가 monitoring인 로그만 조회
     * Field: kubernetes.namespace_name / Operator: is / Value: monitoring 
@@ -79,7 +70,7 @@
 
 
 ## 시나리오 2: Index Policy 설정
-* Index policy 설정을 통해 index lifecycle을 효율적으로 관리할 수 있
+* Index policy 설정을 통해 index lifecycle을 효율적으로 관리할 수 있다.
 
 ### Step 1. index policy 수정하기
 * 목적: Index Policy 기능을 통해 Index의 삭제 주기를 default 7일에서 3일로 변경한다.
