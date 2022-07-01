@@ -85,7 +85,19 @@ ex) opensearch에서 제공하는 sample data(sample-host-health-detector)를 �
 ![image](../figure/example-alert2.png)
 
 ## Observability 관측
-* 목적:
+* Trace analytics: Elastic APM과 같이 Opentelemetry를 통해 특정 application으로부터 trace 데이터를 수집하여 분석할 수 있다.
+* OpenTelemetry를 통해 trace data를 수집하고 Data prepper를 통해 Opensearch의 document 형식에 맞게 변환하여 Opensearch에 적재하면 대시보드를 통해 시각화된 분석 결과를 확인한다.
+![image](../figure/trace-analytics.png)
 
 ## Reporting
-* 목적:
+* 목적: Opensearch Dashboard의 Discovery, Dashboard, Visualization, Notebooks를 통해 report를 생성하여 PNG, PDF, CSV 형식으로 다운로드 할 수 있다.
+* report definition 생성
+   * Report source: report로 내보낼 source를 선택한다. Dashboard, Visualization, Saved search(discovery에서 특정 기간을 설정하여 조회한 데이터), Notebook
+   * File format: dashboard, Visualization, Notebook은 PDF 혹은 PNG 중에 선택, Saved search는 csv 형식으로 고정된다.
+   * Time range: 특정 기간동안 수집된 데이터를 설정한다
+   * Report trigger: on demand와 schedule을 설정할 수 있다.
+      * schedule로 설정 시, 주기적으로 report를 생성하도록 설정할 수 있다.   
+![image](../figure/report1.png)
+
+* report definition 적용 후 예시
+![image](../figure/report2.png)
