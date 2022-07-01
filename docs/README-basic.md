@@ -103,3 +103,9 @@
 
 * Managed Indices에서 index에 매핑한 policy 이름을 클릭하면 변경된 policy로 적용된 것을 확인할 수 있다.
 ![image](../figure/change-policy3.png)
+
+
+### 비고
+* index 삭제하기: Opensearch에서 index 삭제는 dev-tools를 통해서만 가능하다.
+   * dev-tools에서 인덱스 삭제
+   * ex) DELETE logstash-2022.01.01
