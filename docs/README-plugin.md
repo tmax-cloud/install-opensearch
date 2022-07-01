@@ -126,5 +126,5 @@ ex) opensearch에서 제공하는 sample data(sample-host-health-detector)를 �
 ![image](../figure/report1.png)
 
 * report definition 적용 후 예시
-* 생성된 report에서 Generate의 다운로드 버튼을 클릭하면 사용자의 PC에 해당 파일을 저장할 수 있
+* 생성된 report에서 Generate의 다운로드 버튼을 클릭하면 사용자의 PC에 해당 파일을 저장할 수 있다
 ![image](../figure/report2.png)
