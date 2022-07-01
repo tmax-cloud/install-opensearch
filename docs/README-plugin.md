@@ -6,11 +6,11 @@
 ![image](../figure/plugin.png)
 
 ## 목차
-* [Query Workbench](https://github.com/chaejin-lee/install-opensearch/new/main/docs#query-workbench)
-* [Anomaly Detection](https://github.com/chaejin-lee/install-opensearch/new/main/docs#anomaly-detection-%EC%9D%B4%EC%83%81-%ED%83%90%EC%A7%80) 
-* [Alerting](https://github.com/chaejin-lee/install-opensearch/new/main/docs#alerting-%EC%95%8C%EB%A6%BC)
-* [Observability](https://github.com/chaejin-lee/install-opensearch/new/main/docs#observability-%EA%B4%80%EC%B8%A1)
-* [Reporting](https://github.com/chaejin-lee/install-opensearch/new/main/docs#reporting)
+* [Query Workbench](https://github.com/tmax-cloud/install-opensearch/new/main/docs#query-workbench)
+* [Anomaly Detection](https://github.com/tmax-cloud/install-opensearch/new/main/docs#anomaly-detection-%EC%9D%B4%EC%83%81-%ED%83%90%EC%A7%80) 
+* [Alerting](https://github.com/tmax-cloud/install-opensearch/new/main/docs#alerting-%EC%95%8C%EB%A6%BC)
+* [Observability](https://github.com/tmax-cloud/install-opensearch/new/main/docs#observability-%EA%B4%80%EC%B8%A1)
+* [Reporting](https://github.com/tmax-cloud/install-opensearch/new/main/docs#reporting)
 
 ## Query Workbench
 * 목적: Opensearch에서 기존의 Opensearch DSL이 아닌 SQL 구문으로 쿼리를 작성하여 원하는 정보를 조회하고 그 결과를 text, json, jdbc, csv 형식으로 저장할 수 있다.
