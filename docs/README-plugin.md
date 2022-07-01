@@ -85,9 +85,34 @@ ex) opensearch에서 제공하는 sample data(sample-host-health-detector)를 �
 ![image](../figure/example-alert2.png)
 
 ## Observability 관측
-* Trace analytics: Elastic APM과 같이 Opentelemetry를 통해 특정 application으로부터 trace 데이터를 수집하여 분석할 수 있다.
+* Trace analytics: Elastic APM과 같이 Opentelemetry를 통해 application으로부터 trace 데이터를 수집하여 분석할 수 있다.
 * OpenTelemetry를 통해 trace data를 수집하고 Data prepper를 통해 Opensearch의 document 형식에 맞게 변환하여 Opensearch에 적재하면 대시보드를 통해 시각화된 분석 결과를 확인한다.
 ![image](../figure/trace-analytics.png)
+
+### Trace analytics 사용 예시
+* Dashboard 화면을 통해 해당 Application의 trace group(Http 콜을 기준)의 Latency, Error rate, Throughput 정보를 확인할 수 있다.
+![image](../figure/trace1.png)
+
+   * trace 메뉴에서 Time spent by service 및 trace group을 기준으로 한 Span 정보를 확인할 수 있다.
+![image](../figure/trace2.png)
+
+   * Services 메뉴에서 각 서비스 별 latency, error rate, throughput 정보와 연결된 서비스 정보를 확인할 수 있다.
+      * service 중 하나를 클릭하면 해당 서비스에 대한 Span 세부 정보를 확인할 수 있다.
+![image](../figure/trace3.png)
+![image](../figure/trace4.png)
+
+### Piped Processing Language(PPL): 파이프(|) syntax를 사용하는 opensearch에서 제공하는 DSL 이외에 추가로 적용된 쿼리 언어
+* ex) 'source = opensearch_dashboards_sample_data_logs | fields host | stats count()' 
+* 입력 시 조회한 데이터 상에서 host address에 대한 count 결과를 보여준다.
+ 
+* Event Analytics: Piped Processing Language(PPL) 쿼리를 이용한 데이터 시각화를 제공
+![image](../figure/event1.png)
+![image](../figure/event2.png)
+
+* Operational panels: Event Analytics에서 쿼리로 생성한 visualization을 이용하여 대시보드를 제공한다.
+
+* Notebooks: code block(Markdown/SQL/PPL)과 visualization 데이터를 결합할 수 있는 단일 인터페이스
+![image](../figure/notebook.png)
 
 ## Reporting
 * 목적: Opensearch Dashboard의 Discovery, Dashboard, Visualization, Notebooks를 통해 report를 생성하여 PNG, PDF, CSV 형식으로 다운로드 할 수 있다.
