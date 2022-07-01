@@ -50,7 +50,39 @@ ex) opensearch에서 제공하는 sample data(sample-host-health-detector)를 �
 ![image](../figure/example-detection.png)
 
 ## Alerting 알림
-* 목적: 
+* 목적: opensearch에 적재되는 index data가 특정 조건을 충족하면 알림을 수신할 수 있다.
+* Destinations에서 Add destination 클릭
+   * Name: destination 이름 설정
+   * Type: Amazon chime, Slack, Email, Custom Webhook
+   * Slack의 경우, Settings에 Slack API에서 workspace에 slack app을 생성하여 incoming webhook 설정을 통해 받은 Webhook URL을 입력한다.
+      * Slack app 설정 참고: https://api.slack.com/messaging/webhooks
+   * Email의 경우, Sender와 Recipients 설정이 필요하다.
+      * Sender: sender name, email address, SMTP host, port 입력 후 encryption method를 설정한다. (default로 None)
+      * Recipients:  email group을 생성하여 추가한다. email group에는 group name과 alerting을 보내고자하는 email(복수 가능)을 입력하여 생성한다.
+![image](../figure/destination.png)
+
+* Monitors에서 Create monitor 클릭
+* ex) Alerting을 anomaly detector를 이용하여 Slack으로 알림을 수신하는 예시
+
+   * Monitor details:
+      * Monitor name: monitor 이름 설정
+      * Monitor type: Per query monitor, Per bucket monitor 중 하나를 선택
+      * Monitor defining method: 쿼리와 트리거를 정의하기 위한 옵션. visual editor, extraction query editor, anomaly detector 중 하나를 선택
+      * Schedule: monitor가 데이터를 수집하여 알림을 수신하는 주기를 설정할 수 있다.
+![image](../figure/monitor1.png)
+
+   * Triggers: 알림을 수신하기 위한 조건을 설정한다.
+      * trigger type: anomaly detector의 설정을 가져오거나 query response를 설정할 수 있다.
+![image](../figure/monitor2.png)
+
+   * Actions: 알림을 수신할 Destination과 Message 형식을 설정한다
+   * Send test message를 클릭하면 slack app을 연동한 workspace에 action에서 설정한 형식의 message가 수신되는 것을 확인할 수 있다. 
+![image](../figure/monitor3.png)
+
+* 생성된 monitor를 통해 alert history를 조회 및 해당 alert이 수신된 내역을 확인할 수 있다.
+* ex) opensearch에서 제공하는 sample data(sample-host-health-detector)를 이용한 cpu와 memory 사용량 이상 탐지에 대한 알림 수신
+![image](../figure/example-alert1.png)
+![image](../figure/example-alert2.png)
 
 ## Observability 관측
 * 목적:
