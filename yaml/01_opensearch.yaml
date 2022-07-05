@@ -238,10 +238,6 @@ data:
                 subject_key: preferred_username
                 roles_key: roles
                 openid_connect_url: https://{HYPERAUTH_URL}/auth/realms/tmax/.well-known/openid-configuration
-                openid_connect_idp:
-                  enable_ssl: true
-                  verify_hostnames: false
-                  pemtrustedcas_filepath: /usr/share/opensearch/config/certificates/ca.crt
             authentication_backend:
               type: noop
 ---
