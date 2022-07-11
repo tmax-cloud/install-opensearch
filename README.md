@@ -338,6 +338,51 @@ POST /_cluster/voting_config_exclusions/node_name={NODE_NAME} # os-cluster-1, os
     </filter>
 
     ```
+### Opensearch와 Opensearch-Dashboards 모듈의 log level 설정
+* Opensearch: Apache Log4j를 사용하며 TRACE, DEBUG, INFO, WARN, ERROR, FATAL 총 6단계로, default로 설정된 log level은 INFO이다.
+     * log level 설정은 config를 수정하는 방법과 opensearch-dashboards ui에서 query를 보내어 설정하는 방법이 있다
+     * Opensearch-Dashboards ui에서 설정하는 방법: Dev tool 메뉴에서 예시와 같이 원하는 로그 레벨로 입력하여 수정한다.
+	
+	    ex) Dev tools 입력 예시
+	    ```
+            PUT /_cluster/_settings
+            {
+	          "persistent": {
+                    "logger.org.opensearch.index.reindex": "DEBUG"
+                }
+	        }
+	    ```
+	
+     * Opensearch config를 수정하는 방법: Opensearch-config Configmap에서 예시와 같이 원하는 로그 레벨로 입력하여 추가한다.
+	
+	     ex) opensearch-config (opensearch.yml) Configmap 예시
+	
+	     ```
+             plugins.security.authcz.admin_dn:
+               - "CN=admin"
+             plugins.security.nodes_dn:
+               - "CN=opensearch"
+             compatibility.override_main_response_version: true
+             logger.org.opensearch.index.reindex: debug  ## 원하는 로그 레벨로 입력하여 추가
+	     ```
+		
+* Opensearch-Dashboards: opensearch와는 다르게 log level을 지정하여 설정하지 않고 config 설정에서 원하는 log 설정에 true/false를 적용한다.
+        
+	ex) opensearch-dashboards-config (opensearch-dashboards.yml) Configmap 예시
+	
+	```
+	    # Set the value of this setting to true to suppress all logging output.
+        #logging.silent: false
+
+        # Set the value of this setting to true to suppress all logging output other than error messages.
+        #logging.quiet: false
+
+        # Set the value of this setting to true to log all events, including system usage information
+        # and all requests.
+        #logging.verbose: false
+	```
+
+
 * Index management policy 설정
     * watch-history-ilm-policy는 생성된 지 7일이 지난 인덱스는 자동으로 삭제한다.
     * policy를 수정하고 싶다면, Opensearch-dashboards에서 아래와 같이 Index Management > Index Policies 메뉴를 들어가서 watch-history-ilm-policy를 클릭한다.
