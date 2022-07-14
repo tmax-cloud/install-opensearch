@@ -406,7 +406,7 @@ ex2) 01_opensearch.yaml opensearch-log4j-config 마운트 적용 예시
 	     containers:
              - name: fluentd
                image: docker.io/tmaxcloudck/hypercloud:{FLUENTD_VERSION}        
-               command: ["/bin/bash", "-c", "fluentd -c -qq /fluentd/etc/fluent.conf -p /fluentd/plugins"]
+               command: ["/bin/bash", "-c", "fluentd -qq -c /fluentd/etc/fluent.conf -p /fluentd/plugins"]
 
 	     ```
 
