@@ -85,6 +85,7 @@ spec:
       containers:
       - name: fluentd
         image: docker.io/tmaxcloudck/hypercloud:{FLUENTD_VERSION}
+        command: ["/bin/bash", "-c", "fluentd -c /fluentd/etc/fluent.conf -p /fluentd/plugins"]
         env:
           - name: FLUENT_OPENSEARCH_HOST
             value: "opensearch"
