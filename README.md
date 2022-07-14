@@ -338,7 +338,7 @@ POST /_cluster/voting_config_exclusions/node_name={NODE_NAME} # os-cluster-1, os
     </filter>
 
     ```
-### Opensearch와 Opensearch-Dashboards 모듈의 log level 설정
+### Opensearch와 Opensearch-Dashboards, fluentd 모듈의 log level 설정
 * Opensearch: Apache Log4j를 사용하며 TRACE, DEBUG, INFO, WARN, ERROR, FATAL 총 6단계로, default로 설정된 log level은 INFO이다.
      * log level 설정은 config를 수정하는 방법과 opensearch-dashboards ui에서 query를 보내어 설정하는 방법, log4j2.properties를 수정하는 방법이 있다.
      * 현재 opensearch-config를 수정하는 방법과 dashboards ui에서 접근하여 설정하는 방법이 제대로 적용되지 않는 것을 확인하여 log4j2.properties를 수정하는 방법을 안내한다.  
@@ -394,6 +394,21 @@ ex2) 01_opensearch.yaml opensearch-log4j-config 마운트 적용 예시
         # and all requests.
         #logging.verbose: false ## log_level: trace/debug에 유사한 output
 	```
+
+* Fluentd: logger class는 fatal, error, warn, info, debug, trace 총 6단계로 구성되며 default log level 은 info이다. fluentd cli를 사용하거나 config file 을 통해서 수정 가능
+    * config를 통한 log level 설정에 오류가 있어 fluentd command에 옵션을 추가하여 변경하는 방법을 안내한다.
+    * [03_fluentd_cri-o.yaml](yaml/03_fluentd_cri-o.yaml)의 Daemonset에서 command에 원하는 log level에 맞는 옵션을 추가한다.
+    * log level 별 옵션 참조: https://docs.fluentd.org/deployment/logging#by-command-line-option
+    
+    ex) fluentd Daemonset command 수정 예시, log level error 설정 (-qq 옵션 추가)
+    
+             ```
+	     containers:
+             - name: fluentd
+               image: docker.io/tmaxcloudck/hypercloud:{FLUENTD_VERSION}        
+               command: ["/bin/bash", "-c", "fluentd -c -qq /fluentd/etc/fluent.conf -p /fluentd/plugins"]
+
+	     ```
 
 
 * Index management policy 설정
