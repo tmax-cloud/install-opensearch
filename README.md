@@ -340,32 +340,45 @@ POST /_cluster/voting_config_exclusions/node_name={NODE_NAME} # os-cluster-1, os
     ```
 ### Opensearch와 Opensearch-Dashboards 모듈의 log level 설정
 * Opensearch: Apache Log4j를 사용하며 TRACE, DEBUG, INFO, WARN, ERROR, FATAL 총 6단계로, default로 설정된 log level은 INFO이다.
-     * log level 설정은 config를 수정하는 방법과 opensearch-dashboards ui에서 query를 보내어 설정하는 방법이 있다
-     * Opensearch-Dashboards ui에서 설정하는 방법: Dev tool 메뉴에서 예시와 같이 원하는 로그 레벨로 입력하여 수정한다.
-	
-	    ex) Dev tools 입력 예시
-	    ```
-            PUT /_cluster/_settings
-            {
-	          "persistent": {
-                    "logger.org.opensearch.index.reindex": "DEBUG"
-                }
-	        }
-	    ```
-	
-     * Opensearch config를 수정하는 방법: Opensearch-config Configmap에서 예시와 같이 원하는 로그 레벨로 입력하여 추가한다.
-	
-	     ex) opensearch-config (opensearch.yml) Configmap 예시
-	
+     * log level 설정은 config를 수정하는 방법과 opensearch-dashboards ui에서 query를 보내어 설정하는 방법, log4j2.properties를 수정하는 방법이 있다.
+     * 현재 opensearch-config를 수정하는 방법과 dashboards ui에서 접근하여 설정하는 방법이 제대로 적용되지 않는 것을 확인하여 log4j2.properties를 수정하는 방법을 안내한다.  
+     * log4j2.properties를 수정하는 방법: [opensearch-log4j2-config](yaml/opensearch-log4j2-config.yaml) Configmap을 예시와 같이 원하는 로그 레벨로 입력하여 추가시킨 후, opensearch에 mount시켜 적용한다.
+
+ex1) log4j-config (log4j2.properies) Configmap 예시
+             
+	     
 	     ```
-             plugins.security.authcz.admin_dn:
-               - "CN=admin"
-             plugins.security.nodes_dn:
-               - "CN=opensearch"
-             compatibility.override_main_response_version: true
-             logger.org.opensearch.index.reindex: debug  ## 원하는 로그 레벨로 입력하여 추가
+             log4j2.properties: |
+               status = error
+
+               appender.console.type = Console
+               appender.console.name = console
+               appender.console.layout.type = PatternLayout
+               appender.console.layout.pattern = [%d{ISO8601}][%-5p][%-25c{1.}] [%node_name]%marker %m%n
+
+               rootLogger.level = error  ### 원하는 로그 레벨로 변경
+               rootLogger.appenderRef.console.ref = console
+	       
 	     ```
 		
+	
+ex2) 01_opensearch.yaml opensearch-log4j-config 마운트 적용 예시
+	
+	  
+	    ```
+	     volumeMounts:
+	     - name: log4j2
+               mountPath: /usr/share/opensearch/config/log4j2.properties
+               subPath: log4j2.properties
+	       
+	     ...
+	     
+	     volumes:
+	     - name: log4j2
+               configMap:
+               name: opensearch-log4j2-config
+
+	     ```
 * Opensearch-Dashboards: opensearch와는 다르게 log level을 지정하여 설정하지 않고 config 설정에서 원하는 log 설정에 true/false를 적용한다.
         
 	ex) opensearch-dashboards-config (opensearch-dashboards.yml) Configmap 예시
@@ -375,11 +388,11 @@ POST /_cluster/voting_config_exclusions/node_name={NODE_NAME} # os-cluster-1, os
         #logging.silent: false
 
         # Set the value of this setting to true to suppress all logging output other than error messages.
-        #logging.quiet: false
+        #logging.quiet: false  ## log_level: warn/error 에 유사한 output
 
         # Set the value of this setting to true to log all events, including system usage information
         # and all requests.
-        #logging.verbose: false
+        #logging.verbose: false ## log_level: trace/debug에 유사한 output
 	```
 
 
