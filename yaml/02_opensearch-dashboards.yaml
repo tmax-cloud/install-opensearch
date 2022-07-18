@@ -182,7 +182,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   labels:
-    ingress.tmaxcloud.org/name: dashboards
+    ingress.tmaxcloud.org/name: opensearch-dashboards
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     cert-manager.io/cluster-issuer: tmaxcloud-issuer
