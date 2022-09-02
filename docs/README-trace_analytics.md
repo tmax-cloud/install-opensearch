@@ -113,4 +113,4 @@ spec:
 ```
 
 ## Step 5. OpenSearch-Dashboards UI에서 확인
-![image](figure/trace1.png)
+![image](../figure/trace1.png)
