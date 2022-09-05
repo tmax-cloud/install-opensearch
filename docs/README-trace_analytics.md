@@ -28,7 +28,7 @@
 
 1. kubectl apply -f instrumentation.yaml 로 생성
 
-* 비고: [instrumentation.yaml](../trace_analytics/instrumentation.yaml) 에서 각 파드에 
+* 비고: [instrumentation.yaml](../trace_analytics/instrumentation.yaml) 에서 각 파드에 inject할 agent의 이미지를 임의로 변경할 수 있다.
 
 ## Step 2. Opentelemetry-Collector CR 생성
 * 목적: Opentelemetry-Collector CR 설정
