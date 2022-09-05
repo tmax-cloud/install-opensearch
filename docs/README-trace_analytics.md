@@ -11,13 +11,14 @@
 
 ## 구성 요소
 * Opentelemetry-Operator (ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.56.0)
+* Kube-rbac-proxy (gcr.io/kubebuilder/kube-rbac-proxy:v0.11.0)  # operator deployment의 sidecar container
 * Data-prepper (opensearchproject/data-prepper:1.5.0)
 
 ## Step 0. Opentelemetry-Operator 설치
 * 목적: Opentelemetry-Operator 설치
 * 순서:
 
-1. opentelemetry-operator.yaml에 이미지 버전 설정
+1. [opentelemetry-operator.yaml](../trace_analytics/opentelemetry-operator.yaml)에 이미지 버전 설정
 2. kubectl apply -f opentelemetry-operator.yaml 로 설치
 
 ## Step 1. Instrumentation CR 생성
@@ -32,13 +33,13 @@
 
 1. kubectl apply -f opentelemetry-collector.yaml 로 생성
 
-* 비고: deployment mode를 변경할 수 있다. ex) sidecar, daemonset, deployment 현재 default 설정은 deployment
+* 비고: [opentelemetry-collector.yaml](../trace_analytics/opentelemetry-collector.yaml)에서 deployment mode를 변경할 수 있다. ex) sidecar, daemonset, deployment 현재 default 설정은 deployment
 
 ## Step 3. Data-prepper 설치
 * 목적: Opentelemetry-Collector를 통해 받은 trace data를 OpenSearch의 document 형식으로 변환하여 Opensearch에 적재
 * 순서: 
 
-1. data-prepper.yaml에 이미지 버전 설정
+1. [data-prepper.yaml](../trace_analytics/data-prepper.yaml)에 이미지 버전 설정
 2. kubectl apply -f data-prepper.yaml 로 설치
 
 ## Step 4. Pod에 Annotation 추가
