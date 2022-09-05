@@ -11,7 +11,8 @@
 
 ## 구성 요소
 * Opentelemetry-Operator (ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.56.0)
-* Kube-rbac-proxy (gcr.io/kubebuilder/kube-rbac-proxy:v0.11.0)  # operator deployment의 sidecar container
+* Kube-rbac-proxy (gcr.io/kubebuilder/kube-rbac-proxy:v0.11.0)
+    * operator deployment의 sidecar container
 * Data-prepper (opensearchproject/data-prepper:1.5.0)
 
 ## Step 0. Opentelemetry-Operator 설치
@@ -26,6 +27,8 @@
 * 순서:
 
 1. kubectl apply -f instrumentation.yaml 로 생성
+
+* 비고: [instrumentation.yaml](../trace_analytics/instrumentation.yaml) 에서 각 파드에 
 
 ## Step 2. Opentelemetry-Collector CR 생성
 * 목적: Opentelemetry-Collector CR 설정
