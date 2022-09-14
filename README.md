@@ -275,6 +275,11 @@
       ```bash
       $ kubectl apply -f 03_fluentd_multiple_index.yaml
       ```
+      
+    * 비고: Kubernetes namespace 별로 index 생성하고자 할 경우 [03_fluentd_multiple_index.yaml](yaml/03_fluentd_multiple_index.yaml)의 configmap인 fluentd-config에서 pod_name으로 설정된 부분을 namespace_name으로 변경하여 적용한다.
+    
+    ![image](figure/fluentd_module_index.png)
+    
 ## Opensearch HA 구성 가이드
 * 목적: Opensearch와 Opensearch-Dashboards 파드에 대하여 각각 Active-Active 방식으로 기동하기 위한 설정이다.
 * Opensearch 구성
