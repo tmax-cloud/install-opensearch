@@ -2,7 +2,7 @@
 * 목적: 기존의 EFK stack으로 적재하고 저장한 index log data를 Opensearch에 데이터 손실 없이 옮긴다.
 
 ### Step 1. ElasticSearch backup repo 생성
-* 기존에 사용한 [01_elasticsearch.yaml](migration/01_elasticsearch.yaml)(예시용)에 snapshot repository 생성을 위한 설정을 추가한 후, es-cluster pod를 재기동한다.
+* 기존에 사용한 [01_elasticsearch.yaml](../migration/01_elasticsearch.yaml)(예시용)에 snapshot repository 생성을 위한 설정을 추가한 후, es-cluster pod를 재기동한다.
 * 예시1) elasticsearch/statefulset 추가 설정
 ```
 volumeMounts:
@@ -55,7 +55,7 @@ $ ./migration/snapshot.sh
 
 ```
 ### Step 3. OpenSearch에 backup repo 연동 및 restore
-* [01_opensearch.yaml](yaml/01_opensearch.yaml)에 snapshot repository 생성을 위한 설정을 추가한 후, install 가이드에 따라 설치를 진행한다.
+* [01_opensearch.yaml](../yaml/01_opensearch.yaml)에 snapshot repository 생성을 위한 설정을 추가한 후, install 가이드에 따라 설치를 진행한다.
 * 예시1) opensearch/statefulset 추가 설정
 ```
 volumeMounts:
@@ -82,7 +82,7 @@ $ ./migration/restore.sh
 
 
 ### 비고
-* [snapshot.sh](migration/snapshot.sh)에서 저장하고자 하는 index-pattern을 추가할 수 있다.
+* [snapshot.sh](../migration/snapshot.sh)에서 저장하고자 하는 index-pattern을 추가할 수 있다.
 * 예시) fluentd-* index-pattern 추가 시,
 ```
 {
@@ -100,7 +100,7 @@ $ ./migration/restore.sh
 * 목적: Opensearch에 적재한 index log data를 별도의 repository에 저장하여 관리한다.
 
 ### Step 1. OpenSearch backup repo PVC 마운트 설정
-* [01_opensearch.yaml](yaml/01_opensearch.yaml)에 snapshot repository 생성을 위한 설정을 추가한 후, os-cluster pod를 재기동한다.
+* [01_opensearch.yaml](../yaml/01_opensearch.yaml)에 snapshot repository 생성을 위한 설정을 추가한 후, os-cluster pod를 재기동한다.
 * 예시1) opensearch/statefulset 추가 설정
 ```
 volumeMounts:
@@ -169,8 +169,8 @@ curl -u admin:admin -k -XPUT "https://{OPENSEARCH_SERVICE_IP}:9200/_snapshot/bac
 *  Edit State 설정에서 Actions에 add action을 클릭하여 action type에서 snapshot을 고른 후, repository 이름과 snapshot 이름을 설정한다.
 *  이전 state의 transitions 설정에서 minimum index age 설정을 통해 인덱스가 생성된 후 minimum index age로 설정한 기간이 지나면 자동으로 snapshot이 실행된다.
     *  ex) 인덱스 생성 후 1일이 지나면 snapshot을 실행 후, 1시간이 지나면 인덱스를 삭제하는 policy 설정. 지워진 인덱스는 snapshot으로 별도로 저장되어 필요할 때 언제든 restore로 불러올 수 있다.
-    *  index-policy 생성 예시 [snapshot-policy.json](migration/snapshot-policy.json)
-![image](figure/snapshot-settings.png)
+    *  index-policy 생성 예시 [snapshot-policy.json](../migration/snapshot-policy.json)
+![image](../figure/snapshot-settings.png)
 
 ## Snapshot 조회, 복구, 삭제
 * Opensearch-Dashboards UI의 Dev Tools 또는 api 콜을 통해 snapshot 조회, 복구 및 삭제를 할 수 있다.
