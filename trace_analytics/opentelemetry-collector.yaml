@@ -4,6 +4,7 @@ metadata:
   name: otel
   namespace: kube-logging
 spec:
+  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:{OTEL_COLLECTOR_VERSION}
   mode: deployment
   config: |
     receivers:
