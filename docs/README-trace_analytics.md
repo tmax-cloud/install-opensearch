@@ -11,9 +11,61 @@
 
 ## 구성 요소
 * Opentelemetry-Operator (ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.56.0)
+    * Opentelemetry-Collector (ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:0.56.0)
+    * AutoInstrumentation-java (ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:1.11.1)
 * Kube-rbac-proxy (gcr.io/kubebuilder/kube-rbac-proxy:v0.11.0)
     * operator deployment의 sidecar container
 * Data-prepper (opensearchproject/data-prepper:1.5.0)
+
+## 폐쇄망 설치 가이드
+* 설치를 진행하기 전 아래의 과정을 통해 필요한 이미지 및 yaml 파일을 준비한다.
+* 그 후, Install Step을 진행하면 된다.
+1. 사용하는 image repository에 trace_analytics 사용 시 필요한 이미지를 push한다. 
+
+    * 작업 디렉토리 생성 및 환경 설정
+    ```bash
+    $ export OS_HOME=~/opensearch-install
+    $ cd $OS_HOME
+    $ export OTEL_OPERATOR_VERSION=0.56.0
+    $ export OTEL_COLLECTOR_VERSION=0.56.0
+    $ export AGENT_VERSION=1.11.1
+    $ export DP_IMAGE_VERSION=1.5.0
+    $ export REGISTRY={ImageRegistryIP:Port}
+    ```
+    * 외부 네트워크 통신이 가능한 환경에서 필요한 이미지를 다운받는다.
+    ```bash
+    $ sudo docker pull ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:${OTEL_OPERATOR_VERSION}
+    $ sudo docker save ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:${OTEL_OPERATOR_VERSION} > opentelemetry-operator_${OTEL_OPERATOR_VERSION}.tar
+    $ sudo docker pull ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:${OTEL_COLLECTOR_VERSION}
+    $ sudo docker save ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:${OTEL_COLLECTOR_VERSION} > opentelemetry-collector_${OTEL_COLLECTOR_VERSION}.tar
+    $ sudo docker pull ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:${AGENT_VERSION}
+    $ sudo docker save ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:${AGENT_VERSION} > otel-javaagent_${AGENT_VERSION}.tar
+    $ sudo docker pull gcr.io/kubebuilder/kube-rbac-proxy:${PROXY_VERSION}
+    $ sudo docker save gcr.io/kubebuilder/kube-rbac-proxy:${PROXY_VERSION} > kube-rbac-proxy_${PROXY_VERSION}.tar
+    $ sudo docker pull opensearchproject/data-prepper:${DP_IMAGE_VERSION}
+    $ sudo docker save opensearchproject/data-prepper:${DP_IMAGE_VERSION} > data-prepper_${DP_IMAGE_VERSION}.tar
+    ```
+  
+2. 위의 과정에서 생성한 tar 파일들을 폐쇄망 환경으로 이동시킨 뒤 사용하려는 registry에 이미지를 push한다.
+    ```bash
+    $ sudo docker load < opentelemetry-operator_${OTEL_OPERATOR_VERSION}.tar
+    $ sudo docker load < opentelemetry-collector_${OTEL_COLLECTOR_VERSION}.tar
+    $ sudo docker load < otel-javaagent_${AGENT_VERSION}.tar
+    $ sudo docker load < kube-rbac-proxy_${PROXY_VERSION}.tar
+    $ sudo docker load < data-prepper_${DP_IMAGE_VERSION}.tar
+    
+    $ sudo docker tag ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:${OTEL_OPERATOR_VERSION} ${REGISTRY}/opentelemetry-operator/opentelemetry-operator:${OTEL_OPERATOR_VERSION}
+    $ sudo docker tag ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:${OTEL_COLLECTOR_VERSION} ${REGISTRY}/opentelemetry-collector-releases/opentelemetry-collector:${OTEL_COLLECTOR_VERSION} 
+    $ sudo docker tag ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:${AGENT_VERSION} ${REGISTRY}/opentelemetry-operator/autoinstrumentation-java:${AGENT_VERSION}
+    $ sudo docker tag gcr.io/kubebuilder/kube-rbac-proxy:${PROXY_VERSION} ${REGISTRY}/kube-rbac-proxy:${PROXY_VERSION}
+    $ sudo docker tag opensearchproject/data-prepper:${DP_IMAGE_VERSION} ${REGISTRY}/data-prepper:${DP_IMAGE_VERSION}
+    
+    $ sudo docker push ${REGISTRY}/opentelemetry-operator/opentelemetry-operator:${OTEL_OPERATOR_VERSION}
+    $ sudo docker push ${REGISTRY}/opentelemetry-collector-releases/opentelemetry-collector:${OTEL_COLLECTOR_VERSION} 
+    $ sudo docker push ${REGISTRY}/opentelemetry-operator/autoinstrumentation-java:${AGENT_VERSION}
+    $ sudo docker push ${REGISTRY}/kube-rbac-proxy:${PROXY_VERSION}
+    $ sudo docker push ${REGISTRY}/data-prepper:${DP_IMAGE_VERSION}
+    ```
 
 ## Step 0. Opentelemetry-Operator 설치
 * 목적: Opentelemetry-Operator 설치
