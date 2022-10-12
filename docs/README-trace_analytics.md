@@ -67,14 +67,35 @@
     $ sudo docker push ${REGISTRY}/data-prepper:${DP_IMAGE_VERSION}
     ```
 
-## Step 0. Opentelemetry-Operator 설치
+3. registry 정보를 image에 수정하여 반영한다.
+  
+  ```bash
+	$ sed -i 's/ghcr.io\/open-telemetry\/opentelemetry-operator\/opentelemetry-operator/'${REGISTRY}'\/opentelemetry-operator\/opentelemetry-operator/g' opentelemetry-operator.yaml
+  $ sed -i 's/ghcr.io\/open-telemetry\/opentelemetry-collector-releases\/opentelemetry-collector/'${REGISTRY}'\/opentelemetry-collector-releases\/opentelemetry-collector/g' opentelemetry-collector.yaml
+  $ sed -i 's/ghcr.io\/open-telemetry\/opentelemetry-operator\/autoinstrumentation-java/'${REGISTRY}'\/opentelemetry-operator\/autoinstrumentation-java/g' instrumentation.yaml
+  $ sed -i 's/gcr.io\/kubebuilder\/kube-rbac-proxy/'${REGISTRY}'\/kube-rbac-proxy/g' opentelemetry-operator.yaml
+  $ sed -i 's/opensearchproject\/data-prepper/'${REGISTRY}'\/data-prepper/g' data-prepper.yaml
+	```   
+
+## Step 0. 이미지 버전 반영
+* 아래의 command를 사용하여 사용하고자 하는 image 버전을 입력한다.
+
+```bash
+	$ sed -i 's/{OTEL_OPERATOR_VERSION}/'${OTEL_OPERATOR_VERSION}'/g' opentelemetry-operator.yaml
+  $ sed -i 's/{PROXY_VERSION}/'${PROXY_VERSION}'/g' opentelemetry-operator.yaml
+  $ sed -i 's/{OTEL_COLLECTOR_VERSION}/'${OTEL_COLLECTOR_VERSION}'/g' opentelemetry-collector.yaml
+  $ sed -i 's/{AGENT_VERSION}/'${AGENT_VERSION}'/g' instrumentation.yaml
+  $ sed -i 's/{DP_IMAGE_VERSION}/'${DP_IMAGE_VERSION}'/g' data-prepper.yaml
+	```   
+
+## Step 1. Opentelemetry-Operator 설치
 * 목적: Opentelemetry-Operator 설치
 * 순서:
 
 1. [opentelemetry-operator.yaml](../trace_analytics/opentelemetry-operator.yaml)에 이미지 버전 설정
 2. kubectl apply -f opentelemetry-operator.yaml 로 설치
 
-## Step 1. Instrumentation CR 생성
+## Step 2. Instrumentation CR 생성
 * 목적: Instrumentation CR 설정
 * 순서:
 
@@ -82,7 +103,7 @@
 
 * 비고: [instrumentation.yaml](../trace_analytics/instrumentation.yaml) 에서 각 파드에 inject할 agent의 이미지를 임의로 변경할 수 있다.
 
-## Step 2. Opentelemetry-Collector CR 생성
+## Step 3. Opentelemetry-Collector CR 생성
 * 목적: Opentelemetry-Collector CR 설정
 * 순서: 
 
@@ -90,7 +111,7 @@
 
 * 비고: [opentelemetry-collector.yaml](../trace_analytics/opentelemetry-collector.yaml)에서 deployment mode를 변경할 수 있다. ex) sidecar, daemonset, deployment 현재 default 설정은 deployment
 
-## Step 3. Data-prepper 설치
+## Step 4. Data-prepper 설치
 * 목적: Opentelemetry-Collector를 통해 받은 trace data를 OpenSearch의 document 형식으로 변환하여 Opensearch에 적재
 * 순서: 
 
