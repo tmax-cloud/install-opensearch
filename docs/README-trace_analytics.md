@@ -190,4 +190,6 @@ spec:
 ```
 
 ## Step 5. OpenSearch-Dashboards UI에서 확인
+* Dashboards UI에서 Observability 메뉴에서 Trace Analytics를 클릭하여 확인
+* 단, single service의 경우 service map이 뜨지 않는다.
 ![image](../figure/trace1.png)
