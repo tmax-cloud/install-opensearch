@@ -23,6 +23,7 @@
 * 필수 모듈
   * [RookCeph](https://github.com/tmax-cloud/hypersds-wiki/) 
   * [Hyperauth](https://github.com/tmax-cloud/hyperauth)
+  * [Cert-manager](https://github.com/tmax-cloud/install-cert-manager)
 
 ## 폐쇄망 설치 가이드
 * 설치를 진행하기 전 아래의 과정을 통해 필요한 이미지 및 yaml 파일을 준비한다.
