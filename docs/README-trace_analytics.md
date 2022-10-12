@@ -75,18 +75,18 @@
   $ sed -i 's/ghcr.io\/open-telemetry\/opentelemetry-operator\/autoinstrumentation-java/'${REGISTRY}'\/opentelemetry-operator\/autoinstrumentation-java/g' instrumentation.yaml
   $ sed -i 's/gcr.io\/kubebuilder\/kube-rbac-proxy/'${REGISTRY}'\/kube-rbac-proxy/g' opentelemetry-operator.yaml
   $ sed -i 's/opensearchproject\/data-prepper/'${REGISTRY}'\/data-prepper/g' data-prepper.yaml
-	```   
+```   
 
 ## Step 0. 이미지 버전 반영
 * 아래의 command를 사용하여 사용하고자 하는 image 버전을 입력한다.
 
 ```bash
-	$ sed -i 's/{OTEL_OPERATOR_VERSION}/'${OTEL_OPERATOR_VERSION}'/g' opentelemetry-operator.yaml
+  $ sed -i 's/{OTEL_OPERATOR_VERSION}/'${OTEL_OPERATOR_VERSION}'/g' opentelemetry-operator.yaml
   $ sed -i 's/{PROXY_VERSION}/'${PROXY_VERSION}'/g' opentelemetry-operator.yaml
   $ sed -i 's/{OTEL_COLLECTOR_VERSION}/'${OTEL_COLLECTOR_VERSION}'/g' opentelemetry-collector.yaml
   $ sed -i 's/{AGENT_VERSION}/'${AGENT_VERSION}'/g' instrumentation.yaml
   $ sed -i 's/{DP_IMAGE_VERSION}/'${DP_IMAGE_VERSION}'/g' data-prepper.yaml
-	```   
+```   
 
 ## Step 1. Opentelemetry-Operator 설치
 * 목적: Opentelemetry-Operator 설치
