@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: kube-logging
+  labels:
+    app: data-prepper
+  name: data-prepper-config
+data:
+  pipelines.yaml: |
+    entry-pipeline:
+      delay: "100"
+      source:
+        otel_trace_source:
+          ssl: false
+          port: 21890
+      sink:
+      - pipeline:
+          name: "raw-pipeline"
+      - pipeline:
+          name: "service-map-pipeline"
+    raw-pipeline:
+      source:
+        pipeline:
+          name: "entry-pipeline"
+      prepper:
+      - otel_trace_raw_prepper:
+      sink:
+      - opensearch:
+          hosts: [ "https://opensearch.kube-logging.svc:9200" ]
+          username: "admin"
+          password: "admin"
+          insecure: true
+          trace_analytics_raw: true
+    service-map-pipeline:
+      delay: "100"
+      source:
+        pipeline:
+          name: "entry-pipeline"
+      prepper:
+      - service_map_stateful:
+      sink:
+      - opensearch:
+          hosts: [ "https://opensearch.kube-logging.svc:9200" ]
+          username: "admin"
+          password: "admin"
+          insecure: true
+          trace_analytics_service_map: true
+  data-prepper-config.yaml: |
+    ssl: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kube-logging
+  labels:
+    app: data-prepper
+  name: data-prepper
+spec:
+  ports:
+    - port: 21890
+      name: trace
+      targetPort: 21890
+  selector:
+    app: data-prepper
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: kube-logging
+  labels:
+    app: data-prepper
+  name: data-prepper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-prepper
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: data-prepper
+    spec:
+      containers:
+        - args:
+            - java
+            - -jar
+            - /usr/share/data-prepper/data-prepper.jar
+            - /etc/data-prepper/pipelines.yaml
+            - /etc/data-prepper/data-prepper-config.yaml
+          image: opensearchproject/data-prepper:{DP_IMAGE_VERSION}
+          imagePullPolicy: IfNotPresent
+          name: data-prepper
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1000Mi
+            requests:
+              cpu: 200m
+              memory: 1000Mi
+          ports:
+            - containerPort: 21890
+          volumeMounts:
+            - mountPath: /etc/data-prepper
+              name: prepper-configmap-claim
+      restartPolicy: Always
+      volumes:
+        - name: prepper-configmap-claim
+          configMap:
+            name: data-prepper-config

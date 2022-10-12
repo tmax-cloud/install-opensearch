@@ -51,10 +51,10 @@ spec:
         resources:
           limits:
             cpu: 500m
-            memory: 3000Mi
+            memory: 8Gi
           requests:
             cpu: 100m
-            memory: 100Mi
+            memory: 5Gi
         ports:
         - containerPort: 9200
           name: http
@@ -100,7 +100,7 @@ spec:
           - name: cluster.initial_master_nodes
             value: "os-cluster-0" #"os-cluster-0,os-cluster-1,os-cluster-2"
           - name: OPENSEARCH_JAVA_OPTS
-            value: "-Xms2g -Xmx2g"
+            value: "-Xms4g -Xmx4g"
       initContainers:
       - name: fix-permissions
         image: busybox:{BUSYBOX_VERSION}

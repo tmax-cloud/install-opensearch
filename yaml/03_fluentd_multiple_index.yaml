@@ -244,9 +244,11 @@ data:
       reload_on_failure "#{ENV['FLUENT_OPENSEARCH_RELOAD_ON_FAILURE'] || 'true'}"
       log_os_400_reason "#{ENV['FLUENT_OPENSEARCH_LOG_ES_400_REASON'] || 'false'}"
       logstash_prefix logstash-${$.kubernetes.pod_name}
+      #logstash_prefix logstash-${$.kubernetes.namespace_name} 모듈 별 index 생성 시
       logstash_format "#{ENV['FLUENT_OPENSEARCH_LOGSTASH_FORMAT'] || 'true'}"
       index_name "#{ENV['FLUENT_OPENSEARCH_LOGSTASH_INDEX_NAME'] || 'logstash'}"
       #type_name "#{ENV['FLUENT_OPENSEARCH_LOGSTASH_TYPE_NAME'] || 'fluentd'}"
+      #<buffer $.kubernetes.namespace_name> 모듈 별 index 생성 시
       <buffer $.kubernetes.pod_name>
         @type file
         path /var/log/fluentd-buffer

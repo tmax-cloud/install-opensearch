@@ -3,6 +3,7 @@
 * [Opensearch Plugin 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/docs/README-plugin.md)
 * [EFK-OpenSearch Migration 및 Snapshot 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/docs/README-snapshot.md)
 * [Opensearch Role 설정 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/docs/README-roles.md)
+* [Opensearch Trace_Analytics 사용 가이드](https://github.com/tmax-cloud/install-opensearch/blob/main/docs/README-trace_analytics.md)
 
 # Opensearch 설치 가이드
 
@@ -275,6 +276,11 @@
       ```bash
       $ kubectl apply -f 03_fluentd_multiple_index.yaml
       ```
+      
+    * 비고: Kubernetes namespace 별로 index 생성하고자 할 경우 [03_fluentd_multiple_index.yaml](yaml/03_fluentd_multiple_index.yaml)의 configmap인 fluentd-config에서 pod_name으로 설정된 부분을 namespace_name으로 변경하여 적용한다.
+    
+    ![image](figure/fluentd_module_index.png)
+    
 ## Opensearch HA 구성 가이드
 * 목적: Opensearch와 Opensearch-Dashboards 파드에 대하여 각각 Active-Active 방식으로 기동하기 위한 설정이다.
 * Opensearch 구성
@@ -489,7 +495,7 @@ openid_connect_idp:         # 해당 내용 추가 필요
 4. 이후 install 가이드와 동일한 순서로 설치를 진행
 
 * 비고: selfsigned 설정/또는 공인인증서 교체 이후 대시보드 접속했을 때 hyperauth와의 redirect에러(error 302) 발생 시,
-     * 'kubectl exec -it os-cluster-os -n kube-logging /bin/bash' 로 opensearch pod 접속 
+     * 'kubectl exec -it os-cluster-0 -n kube-logging /bin/bash' 로 opensearch pod 접속 
      * 아래의 명령어 실행을 통해 securityconfig를 재설정한다.
      ```bash
      ./plugins/opensearch-security/tools/securityadmin.sh -cd ./plugins/opensearch-security/securityconfig/ -icl -nhnv -cacert ./config/certificates/admin/ca.crt -cert ./config/certificates/admin/tls.crt -key ./config/certificates/admin/tls.key
