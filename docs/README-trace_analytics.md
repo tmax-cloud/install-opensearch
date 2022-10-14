@@ -193,3 +193,8 @@ spec:
 * Dashboards UI에서 Observability 메뉴에서 Trace Analytics를 클릭하여 확인
 * 단, single service의 경우 service map이 뜨지 않는다.
 ![image](../figure/trace1.png)
+
+
+## 비고
+### Instrumentation의 Agent log level 설정
+* java agent의 경우, env에서 OTEL_JAVAAGENT_DEBUG를 "false"로 수정 시 해당 agent가 설치되는 pod 내부에서 출력되는 log level이 info로 설정된다. 
