@@ -23,6 +23,10 @@ spec:
         endpoint: data-prepper.kube-logging.svc:21890
         tls:
           insecure: true
+        sending_queue:
+          enabled: true
+          num_consumers: 100
+          queue_size: 10000
 
     service:
       pipelines:
