@@ -198,3 +198,22 @@ spec:
 ## 비고
 ### Instrumentation의 Agent log level 설정
 * java agent의 경우, env에서 OTEL_JAVAAGENT_DEBUG를 "false"로 수정 시 해당 agent가 설치되는 pod 내부에서 출력되는 log level이 info로 설정된다. 
+
+
+## TroubleShooting
+### Dropping data because sending_queue is full. Try increasing queue_size
+* sending_queue full로 인하여 otel-collector pod에서 해당 로그 발생 시 collector queue size를 늘려준다.
+* ex) [opentelemetry-collector.yaml](../trace_analytics/opentelemetry-collector.yaml) 의 exporter에서 sending queue 옵션 수정
+
+```
+exporters:
+      logging:
+      otlp/data-prepper:
+        endpoint: data-prepper.kube-logging.svc:21890
+        tls:
+          insecure: true
+        sending_queue:
+          enabled: true
+          num_consumers: 100
+          queue_size: 10000  ### 해당 queue size를 늘려 준다. 
+```   
