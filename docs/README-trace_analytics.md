@@ -216,4 +216,53 @@ exporters:
           enabled: true
           num_consumers: 100
           queue_size: 10000  ### 해당 queue size를 늘려 준다. 
-```   
+``` 
+
+### OTelTraceGrpcService - Buffer is full, unable to write
+* Data prepper pod에서 해당 로그 발생 시 ConfigMap에서 buffer_size와 batch_size를 조정한다.
+* ex) [data-prepper.yaml](../trace_analytics/data-prepper.yaml)
+
+```
+data:
+  pipelines.yaml: |
+    entry-pipeline:
+      delay: "100"
+      source:
+        otel_trace_source:
+          ssl: false
+          port: 21890
+      buffer:
+        bounded_blocking:
+          buffer_size: 1024   ### buffer size를 늘린다
+          batch_size: 256     ### batch_size를 늘린다
+      sink:
+      - pipeline:
+          name: "raw-pipeline"
+      - pipeline:
+          name: "service-map-pipeline"
+``` 
+
+* Data prepper에서 java.lang.OutOfMemoryError: Java heap space 발생 시, data prepper Deployment의 container args에 jvm option 추가 및 resource를 조정한다.
+
+```
+spec:
+  containers:
+    - args:
+        - java
+        - -Xms2g             ### jvm heap size 설정 default 8m에서 2g로 변경
+        - -Xmx2g
+        - -jar
+	- /usr/share/data-prepper/data-prepper.jar
+        - /etc/data-prepper/pipelines.yaml
+        - /etc/data-prepper/data-prepper-config.yaml
+      image: opensearchproject/data-prepper:{DP_IMAGE_VERSION}
+      imagePullPolicy: IfNotPresent
+      name: data-prepper
+      resources:
+        limits:
+          cpu: 500m
+	  memory: 4000Mi     ### limits memory는 설정한 jvm heap size의 2배로 설정
+        requests:
+          cpu: 200m
+          memory: 2000Mi     ### requests memory는 설정한 jvm heap size와 동일하게 설정
+``` 
