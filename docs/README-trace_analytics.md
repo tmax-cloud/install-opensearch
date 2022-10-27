@@ -242,7 +242,8 @@ data:
           name: "service-map-pipeline"
 ``` 
 
-* Data prepper에서 java.lang.OutOfMemoryError: Java heap space 발생 시, data prepper Deployment의 container args에 jvm option 추가 및 resource를 조정한다.
+### java.lang.OutOfMemoryError: Java heap space 
+* data prepper발생 시, data prepper Deployment의 container args에 jvm option 추가 및 resource를 조정한다.
 
 ```
 spec:
