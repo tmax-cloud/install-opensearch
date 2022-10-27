@@ -13,6 +13,10 @@ data:
         otel_trace_source:
           ssl: false
           port: 21890
+      buffer:
+        bounded_blocking:
+          buffer_size: 1024
+          batch_size: 256
       sink:
       - pipeline:
           name: "raw-pipeline"
