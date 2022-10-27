@@ -243,7 +243,7 @@ data:
 ``` 
 
 ### java.lang.OutOfMemoryError: Java heap space 
-* data prepper발생 시, data prepper Deployment의 container args에 jvm option 추가 및 resource를 조정한다.
+* Data prepper pod에서 해당 로그 발생 시, data prepper Deployment의 container args에 jvm option 추가 및 resource를 조정한다.
 
 ```
 spec:
