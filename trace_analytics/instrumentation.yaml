@@ -7,6 +7,8 @@ spec:
   env:
     - name: OTEL_TRACES_EXPORTER
       value: otlp
+    - name: OTEL_METRICS_EXPORTER
+      value: none
     - name: OTEL_EXPORTER_OTLP_ENDPOINT
       value: http://otel-collector.kube-logging.svc:4317
     - name: OTEL_EXPORTER_OTLP_TIMEOUT
