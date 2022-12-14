@@ -135,7 +135,7 @@ spec:
           secretName: admin-secret
       - name: roles
         configMap:
-          name: os-roles
+          name: os-role
       - name: role-mapping
         configMap:
           name: os-role-mapping
@@ -377,7 +377,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata: 
-  name: os-roles
+  name: os-role
   namespace: kube-logging
 data:
   roles.yml: |
