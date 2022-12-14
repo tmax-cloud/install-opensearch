@@ -128,7 +128,7 @@ data:
     opensearch_security.openid.connect_url: "https://{HYPERAUTH_URL}/auth/realms/tmax/.well-known/openid-configuration"
     opensearch_security.openid.client_id: "opensearch"
     opensearch_security.openid.client_secret: "{OPENSEARCH_CLIENT_SECRET}"
-    opensearch_security.openid.base_redirect_url: "https://opensearch-dashboards.{CUSTOM_DOMAIN_NAME}"
+    opensearch_security.openid.base_redirect_url: "https://opensearch-dashboard.{CUSTOM_DOMAIN_NAME}"
     opensearch_security.openid.verify_hostnames: false
     opensearch_security.cookie.secure: false
 ---
@@ -191,7 +191,7 @@ metadata:
 spec:
   ingressClassName: tmax-cloud
   rules:
-  - host: opensearch-dashboards.{CUSTOM_DOMAIN_NAME}
+  - host: opensearch-dashboard.{CUSTOM_DOMAIN_NAME}
     http:
       paths:
       - backend:
@@ -204,7 +204,7 @@ spec:
   #{RS_PLUGIN_INGRESS}
   tls:
   - hosts:
-    - opensearch-dashboards.{CUSTOM_DOMAIN_NAME}
+    - opensearch-dashboard.{CUSTOM_DOMAIN_NAME}
     #-
 ---
 apiVersion: cert-manager.io/v1
