@@ -121,6 +121,26 @@ spec:
           mountPath: /fluentd/Gemfile
           subPath: Gemfile
           readOnly: true
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - '-c'
+            - |-
+              liveness=$(pgrep ruby | wc -l)
+              if [[ $liveness -ne 2 ]]; then exit 1; fi
+          initialDelaySeconds: 300
+          periodSeconds: 20
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - '-c'
+            - |-
+              liveness=$(pgrep ruby | wc -l)
+              if [[ $liveness -ne 2 ]]; then exit 1; fi
+          initialDelaySeconds: 30
+          periodSeconds: 5
       terminationGracePeriodSeconds: 30
       volumes:
       - name: varlog
