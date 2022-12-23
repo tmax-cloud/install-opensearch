@@ -392,8 +392,8 @@ spec:
               if [[ -z "$(find /var/log/fluentd-buffer -type d -newer /tmp/marker-stuck -print -quit)" ]]; then rm -rf /var/log/fluentd-buffer; exit 1; fi
               touch -d "LIVENESS_THRESHOLD 300 seconds ago" /tmp/marker-liveness;
               if [ -z "$(find /var/log/fluentd-buffer -type d -newer /tmp/marker-liveness -print -quit)" ]; then exit 1; fi
-          initialDelaySeconds: 600
-          periodSeconds: 60
+          initialDelaySeconds: 60
+          periodSeconds: 6
       terminationGracePeriodSeconds: 30
       volumes:
       - name: varlog
