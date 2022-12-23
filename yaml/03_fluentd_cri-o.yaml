@@ -368,20 +368,30 @@ spec:
             - /bin/bash
             - '-c'
             - |-
-              liveness=$(pgrep ruby | wc -l)
-              if [[ $liveness -ne 2 ]]; then exit 1; fi
-          initialDelaySeconds: 300
-          periodSeconds: 20
+              LIVENESS_THRESHOLD_SECONDS=300
+              STUCK_THRESHOLD_SECONDS=900
+              if [[ ! -e /var/log/fluentd-buffer ]]; then exit 1; fi
+              touch -d "STUCK_THRESHOLD 900 seconds ago" /tmp/marker-stuck;
+              if [[ -z "$(find /var/log/fluentd-buffer -type d -newer /tmp/marker-stuck -print -quit)" ]]; then rm -rf /var/log/fluentd-buffer; exit 1; fi
+              touch -d "LIVENESS_THRESHOLD 300 seconds ago" /tmp/marker-liveness;
+              if [ -z "$(find /var/log/fluentd-buffer -type d -newer /tmp/marker-liveness -print -quit)" ]; then exit 1; fi
+          initialDelaySeconds: 600
+          periodSeconds: 60
         readinessProbe:
           exec:
             command:
             - /bin/bash
             - '-c'
             - |-
-              liveness=$(pgrep ruby | wc -l)
-              if [[ $liveness -ne 2 ]]; then exit 1; fi
-          initialDelaySeconds: 30
-          periodSeconds: 5
+              LIVENESS_THRESHOLD_SECONDS=300
+              STUCK_THRESHOLD_SECONDS=900
+              if [[ ! -e /var/log/fluentd-buffer ]]; then exit 1; fi
+              touch -d "STUCK_THRESHOLD 900 seconds ago" /tmp/marker-stuck;
+              if [[ -z "$(find /var/log/fluentd-buffer -type d -newer /tmp/marker-stuck -print -quit)" ]]; then rm -rf /var/log/fluentd-buffer; exit 1; fi
+              touch -d "LIVENESS_THRESHOLD 300 seconds ago" /tmp/marker-liveness;
+              if [ -z "$(find /var/log/fluentd-buffer -type d -newer /tmp/marker-liveness -print -quit)" ]; then exit 1; fi
+          initialDelaySeconds: 60
+          periodSeconds: 6
       terminationGracePeriodSeconds: 30
       volumes:
       - name: varlog
