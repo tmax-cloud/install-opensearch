@@ -28,6 +28,7 @@
     $ cd $OS_HOME
     $ export OTEL_OPERATOR_VERSION=0.56.0
     $ export OTEL_COLLECTOR_VERSION=0.56.0
+    $ export PROXY_VERSION=v0.11.0
     $ export AGENT_VERSION=1.15.0
     $ export DP_IMAGE_VERSION=1.5.0
     $ export REGISTRY={ImageRegistryIP:Port}
