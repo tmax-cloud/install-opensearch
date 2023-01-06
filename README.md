@@ -12,11 +12,11 @@
 * K8S 클러스터로부터 Fluentd가 수집한 로그를 Opensearch에 적재하면, Opensearch는 수집된 로그를 저장하고 요청에 따라 검색 기능을 제공한다. 그리고 Opensearch-Dashboards를 통해 Opensearch에 적재된 데이터를 시각화한다.
 
 ## 구성 요소 및 버전
-* Opensearch ([opensearchproject/opensearch:1.2.3](https://hub.docker.com/r/opensearchproject/opensearch))
-* Opensearch dashboard ([opensearchproject/opensearch-dashboards:1.2.0](https://hub.docker.com/r/opensearchproject/opensearch-dashboards))
+* Opensearch ([opensearchproject/opensearch:1.3.7](https://hub.docker.com/r/opensearchproject/opensearch))
+* Opensearch dashboard ([opensearchproject/opensearch-dashboards:1.3.7](https://hub.docker.com/r/opensearchproject/opensearch-dashboards))
 * Busybox ([busybox:1.32.0](https://hub.docker.com/layers/busybox/library/busybox/1.32.0/images/sha256-414aeb860595d7078cbe87abaeed05157d6b44907fbd7db30e1cfba9b6902448?context=explore))
-* Fluentd ([docker.io/tmaxcloudck/hypercloud:fluentd-v1.4.2-debian-elasticsearch-1.1](https://hub.docker.com/layers/fluent/fluentd-kubernetes-daemonset/v1.4.2-debian-elasticsearch-1.1/images/sha256-ce4885865850d3940f5e5318066897b8502c0b955066392de7fd4ef6f1fd4275?context=explore](https://hub.docker.com/layers/204908945/tmaxcloudck/hypercloud/fluentd-v1.4.2-debian-elasticsearch-1.1/images/sha256-1221c5f693d9a974ca5ba1be84b5de81698ddbccaf734e70a76a75daf0dc992c?context=repo)))
-    * 기존 fluentd와 동일한 이미지에 opensearch output plugin을 추가하여 생성한 이미지
+* Fluentd ([docker.io/tmaxcloudck/hypercloud:fluentd-v1.15.3-debian-elasticsearch-1.0](https://hub.docker.com/layers/tmaxcloudck/hypercloud/fluentd-v1.15.3-debian-elasticsearch-1.0/images/sha256-14539981f57cbac47ef53e38ac23419b9a0614803c120d9d38b3db50c0295c54?context=explore))
+    * elasticsearch plugin이 적용된 최신 버전 fluentd와 동일한 이미지에 opensearch output plugin을 추가하여 생성한 이미지
 * Rightsizing Plugin ([docker.io/tmaxcloudck/rightsizing-opensearch-plugin:demo](https://hub.docker.com/repository/docker/tmaxcloudck/rightsizing-opensearch-plugin))
 
 ## Prerequisites
@@ -35,11 +35,11 @@
     $ mkdir -p ~/opensearch-install
     $ export OS_HOME=~/opensearch-install
     $ cd $OS_HOME
-    $ export OS_VERSION=1.2.3
-    $ export DASHBOARD_VERSION=1.2.0
+    $ export OS_VERSION=1.3.7
+    $ export DASHBOARD_VERSION=1.3.7
     $ export PG_IMAGE_PATH=rightsizing-opensearch-plugin:demo
     $ export BUSYBOX_VERSION=1.32.0
-    $ export FLUENTD_VERSION=fluentd-v1.4.2-debian-elasticsearch-1.1
+    $ export FLUENTD_VERSION=fluentd-v1.15.3-debian-elasticsearch-1.0
     $ export REGISTRY={ImageRegistryIP:Port}
     ```
     * 외부 네트워크 통신이 가능한 환경에서 필요한 이미지를 다운받는다.
@@ -83,10 +83,10 @@
 	* 환경에 맞는 config 내용 작성
 		* OS_VERSION
 			* OpenSearch 의 버전
-			* ex) 1.2.3
+			* ex) 1.3.7
 		* DASHBOARD_VERSION
 			* Opensearch-Dashboards 의 버전
-			* ex) 1.2.0
+			* ex) 1.3.7
 		* BUSYBOX_VERSION
 			* Busybox 의 버전
 			* ex) 1.32.0
@@ -107,7 +107,7 @@
             * ex) tmaxcloud.org
 		* FLUENTD_VERSION
 			* FLUENTD_VERSION 의 버전
-			* ex) fluentd-v1.4.2-debian-elasticsearch-1.1
+			* ex) fluentd-v1.15.3-debian-elasticsearch-1.0
 		* BUSYBOX_VERSION
 			* BUSYBOX_VERSION 의 버전
 			* ex) 1.32.0
@@ -178,9 +178,9 @@
 2. 변수 export
     * 다운 받을 버전을 export한다. 
     ```bash
-    $ export OS_VERSION=1.2.3
-    $ export DASHBOARD_VERSION=1.2.0
-    $ export FLUENTD_VERSION=fluentd-v1.4.2-debian-elasticsearch-1.1
+    $ export OS_VERSION=1.3.7
+    $ export DASHBOARD_VERSION=1.3.7
+    $ export FLUENTD_VERSION=fluentd-v1.15.3-debian-elasticsearch-1.0
     $ export BUSYBOX_VERSION=1.32.0
     $ export PG_IMAGE_PATH=rightsizing-opensearch-plugin:demo
     $ export STORAGECLASS_NAME=csi-cephfs-sc
