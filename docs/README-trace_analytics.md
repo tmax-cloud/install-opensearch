@@ -10,12 +10,12 @@
 * [Cert-Manager](https://github.com/tmax-cloud/install-cert-manager)
 
 ## 구성 요소
-* Opentelemetry-Operator (ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.56.0)
-    * Opentelemetry-Collector (ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:0.56.0)
-    * AutoInstrumentation-java (ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:1.15.0)
-* Kube-rbac-proxy (gcr.io/kubebuilder/kube-rbac-proxy:v0.11.0)
+* Opentelemetry-Operator (ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.66.0)
+    * Opentelemetry-Collector (ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:0.66.0)
+    * AutoInstrumentation-java (ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:1.21.0)
+* Kube-rbac-proxy (gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1)
     * operator deployment의 sidecar container
-* Data-prepper (opensearchproject/data-prepper:1.5.0)
+* Data-prepper (opensearchproject/data-prepper:1.5.2)
 
 ## 폐쇄망 설치 가이드
 * 설치를 진행하기 전 아래의 과정을 통해 필요한 이미지 및 yaml 파일을 준비한다.
@@ -26,11 +26,11 @@
     ```bash
     $ export OS_HOME=~/opensearch-install
     $ cd $OS_HOME
-    $ export OTEL_OPERATOR_VERSION=0.56.0
-    $ export OTEL_COLLECTOR_VERSION=0.56.0
-    $ export PROXY_VERSION=v0.11.0
-    $ export AGENT_VERSION=1.15.0
-    $ export DP_IMAGE_VERSION=1.5.0
+    $ export OTEL_OPERATOR_VERSION=0.66.0
+    $ export OTEL_COLLECTOR_VERSION=0.66.0
+    $ export PROXY_VERSION=v0.13.1
+    $ export AGENT_VERSION=1.21.0
+    $ export DP_IMAGE_VERSION=1.5.2
     $ export REGISTRY={ImageRegistryIP:Port}
     ```
     * 외부 네트워크 통신이 가능한 환경에서 필요한 이미지를 다운받는다.
