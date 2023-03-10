@@ -6,7 +6,7 @@ metadata:
   labels:
     app: opensearch-dashboards
   annotations:
-    traefik.ingress.kubernetes.io/service.serverstransport: tmaxcloud@file
+    traefik.ingress.kubernetes.io/service.serverstransport: insecure@file
 spec:
   type: ClusterIP
   ports:
